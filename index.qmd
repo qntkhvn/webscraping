@@ -59,7 +59,7 @@ Agenda:
 
 ### Web page basics
 
--   **HTML** (Hyper Text Markup Language) defines the content and structure of a web page
+-   **HTML** (Hyper Text Markup Language) defines the content and structure of a webpage
 
     -   An HTML page contains various elements (headers, paragraphs, tables...)
     
@@ -69,11 +69,11 @@ Agenda:
     
 ::: {.fragment}
 
--   **CSS** (Cascading Style Sheets) defines the appearance of HTML elements (i.e. whether the web page is pretty or ugly)
+-   **CSS** (Cascading Style Sheets) defines the appearance of HTML elements (i.e. whether the webpage is pretty or ugly)
 
     -   CSS selectors are patterns used to select the elements to be style
     
-    -   **CSS selectors can be used to extract elements from a web page**
+    -   **CSS selectors can be used to extract elements from a webpage**
 
 :::
 
@@ -99,19 +99,37 @@ install.packages("rvest")
 
 ### Typical web scraping workflow
 
-- Reading in a website
+::: {.fragment}
+
+- (Survey the webpage)
+
+:::
+
+::: {.fragment}
+
+- Read in the webpage
+
+:::
+
+::: {.fragment}
 
 - Data organization and cleaning (most of the process)
 
-  - Extracting website elements (e.g., tables, links, etc.)
+  - Extracting elements (e.g., tables, links, etc.)
 
   - Common data manipulation tasks (e.g., with `dplyr`)
 
-  - Working with strings (e.g, `stringr`, `stringi`) and regular expressions (regex)
+  - Handle strings (e.g, `stringr`, `stringi`) and regular expressions (regex)
+  
+:::
 
-- Generalization: writing functions (and developing packages)
+::: {.fragment}
+
+- Generalization: write functions (and develop packages)
 
   - For instance, in sports, you may be interested in data for not just 1 season/player/team/etc., but multiple
+  
+:::
 
 ---
 
@@ -120,7 +138,6 @@ install.packages("rvest")
 -   Example: NHL career games played leaders
 
     -   URL: <https://www.hockey-reference.com/leaders/nhl_tbl_career.html>
-
 ::: {.fragment}
 -   Tasks:  Scrape the **NHL Leaders** table
 
@@ -143,7 +160,7 @@ install.packages("rvest")
 
 ### Read the HTML page into `R`
 
--   We use `read_html()` to read in the HTML page based on a specified web page's URL
+-   We use `read_html()` to read in the HTML page based on a specified webpage's URL
 
 ```{r, echo=TRUE}
 library(rvest)
@@ -159,15 +176,19 @@ nhl_url |>
 
 ### How to find a table's CSS selector
 
+::: {.fragment}
+
 1.   Move the cursor close to the table you want to scrape (e.g., near top of the table). Right click and select **Inspect** (*Chrome* or *Firefox*) or **Inspect element** (*Safari*)
+
+:::
 
 ::: {.fragment}
 
 2.  The **Developer Tools** will open in your browser. Pay attention to the **Elements** pane (*Chrome* or *Safari*) or **Inspector** pane (*Firefox*)
 
-    *   The HTML element corresponding to the web page area (close to the table) mentioned in Step 1 is highlighted
+    *   The HTML element corresponding to the webpage area (close to the table) mentioned in Step 1 is highlighted
 
-    *   Hovering over different HTML elements will highlight different parts of the web page
+    *   Hovering over different HTML elements will highlight different parts of the webpage
     
 :::
 
@@ -219,7 +240,7 @@ nhl_url |>
 
 -   Finally, use `html_table()` to convert to a tibble (data frame) in `R`
 
--   This completes our scraping pipeline.
+-   This completes our scraping process
 
 ```{r, echo=TRUE}
 nhl_tbl <- nhl_url |> 
@@ -232,9 +253,11 @@ nhl_tbl
 
 ---
 
-### Remarks: web page elements
+### Remarks: webpage elements
 
 *   Note that `html_table()` only works when the element specified in `html_element()` is a table
+
+::: {.fragment}
 
 *   There are other things to be extracted from an element
 
@@ -244,6 +267,8 @@ nhl_tbl
     
     *   We will touch on these 2 cases later on
 
+:::
+
 ---
 
 ### Not recommended
@@ -252,7 +277,7 @@ nhl_tbl
 
 -   `html_table()` can be called right after `read_html()`
 
--   This outputs a list of all the tables existed on the web page
+-   This outputs a list of all the tables existed on the webpage
 
 ```{r, echo=TRUE}
 nhl_tbl_list <- nhl_url |> 
@@ -401,7 +426,9 @@ str_replace_all("noon", "o", "a")
 
 ---
 
-### Practice: Frauen Bundesliga
+### Practice: Scraping (HTML) tables
+
+Example: Frauen Bundesliga (Germany's women's soccer league)
 
 *   URL: <https://fbref.com/en/comps/183/2017-2018/2017-2018-Frauen-Bundesliga-Stats>
 
@@ -417,7 +444,7 @@ str_replace_all("noon", "o", "a")
     
 ---
 
-### Practice: Frauen Bundesliga
+### Practice: Scraping (HTML) tables
 
 *   Scrape 2017-2018 overall standings
 
@@ -432,7 +459,7 @@ fb_tbl
         
 ---
 
-### Practice: Frauen Bundesliga
+### Practice: Scraping (HTML) tables
 
 *   General function
 
@@ -467,7 +494,7 @@ fb_tbl_full <- seasons |>
 
 Continuing with the Frauen Bundesliga 2017-2018 season stats example...
 
-*   Notice that the table on the web page also contains team logos, URLs, etc.
+*   Notice that the table on the webpage also contains team logos, URLs, etc.
 
 *   These information were not extracted with `html_table()`
 
@@ -534,7 +561,7 @@ fb_node |>
 
 ### Scraping links and images
 
-*   Within <a>, we can grab the `href` attribute with `html_attr` 
+*   Within `<a>`, we can grab the `href` attribute with `html_attr` 
 
     *   `href` specifies the URL/page associated with the link
 
@@ -601,7 +628,7 @@ fb_tbl |>
 
 *   Sometimes data are just simply raw text
 
-*   Example 3 Wimbledon Women's singles
+*   Example: Wimbledon Women's singles
 
     *   URL: <https://en.wikipedia.org/wiki/2009_Wimbledon_Championships_-_Women's_singles>
 
@@ -626,7 +653,9 @@ wimbledon_url |>
 
 *   Then, we can retrieve text from this element with `html_text2()`
 
-    *   There's also an `html_text()` function. Look up the documentation `?html_text` to see the differences. (Honestly, if you don't remember the differences, just try both and see which one is suitable. Ditto for `html_element()` and `html_elements()`.)
+    *   There's also an `html_text()` function. Look up the help documentation to see the differences
+    
+(Honestly, if you don't remember the differences, just try both and see which one is suitable. Ditto for `html_element()` and `html_elements()`)
     
 ```{r, echo=TRUE}
 wimbledon_url |> 
@@ -674,17 +703,29 @@ wimbledon_info
 
 An API (Application Programming Interface) connects computer programs to each other
 
+::: {.fragment}
+
 Web APIs provides interactions between a client device and a web server using the Hypertext Transfer Protocol (HTTP) 
+
+:::
+
+::: {.fragment}
 
 *   Clients send a (HTTP) request and receive a response (in `JSON` or `XML`)
     
 *   Many organizations have their own public API, which can be used to access data
+
+:::
+
+::: {.fragment}
 
 *   Fortunately, there exists many `R` packages (sports on non-sports) that provides access to APIs for obtaining data
 
     *   Note that these packages ("API wrappers") do not provide the actual data - instead functions for accessing the data
 
     *   For sports, check out the [Sports Analytics CRAN Task View](https://cran.r-project.org/web/views/SportsAnalytics.html) and [SportsDataverse](https://www.sportsdataverse.org/) for more information
+    
+:::
 
 ---
 
@@ -714,9 +755,9 @@ There are many other useful functions in `httr`
 
 ---
 
-### Example 4: Formula One API
+### Pulling data from APIs
 
-(Inspiration: [Tidy Tuesday 2021-09-07](https://github.com/rfordatascience/tidytuesday/tree/master/data/2021/2021-09-07))
+Example: Formula One API (Inspiration: [Tidy Tuesday 2021-09-07](https://github.com/rfordatascience/tidytuesday/tree/master/data/2021/2021-09-07))
 
 -   [Ergast Developer API](http://ergast.com/mrd/) (<http://ergast.com/mrd/>) is an (experimental) API that provides Formula One historical data
 
@@ -726,7 +767,7 @@ There are many other useful functions in `httr`
 
 ---
 
-### Example 4: Formula One API
+### Pulling data from APIs
 
 -   First, we can use `GET()` to send a request to the API. We then receive the data via a response
 
@@ -744,7 +785,7 @@ f1_response
 
 ---
 
-### Example 4: Formula One API
+### Pulling data from APIs
 
 -   Next, we want to get the data from the response by calling `content()`. We can then view the structure of the content object.
 
@@ -756,7 +797,7 @@ glimpse(f1_content)
 
 ---
 
-### Example 4: Formula One API
+### Pulling data from APIs
 
 -   Finally, based on the content structure, we can get a list of constructors. Each list consists of constructor ID, (Wikipedia) URL, name, and nationality.
 
@@ -766,12 +807,12 @@ f1_constructor_list <- f1_content |>
   pluck("ConstructorTable") |> 
   pluck("Constructors")
 # f1_constructor_list
-# names(f1_constructor_list[[1]])
+f1_constructor_list[[1]]
 ```
 
 ---
 
-### Example 4: Formula One API
+### Pulling data from APIs
 
 -   A few extra transformation steps will give us the desired table
 
@@ -796,9 +837,9 @@ f1_constructor_tbl
 
 -   Great article on [Ethics in Web Scraping](https://towardsdatascience.com/ethics-in-web-scraping-b96b18136f01), featuring a "web scraping manifesto"
 
--   Web scraping case study from [Data science ethics chapter of MDSR](https://mdsr-book.github.io/mdsr2e/ch-ethics.html)
+-   Web scraping case study from the [Data science ethics chapter](https://mdsr-book.github.io/mdsr2e/ch-ethics.html) of MDSR
 
--   [Good pratice chapter from Web Scraping using R](https://jakobtures.github.io/web-scraping/goodpractice.html)
+-   [Good pratice chapter](https://jakobtures.github.io/web-scraping/goodpractice.html) from Web Scraping using R
 
 -   Common points
 
@@ -822,11 +863,11 @@ f1_constructor_tbl
 
 ### The `polite` package: example
 
--   We use the same Wimbledon example as before to demonstrate `polite`
+-   Example: Wimbledon Women's singles (same as before)
 
 -   First, pass the URL into `bow()` to get a "session" object
 
-    -   This gives information about the `robots.txt` and whether the web page is scrapable
+    -   This gives information about the `robots.txt` and whether the webpage is scrapable
 
 ```{r, echo=TRUE}
 library(polite)
@@ -876,7 +917,7 @@ session |>
 
 -   [Scraping with Selenium blogpost](http://brooksandrew.github.io/simpleblog/articles/scraping-with-selenium/)
 
--   Browse through source code of different `R` "scraper" packages.
+-   Browse through source code of different `R` "scraper" packages
 
 ---
 
@@ -884,11 +925,11 @@ session |>
 
 -   Web scraping is an excellent means for gaining proficiency in data cleaning
 
-    -   It takes time... the more you play around the better you get
+    -   It takes time - the more you play around the better you get
     
-    -   Always consult the function documentations
+    -   Remember to consult the help documentations
     
 -   Come up with fun personal projects (data viz, Shiny app, etc.), scrape data, and enjoy learning (and the struggle)
 
--   You can develop the next great sports "scrapR" package(s)
+-   You can develop the next great sports "scrapR" package(s) (or even for your field of interest)
 

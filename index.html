@@ -448,7 +448,7 @@ Quang Nguyen
 
 <h3 id="web-page-basics">Web page basics</h3>
 <ul>
-<li><p><strong>HTML</strong> (Hyper Text Markup Language) defines the content and structure of a web page</p>
+<li><p><strong>HTML</strong> (Hyper Text Markup Language) defines the content and structure of a webpage</p>
 <ul>
 <li><p>An HTML page contains various elements (headers, paragraphs, tables…)</p></li>
 <li><p>HTML tags define where an element begins and ends</p></li>
@@ -457,10 +457,10 @@ Quang Nguyen
 </ul>
 <div class="fragment">
 <ul>
-<li><p><strong>CSS</strong> (Cascading Style Sheets) defines the appearance of HTML elements (i.e.&nbsp;whether the web page is pretty or ugly)</p>
+<li><p><strong>CSS</strong> (Cascading Style Sheets) defines the appearance of HTML elements (i.e.&nbsp;whether the webpage is pretty or ugly)</p>
 <ul>
 <li><p>CSS selectors are patterns used to select the elements to be style</p></li>
-<li><p><strong>CSS selectors can be used to extract elements from a web page</strong></p></li>
+<li><p><strong>CSS selectors can be used to extract elements from a webpage</strong></p></li>
 </ul></li>
 </ul>
 </div>
@@ -482,19 +482,34 @@ Quang Nguyen
 <section class="slide level2">
 
 <h3 id="typical-web-scraping-workflow">Typical web scraping workflow</h3>
+<div class="fragment">
 <ul>
-<li><p>Reading in a website</p></li>
+<li>(Survey the webpage)</li>
+</ul>
+</div>
+<div class="fragment">
+<ul>
+<li>Read in the webpage</li>
+</ul>
+</div>
+<div class="fragment">
+<ul>
 <li><p>Data organization and cleaning (most of the process)</p>
 <ul>
-<li><p>Extracting website elements (e.g., tables, links, etc.)</p></li>
+<li><p>Extracting elements (e.g., tables, links, etc.)</p></li>
 <li><p>Common data manipulation tasks (e.g., with <code>dplyr</code>)</p></li>
-<li><p>Working with strings (e.g, <code>stringr</code>, <code>stringi</code>) and regular expressions (regex)</p></li>
+<li><p>Handle strings (e.g, <code>stringr</code>, <code>stringi</code>) and regular expressions (regex)</p></li>
 </ul></li>
-<li><p>Generalization: writing functions (and developing packages)</p>
+</ul>
+</div>
+<div class="fragment">
+<ul>
+<li><p>Generalization: write functions (and develop packages)</p>
 <ul>
 <li>For instance, in sports, you may be interested in data for not just 1 season/player/team/etc., but multiple</li>
 </ul></li>
 </ul>
+</div>
 </section>
 <section class="slide level2">
 
@@ -502,11 +517,8 @@ Quang Nguyen
 <ul>
 <li><p>Example: NHL career games played leaders</p>
 <ul>
-<li>URL: <a href="https://www.hockey-reference.com/leaders/nhl_tbl_career.html" class="uri">https://www.hockey-reference.com/leaders/nhl_tbl_career.html</a></li>
+<li>URL: <a href="https://www.hockey-reference.com/leaders/nhl_tbl_career.html" class="uri">https://www.hockey-reference.com/leaders/nhl_tbl_career.html</a> ::: {.fragment}</li>
 </ul></li>
-</ul>
-<div class="fragment">
-<ul>
 <li><p>Tasks: Scrape the <strong>NHL Leaders</strong> table</p>
 <ul>
 <li><p>Read the HTML page into <code>R</code></p></li>
@@ -516,17 +528,16 @@ Quang Nguyen
 <ul>
 <li><p>Create an indicator variable for whether a player is in the Hall of Fame</p></li>
 <li><p>Remove the asterisk (<code>*</code>) from the Player column</p></li>
-<li><p>Remove the dot (<code>.</code>) from the Rank column</p></li>
+<li><p>Remove the dot (<code>.</code>) from the Rank column :::</p></li>
 </ul></li>
 </ul></li>
 </ul>
-</div>
 </section>
 <section class="slide level2">
 
 <h3 id="read-the-html-page-into-r">Read the HTML page into <code>R</code></h3>
 <ul>
-<li>We use <code>read_html()</code> to read in the HTML page based on a specified web page’s URL</li>
+<li>We use <code>read_html()</code> to read in the HTML page based on a specified webpage’s URL</li>
 </ul>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(rvest)</span>
@@ -548,15 +559,17 @@ Quang Nguyen
 <section class="slide level2">
 
 <h3 id="how-to-find-a-tables-css-selector">How to find a table’s CSS selector</h3>
+<div class="fragment">
 <ol type="1">
 <li>Move the cursor close to the table you want to scrape (e.g., near top of the table). Right click and select <strong>Inspect</strong> (<em>Chrome</em> or <em>Firefox</em>) or <strong>Inspect element</strong> (<em>Safari</em>)</li>
 </ol>
+</div>
 <div class="fragment">
 <ol start="2" type="1">
 <li><p>The <strong>Developer Tools</strong> will open in your browser. Pay attention to the <strong>Elements</strong> pane (<em>Chrome</em> or <em>Safari</em>) or <strong>Inspector</strong> pane (<em>Firefox</em>)</p>
 <ul>
-<li><p>The HTML element corresponding to the web page area (close to the table) mentioned in Step 1 is highlighted</p></li>
-<li><p>Hovering over different HTML elements will highlight different parts of the web page</p></li>
+<li><p>The HTML element corresponding to the webpage area (close to the table) mentioned in Step 1 is highlighted</p></li>
+<li><p>Hovering over different HTML elements will highlight different parts of the webpage</p></li>
 </ul></li>
 </ol>
 </div>
@@ -608,7 +621,7 @@ Quang Nguyen
 <h3 id="scraping-html-tables-3">Scraping (HTML) tables</h3>
 <ul>
 <li><p>Finally, use <code>html_table()</code> to convert to a tibble (data frame) in <code>R</code></p></li>
-<li><p>This completes our scraping pipeline.</p></li>
+<li><p>This completes our scraping process</p></li>
 </ul>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>nhl_tbl <span class="ot">&lt;-</span> nhl_url <span class="sc">|&gt;</span> </span>
@@ -637,9 +650,12 @@ Quang Nguyen
 </section>
 <section class="slide level2">
 
-<h3 id="remarks-web-page-elements">Remarks: web page elements</h3>
+<h3 id="remarks-webpage-elements">Remarks: webpage elements</h3>
 <ul>
-<li><p>Note that <code>html_table()</code> only works when the element specified in <code>html_element()</code> is a table</p></li>
+<li>Note that <code>html_table()</code> only works when the element specified in <code>html_element()</code> is a table</li>
+</ul>
+<div class="fragment">
+<ul>
 <li><p>There are other things to be extracted from an element</p>
 <ul>
 <li><p>To retrieve text from an element, use <code>html_text()</code> and <code>html_text2()</code></p></li>
@@ -647,6 +663,7 @@ Quang Nguyen
 <li><p>We will touch on these 2 cases later on</p></li>
 </ul></li>
 </ul>
+</div>
 </section>
 <section class="slide level2">
 
@@ -654,7 +671,7 @@ Quang Nguyen
 <ul>
 <li><p>The inspection step (for obtaining CSS selector) can be skipped</p></li>
 <li><p><code>html_table()</code> can be called right after <code>read_html()</code></p></li>
-<li><p>This outputs a list of all the tables existed on the web page</p></li>
+<li><p>This outputs a list of all the tables existed on the webpage</p></li>
 </ul>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>nhl_tbl_list <span class="ot">&lt;-</span> nhl_url <span class="sc">|&gt;</span> </span>
@@ -915,7 +932,8 @@ Quang Nguyen
 </section>
 <section class="slide level2">
 
-<h3 id="practice-frauen-bundesliga">Practice: Frauen Bundesliga</h3>
+<h3 id="practice-scraping-html-tables">Practice: Scraping (HTML) tables</h3>
+<p>Example: Frauen Bundesliga (Germany’s women’s soccer league)</p>
 <ul>
 <li><p>URL: <a href="https://fbref.com/en/comps/183/2017-2018/2017-2018-Frauen-Bundesliga-Stats" class="uri">https://fbref.com/en/comps/183/2017-2018/2017-2018-Frauen-Bundesliga-Stats</a></p></li>
 <li><p>The link above provides stats for the 2017-2018 season</p>
@@ -931,7 +949,7 @@ Quang Nguyen
 </section>
 <section class="slide level2">
 
-<h3 id="practice-frauen-bundesliga-1">Practice: Frauen Bundesliga</h3>
+<h3 id="practice-scraping-html-tables-1">Practice: Scraping (HTML) tables</h3>
 <ul>
 <li>Scrape 2017-2018 overall standings</li>
 </ul>
@@ -965,7 +983,7 @@ Quang Nguyen
 </section>
 <section class="slide level2">
 
-<h3 id="practice-frauen-bundesliga-2">Practice: Frauen Bundesliga</h3>
+<h3 id="practice-scraping-html-tables-2">Practice: Scraping (HTML) tables</h3>
 <ul>
 <li>General function</li>
 </ul>
@@ -999,7 +1017,7 @@ Quang Nguyen
 <h3 id="scraping-links-and-images">Scraping links and images</h3>
 <p>Continuing with the Frauen Bundesliga 2017-2018 season stats example…</p>
 <ul>
-<li><p>Notice that the table on the web page also contains team logos, URLs, etc.</p></li>
+<li><p>Notice that the table on the webpage also contains team logos, URLs, etc.</p></li>
 <li><p>These information were not extracted with <code>html_table()</code></p></li>
 <li><p>Suppose we’re also interested in getting the team URLs and logos</p></li>
 </ul>
@@ -1128,13 +1146,13 @@ Quang Nguyen
 
 <h3 id="scraping-links-and-images-5">Scraping links and images</h3>
 <ul>
-<li><p>Within <a href="">, we can grab the <code>href</code> attribute with <code>html_attr</code></a></p><a href="">
+<li><p>Within <code>&lt;a&gt;</code>, we can grab the <code>href</code> attribute with <code>html_attr</code></p>
 <ul>
 <li><code>href</code> specifies the URL/page associated with the link</li>
-</ul></a></li><a href="">
-</a></ul><a href="">
-</a><div class="cell"><a href="">
-</a><div class="sourceCode cell-code" id="cb47"><a href=""></a><pre class="sourceCode r code-with-copy"><a href=""><code class="sourceCode r"><span id="cb47-1"></span></code></a><code class="sourceCode r"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a>fb_node <span class="sc">|&gt;</span> 
+</ul></li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a>fb_node <span class="sc">|&gt;</span> </span>
 <span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">html_elements</span>(<span class="st">"a"</span>) <span class="sc">|&gt;</span> </span>
 <span id="cb47-3"><a href="#cb47-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">html_attr</span>(<span class="st">"href"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -1265,7 +1283,7 @@ Quang Nguyen
 <ul>
 <li><p>As previously mentioned, data do not always come in the form of nicely formatted tables</p></li>
 <li><p>Sometimes data are just simply raw text</p></li>
-<li><p>Example 3 Wimbledon Women’s singles</p>
+<li><p>Example: Wimbledon Women’s singles</p>
 <ul>
 <li><p>URL: <a href="https://en.wikipedia.org/wiki/2009_Wimbledon_Championships_-_Women's_singles" class="uri">https://en.wikipedia.org/wiki/2009_Wimbledon_Championships_-_Women's_singles</a></p></li>
 <li><p>Suppose we want to scrape results for the seeded players (under <strong>Seeds</strong> section)</p></li>
@@ -1297,9 +1315,10 @@ Quang Nguyen
 <ul>
 <li><p>Then, we can retrieve text from this element with <code>html_text2()</code></p>
 <ul>
-<li>There’s also an <code>html_text()</code> function. Look up the documentation <code>?html_text</code> to see the differences. (Honestly, if you don’t remember the differences, just try both and see which one is suitable. Ditto for <code>html_element()</code> and <code>html_elements()</code>.)</li>
+<li>There’s also an <code>html_text()</code> function. Look up the help documentation to see the differences</li>
 </ul></li>
 </ul>
+<p>(Honestly, if you don’t remember the differences, just try both and see which one is suitable. Ditto for <code>html_element()</code> and <code>html_elements()</code>)</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb56"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a>wimbledon_url <span class="sc">|&gt;</span> </span>
 <span id="cb56-2"><a href="#cb56-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">read_html</span>() <span class="sc">|&gt;</span> </span>
@@ -1380,16 +1399,24 @@ Quang Nguyen
 
 <h3 id="web-api-basics">(Web) API basics</h3>
 <p>An API (Application Programming Interface) connects computer programs to each other</p>
+<div class="fragment">
 <p>Web APIs provides interactions between a client device and a web server using the Hypertext Transfer Protocol (HTTP)</p>
+</div>
+<div class="fragment">
 <ul>
 <li><p>Clients send a (HTTP) request and receive a response (in <code>JSON</code> or <code>XML</code>)</p></li>
 <li><p>Many organizations have their own public API, which can be used to access data</p></li>
+</ul>
+</div>
+<div class="fragment">
+<ul>
 <li><p>Fortunately, there exists many <code>R</code> packages (sports on non-sports) that provides access to APIs for obtaining data</p>
 <ul>
 <li><p>Note that these packages (“API wrappers”) do not provide the actual data - instead functions for accessing the data</p></li>
 <li><p>For sports, check out the <a href="https://cran.r-project.org/web/views/SportsAnalytics.html">Sports Analytics CRAN Task View</a> and <a href="https://www.sportsdataverse.org/">SportsDataverse</a> for more information</p></li>
 </ul></li>
 </ul>
+</div>
 </section>
 <section class="slide level2">
 
@@ -1412,8 +1439,8 @@ Quang Nguyen
 </section>
 <section class="slide level2">
 
-<h3 id="example-4-formula-one-api">Example 4: Formula One API</h3>
-<p>(Inspiration: <a href="https://github.com/rfordatascience/tidytuesday/tree/master/data/2021/2021-09-07">Tidy Tuesday 2021-09-07</a>)</p>
+<h3 id="pulling-data-from-apis">Pulling data from APIs</h3>
+<p>Example: Formula One API (Inspiration: <a href="https://github.com/rfordatascience/tidytuesday/tree/master/data/2021/2021-09-07">Tidy Tuesday 2021-09-07</a>)</p>
 <ul>
 <li><p><a href="http://ergast.com/mrd/">Ergast Developer API</a> (<a href="http://ergast.com/mrd/" class="uri">http://ergast.com/mrd/</a>) is an (experimental) API that provides Formula One historical data</p></li>
 <li><p>Suppose we’re interested in getting a table of every F1 winning constructor</p>
@@ -1424,7 +1451,7 @@ Quang Nguyen
 </section>
 <section class="slide level2">
 
-<h3 id="example-4-formula-one-api-1">Example 4: Formula One API</h3>
+<h3 id="pulling-data-from-apis-1">Pulling data from APIs</h3>
 <ul>
 <li>First, we can use <code>GET()</code> to send a request to the API. We then receive the data via a response</li>
 </ul>
@@ -1436,7 +1463,7 @@ Quang Nguyen
 <span id="cb60-5"><a href="#cb60-5" aria-hidden="true" tabindex="-1"></a>f1_response</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Response [http://ergast.com/api/f1/constructorStandings/1/constructors.json]
-  Date: 2023-07-03 20:07
+  Date: 2023-07-03 20:42
   Status: 200
   Content-Type: application/json; charset=utf-8
   Size: 2.4 kB</code></pre>
@@ -1448,7 +1475,7 @@ Quang Nguyen
 </section>
 <section class="slide level2">
 
-<h3 id="example-4-formula-one-api-2">Example 4: Formula One API</h3>
+<h3 id="pulling-data-from-apis-2">Pulling data from APIs</h3>
 <ul>
 <li>Next, we want to get the data from the response by calling <code>content()</code>. We can then view the structure of the content object.</li>
 </ul>
@@ -1473,7 +1500,7 @@ Quang Nguyen
 </section>
 <section class="slide level2">
 
-<h3 id="example-4-formula-one-api-3">Example 4: Formula One API</h3>
+<h3 id="pulling-data-from-apis-3">Pulling data from APIs</h3>
 <ul>
 <li>Finally, based on the content structure, we can get a list of constructors. Each list consists of constructor ID, (Wikipedia) URL, name, and nationality.</li>
 </ul>
@@ -1483,20 +1510,33 @@ Quang Nguyen
 <span id="cb65-3"><a href="#cb65-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pluck</span>(<span class="st">"ConstructorTable"</span>) <span class="sc">|&gt;</span> </span>
 <span id="cb65-4"><a href="#cb65-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pluck</span>(<span class="st">"Constructors"</span>)</span>
 <span id="cb65-5"><a href="#cb65-5" aria-hidden="true" tabindex="-1"></a><span class="co"># f1_constructor_list</span></span>
-<span id="cb65-6"><a href="#cb65-6" aria-hidden="true" tabindex="-1"></a><span class="co"># names(f1_constructor_list[[1]])</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb65-6"><a href="#cb65-6" aria-hidden="true" tabindex="-1"></a>f1_constructor_list[[<span class="dv">1</span>]]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>$constructorId
+[1] "benetton"
+
+$url
+[1] "http://en.wikipedia.org/wiki/Benetton_Formula"
+
+$name
+[1] "Benetton"
+
+$nationality
+[1] "Italian"</code></pre>
+</div>
 </div>
 </section>
 <section class="slide level2">
 
-<h3 id="example-4-formula-one-api-4">Example 4: Formula One API</h3>
+<h3 id="pulling-data-from-apis-4">Pulling data from APIs</h3>
 <ul>
 <li>A few extra transformation steps will give us the desired table</li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb66"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb66-1"><a href="#cb66-1" aria-hidden="true" tabindex="-1"></a>f1_constructor_tbl <span class="ot">&lt;-</span> f1_constructor_list <span class="sc">|&gt;</span> </span>
-<span id="cb66-2"><a href="#cb66-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as_tibble_col</span>(<span class="at">column_name =</span> <span class="st">"info"</span>) <span class="sc">|&gt;</span> <span class="co"># convert list to tibble</span></span>
-<span id="cb66-3"><a href="#cb66-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unnest_wider</span>(info) <span class="co"># unnest a list-column into columns</span></span>
-<span id="cb66-4"><a href="#cb66-4" aria-hidden="true" tabindex="-1"></a>f1_constructor_tbl</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb67"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb67-1"><a href="#cb67-1" aria-hidden="true" tabindex="-1"></a>f1_constructor_tbl <span class="ot">&lt;-</span> f1_constructor_list <span class="sc">|&gt;</span> </span>
+<span id="cb67-2"><a href="#cb67-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as_tibble_col</span>(<span class="at">column_name =</span> <span class="st">"info"</span>) <span class="sc">|&gt;</span> <span class="co"># convert list to tibble</span></span>
+<span id="cb67-3"><a href="#cb67-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unnest_wider</span>(info) <span class="co"># unnest a list-column into columns</span></span>
+<span id="cb67-4"><a href="#cb67-4" aria-hidden="true" tabindex="-1"></a>f1_constructor_tbl</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 17 × 4
    constructorId url                                           name  nationality
@@ -1526,8 +1566,8 @@ Quang Nguyen
 <h3 id="scrape-responsibly">Scrape responsibly!</h3>
 <ul>
 <li><p>Great article on <a href="https://towardsdatascience.com/ethics-in-web-scraping-b96b18136f01">Ethics in Web Scraping</a>, featuring a “web scraping manifesto”</p></li>
-<li><p>Web scraping case study from <a href="https://mdsr-book.github.io/mdsr2e/ch-ethics.html">Data science ethics chapter of MDSR</a></p></li>
-<li><p><a href="https://jakobtures.github.io/web-scraping/goodpractice.html">Good pratice chapter from Web Scraping using R</a></p></li>
+<li><p>Web scraping case study from the <a href="https://mdsr-book.github.io/mdsr2e/ch-ethics.html">Data science ethics chapter</a> of MDSR</p></li>
+<li><p><a href="https://jakobtures.github.io/web-scraping/goodpractice.html">Good pratice chapter</a> from Web Scraping using R</p></li>
 <li><p>Common points</p>
 <ul>
 <li><p>Be mindful of the terms of use of every website</p></li>
@@ -1550,18 +1590,18 @@ Quang Nguyen
 
 <h3 id="the-polite-package-example">The <code>polite</code> package: example</h3>
 <ul>
-<li><p>We use the same Wimbledon example as before to demonstrate <code>polite</code></p></li>
+<li><p>Example: Wimbledon Women’s singles (same as before)</p></li>
 <li><p>First, pass the URL into <code>bow()</code> to get a “session” object</p>
 <ul>
-<li>This gives information about the <code>robots.txt</code> and whether the web page is scrapable</li>
+<li>This gives information about the <code>robots.txt</code> and whether the webpage is scrapable</li>
 </ul></li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb68"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb68-1"><a href="#cb68-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(polite)</span>
-<span id="cb68-2"><a href="#cb68-2" aria-hidden="true" tabindex="-1"></a>wimbledon_url <span class="ot">&lt;-</span> <span class="st">"https://en.wikipedia.org/wiki/2009_Wimbledon_Championships_-_Women's_singles"</span></span>
-<span id="cb68-3"><a href="#cb68-3" aria-hidden="true" tabindex="-1"></a>session <span class="ot">&lt;-</span> wimbledon_url <span class="sc">|&gt;</span> </span>
-<span id="cb68-4"><a href="#cb68-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">bow</span>()</span>
-<span id="cb68-5"><a href="#cb68-5" aria-hidden="true" tabindex="-1"></a>session</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb69"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb69-1"><a href="#cb69-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(polite)</span>
+<span id="cb69-2"><a href="#cb69-2" aria-hidden="true" tabindex="-1"></a>wimbledon_url <span class="ot">&lt;-</span> <span class="st">"https://en.wikipedia.org/wiki/2009_Wimbledon_Championships_-_Women's_singles"</span></span>
+<span id="cb69-3"><a href="#cb69-3" aria-hidden="true" tabindex="-1"></a>session <span class="ot">&lt;-</span> wimbledon_url <span class="sc">|&gt;</span> </span>
+<span id="cb69-4"><a href="#cb69-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">bow</span>()</span>
+<span id="cb69-5"><a href="#cb69-5" aria-hidden="true" tabindex="-1"></a>session</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>&lt;polite session&gt; https://en.wikipedia.org/wiki/2009_Wimbledon_Championships_-_Women's_singles
     User-agent: polite R package
@@ -1581,8 +1621,8 @@ Quang Nguyen
 </ul></li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb70"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb70-1"><a href="#cb70-1" aria-hidden="true" tabindex="-1"></a>session <span class="sc">|&gt;</span> </span>
-<span id="cb70-2"><a href="#cb70-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scrape</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb71"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb71-1"><a href="#cb71-1" aria-hidden="true" tabindex="-1"></a>session <span class="sc">|&gt;</span> </span>
+<span id="cb71-2"><a href="#cb71-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scrape</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>{html_document}
 &lt;html class="client-nojs vector-feature-language-in-header-enabled vector-feature-language-in-main-page-header-disabled vector-feature-sticky-header-disabled vector-feature-page-tools-pinned-disabled vector-feature-toc-pinned-enabled vector-feature-main-menu-pinned-disabled vector-feature-limited-width-enabled vector-feature-limited-width-content-enabled vector-feature-zebra-design-disabled" lang="en" dir="ltr"&gt;
@@ -1598,12 +1638,12 @@ Quang Nguyen
 <li>The remaining steps are similar as before. We can copy the earlier code for specifying the HTML element, retrieving text, and converting to tibble.</li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb72"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb72-1"><a href="#cb72-1" aria-hidden="true" tabindex="-1"></a>session <span class="sc">|&gt;</span> </span>
-<span id="cb72-2"><a href="#cb72-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scrape</span>() <span class="sc">|&gt;</span> </span>
-<span id="cb72-3"><a href="#cb72-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">html_element</span>(<span class="st">"#mw-content-text &gt; div.mw-parser-output &gt; div:nth-child(13)"</span>) <span class="sc">|&gt;</span> </span>
-<span id="cb72-4"><a href="#cb72-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">html_text2</span>() <span class="sc">|&gt;</span></span>
-<span id="cb72-5"><a href="#cb72-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">str_split_1</span>(<span class="st">"</span><span class="sc">\\</span><span class="st">n"</span>) <span class="sc">|&gt;</span> </span>
-<span id="cb72-6"><a href="#cb72-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as_tibble_col</span>(<span class="at">column_name =</span> <span class="st">"info"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb73"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb73-1"><a href="#cb73-1" aria-hidden="true" tabindex="-1"></a>session <span class="sc">|&gt;</span> </span>
+<span id="cb73-2"><a href="#cb73-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scrape</span>() <span class="sc">|&gt;</span> </span>
+<span id="cb73-3"><a href="#cb73-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">html_element</span>(<span class="st">"#mw-content-text &gt; div.mw-parser-output &gt; div:nth-child(13)"</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb73-4"><a href="#cb73-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">html_text2</span>() <span class="sc">|&gt;</span></span>
+<span id="cb73-5"><a href="#cb73-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">str_split_1</span>(<span class="st">"</span><span class="sc">\\</span><span class="st">n"</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb73-6"><a href="#cb73-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as_tibble_col</span>(<span class="at">column_name =</span> <span class="st">"info"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 32 × 1
    info                                                             
@@ -1630,7 +1670,7 @@ Quang Nguyen
 <li><p><a href="https://ryo-n7.github.io/2020-05-14-webscrape-soccer-data-with-R">Intro to {polite} Web Scraping of Soccer Data with R</a></p></li>
 <li><p>Web scraping workshop from UCSAS <a href="https://github.com/YaqiongYao/UCSAS_WebScrapping">2020</a> and <a href="https://github.com/lcgodoy/ucsas2021">2021</a></p></li>
 <li><p><a href="http://brooksandrew.github.io/simpleblog/articles/scraping-with-selenium/">Scraping with Selenium blogpost</a></p></li>
-<li><p>Browse through source code of different <code>R</code> “scraper” packages.</p></li>
+<li><p>Browse through source code of different <code>R</code> “scraper” packages</p></li>
 </ul>
 </section>
 <section class="slide level2">
@@ -1639,11 +1679,11 @@ Quang Nguyen
 <ul>
 <li><p>Web scraping is an excellent means for gaining proficiency in data cleaning</p>
 <ul>
-<li><p>It takes time… the more you play around the better you get</p></li>
-<li><p>Always consult the function documentations</p></li>
+<li><p>It takes time - the more you play around the better you get</p></li>
+<li><p>Remember to consult the help documentations</p></li>
 </ul></li>
 <li><p>Come up with fun personal projects (data viz, Shiny app, etc.), scrape data, and enjoy learning (and the struggle)</p></li>
-<li><p>You can develop the next great sports “scrapR” package(s)</p></li>
+<li><p>You can develop the next great sports “scrapR” package(s) (or even for your field of interest)</p></li>
 </ul>
 <div class="footer footer-default">
 
