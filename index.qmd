@@ -138,7 +138,9 @@ install.packages("rvest")
 -   Example: NHL career games played leaders
 
     -   URL: <https://www.hockey-reference.com/leaders/nhl_tbl_career.html>
+    
 ::: {.fragment}
+
 -   Tasks:  Scrape the **NHL Leaders** table
 
     *   Read the HTML page into `R`
@@ -426,7 +428,7 @@ str_replace_all("noon", "o", "a")
 
 ---
 
-### Practice: Scraping (HTML) tables
+### Scraping practice
 
 Example: Frauen Bundesliga (Germany's women's soccer league)
 
@@ -444,7 +446,7 @@ Example: Frauen Bundesliga (Germany's women's soccer league)
     
 ---
 
-### Practice: Scraping (HTML) tables
+### Scraping practice
 
 *   Scrape 2017-2018 overall standings
 
@@ -459,7 +461,7 @@ fb_tbl
         
 ---
 
-### Practice: Scraping (HTML) tables
+### Scraping practice
 
 *   General function
 
@@ -719,7 +721,7 @@ Web APIs provides interactions between a client device and a web server using th
 
 ::: {.fragment}
 
-*   Fortunately, there exists many `R` packages (sports on non-sports) that provides access to APIs for obtaining data
+*   Fortunately, there exists many `R` packages (sports and non-sports) that provides access to APIs for obtaining data
 
     *   Note that these packages ("API wrappers") do not provide the actual data - instead functions for accessing the data
 

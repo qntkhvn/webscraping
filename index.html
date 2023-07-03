@@ -517,8 +517,11 @@ Quang Nguyen
 <ul>
 <li><p>Example: NHL career games played leaders</p>
 <ul>
-<li>URL: <a href="https://www.hockey-reference.com/leaders/nhl_tbl_career.html" class="uri">https://www.hockey-reference.com/leaders/nhl_tbl_career.html</a> ::: {.fragment}</li>
+<li>URL: <a href="https://www.hockey-reference.com/leaders/nhl_tbl_career.html" class="uri">https://www.hockey-reference.com/leaders/nhl_tbl_career.html</a></li>
 </ul></li>
+</ul>
+<div class="fragment">
+<ul>
 <li><p>Tasks: Scrape the <strong>NHL Leaders</strong> table</p>
 <ul>
 <li><p>Read the HTML page into <code>R</code></p></li>
@@ -528,10 +531,11 @@ Quang Nguyen
 <ul>
 <li><p>Create an indicator variable for whether a player is in the Hall of Fame</p></li>
 <li><p>Remove the asterisk (<code>*</code>) from the Player column</p></li>
-<li><p>Remove the dot (<code>.</code>) from the Rank column :::</p></li>
+<li><p>Remove the dot (<code>.</code>) from the Rank column</p></li>
 </ul></li>
 </ul></li>
 </ul>
+</div>
 </section>
 <section class="slide level2">
 
@@ -932,7 +936,7 @@ Quang Nguyen
 </section>
 <section class="slide level2">
 
-<h3 id="practice-scraping-html-tables">Practice: Scraping (HTML) tables</h3>
+<h3 id="scraping-practice">Scraping practice</h3>
 <p>Example: Frauen Bundesliga (Germany’s women’s soccer league)</p>
 <ul>
 <li><p>URL: <a href="https://fbref.com/en/comps/183/2017-2018/2017-2018-Frauen-Bundesliga-Stats" class="uri">https://fbref.com/en/comps/183/2017-2018/2017-2018-Frauen-Bundesliga-Stats</a></p></li>
@@ -949,7 +953,7 @@ Quang Nguyen
 </section>
 <section class="slide level2">
 
-<h3 id="practice-scraping-html-tables-1">Practice: Scraping (HTML) tables</h3>
+<h3 id="scraping-practice-1">Scraping practice</h3>
 <ul>
 <li>Scrape 2017-2018 overall standings</li>
 </ul>
@@ -983,7 +987,7 @@ Quang Nguyen
 </section>
 <section class="slide level2">
 
-<h3 id="practice-scraping-html-tables-2">Practice: Scraping (HTML) tables</h3>
+<h3 id="scraping-practice-2">Scraping practice</h3>
 <ul>
 <li>General function</li>
 </ul>
@@ -1410,7 +1414,7 @@ Quang Nguyen
 </div>
 <div class="fragment">
 <ul>
-<li><p>Fortunately, there exists many <code>R</code> packages (sports on non-sports) that provides access to APIs for obtaining data</p>
+<li><p>Fortunately, there exists many <code>R</code> packages (sports and non-sports) that provides access to APIs for obtaining data</p>
 <ul>
 <li><p>Note that these packages (“API wrappers”) do not provide the actual data - instead functions for accessing the data</p></li>
 <li><p>For sports, check out the <a href="https://cran.r-project.org/web/views/SportsAnalytics.html">Sports Analytics CRAN Task View</a> and <a href="https://www.sportsdataverse.org/">SportsDataverse</a> for more information</p></li>
@@ -1463,7 +1467,7 @@ Quang Nguyen
 <span id="cb60-5"><a href="#cb60-5" aria-hidden="true" tabindex="-1"></a>f1_response</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Response [http://ergast.com/api/f1/constructorStandings/1/constructors.json]
-  Date: 2023-07-03 20:42
+  Date: 2023-07-03 20:50
   Status: 200
   Content-Type: application/json; charset=utf-8
   Size: 2.4 kB</code></pre>
