@@ -846,6 +846,8 @@ f1_constructor_tbl
     - Be mindful of the terms of use of every website
     
     - Anonymize personal data, especially if data/analysis are to be publicly released
+    
+    - Take advantage of APIs
 
 --- 
 
