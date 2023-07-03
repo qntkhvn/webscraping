@@ -1,0 +1,2051 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<script src="index_files/libs/clipboard/clipboard.min.js"></script>
+<script src="index_files/libs/quarto-html/tabby.min.js"></script>
+<script src="index_files/libs/quarto-html/popper.min.js"></script>
+<script src="index_files/libs/quarto-html/tippy.umd.min.js"></script>
+<link href="index_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="index_files/libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="index_files/libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
+<link href="index_files/libs/quarto-html/quarto-syntax-highlighting-dark.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="index_files/libs/quarto-contrib/videojs/video.min.js"></script>
+<link href="index_files/libs/quarto-contrib/videojs/video-js.css" rel="stylesheet"><meta charset="utf-8">
+  <meta name="generator" content="quarto-1.3.361">
+
+  <meta name="author" content="Quang Nguyen">
+  <title>Web Scraping: A Primer</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+  <link rel="stylesheet" href="index_files/libs/revealjs/dist/reset.css">
+  <link rel="stylesheet" href="index_files/libs/revealjs/dist/reveal.css">
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+      vertical-align: middle;
+    }
+    /* CSS for syntax highlighting */
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+      }
+    pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+    div.sourceCode
+      { color: #f8f8f2;  }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span { color: #f8f8f2; } /* Normal */
+    code span.al { color: #f07178; background-color: #2a0f15; font-weight: bold; } /* Alert */
+    code span.an { color: #d4d0ab; } /* Annotation */
+    code span.at { color: #00e0e0; } /* Attribute */
+    code span.bn { color: #d4d0ab; } /* BaseN */
+    code span.bu { color: #abe338; } /* BuiltIn */
+    code span.cf { color: #ffa07a; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #abe338; } /* Char */
+    code span.cn { color: #ffd700; } /* Constant */
+    code span.co { color: #f8f8f2; font-style: italic; } /* Comment */
+    code span.cv { color: #ffd700; } /* CommentVar */
+    code span.do { color: #f8f8f2; } /* Documentation */
+    code span.dt { color: #ffa07a; } /* DataType */
+    code span.dv { color: #d4d0ab; } /* DecVal */
+    code span.er { color: #f07178; text-decoration: underline; } /* Error */
+    code span.ex { color: #00e0e0; font-weight: bold; } /* Extension */
+    code span.fl { color: #d4d0ab; } /* Float */
+    code span.fu { color: #ffa07a; } /* Function */
+    code span.im { color: #abe338; } /* Import */
+    code span.in { color: #d4d0ab; } /* Information */
+    code span.kw { color: #ffa07a; font-weight: bold; } /* Keyword */
+    code span.op { color: #ffa07a; } /* Operator */
+    code span.ot { color: #00e0e0; } /* Other */
+    code span.pp { color: #dcc6e0; } /* Preprocessor */
+    code span.re { color: #00e0e0; background-color: #f8f8f2; } /* RegionMarker */
+    code span.sc { color: #abe338; } /* SpecialChar */
+    code span.ss { color: #abe338; } /* SpecialString */
+    code span.st { color: #abe338; } /* String */
+    code span.va { color: #00e0e0; } /* Variable */
+    code span.vs { color: #abe338; } /* VerbatimString */
+    code span.wa { color: #dcc6e0; } /* Warning */
+  </style>
+  <link rel="stylesheet" href="index_files/libs/revealjs/dist/theme/quarto.css">
+  <link href="index_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
+  <link href="index_files/libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
+  <link href="index_files/libs/revealjs/plugin/reveal-menu/quarto-menu.css" rel="stylesheet">
+  <link href="index_files/libs/revealjs/plugin/quarto-support/footer.css" rel="stylesheet">
+  <style type="text/css">
+
+  .callout {
+    margin-top: 1em;
+    margin-bottom: 1em;  
+    border-radius: .25rem;
+  }
+
+  .callout.callout-style-simple { 
+    padding: 0em 0.5em;
+    border-left: solid #acacac .3rem;
+    border-right: solid 1px silver;
+    border-top: solid 1px silver;
+    border-bottom: solid 1px silver;
+    display: flex;
+  }
+
+  .callout.callout-style-default {
+    border-left: solid #acacac .3rem;
+    border-right: solid 1px silver;
+    border-top: solid 1px silver;
+    border-bottom: solid 1px silver;
+  }
+
+  .callout .callout-body-container {
+    flex-grow: 1;
+  }
+
+  .callout.callout-style-simple .callout-body {
+    font-size: 1rem;
+    font-weight: 400;
+  }
+
+  .callout.callout-style-default .callout-body {
+    font-size: 0.9rem;
+    font-weight: 400;
+  }
+
+  .callout.callout-titled.callout-style-simple .callout-body {
+    margin-top: 0.2em;
+  }
+
+  .callout:not(.callout-titled) .callout-body {
+      display: flex;
+  }
+
+  .callout:not(.no-icon).callout-titled.callout-style-simple .callout-content {
+    padding-left: 1.6em;
+  }
+
+  .callout.callout-titled .callout-header {
+    padding-top: 0.2em;
+    margin-bottom: -0.2em;
+  }
+
+  .callout.callout-titled .callout-title  p {
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
+  }
+    
+  .callout.callout-titled.callout-style-simple .callout-content  p {
+    margin-top: 0;
+  }
+
+  .callout.callout-titled.callout-style-default .callout-content  p {
+    margin-top: 0.7em;
+  }
+
+  .callout.callout-style-simple div.callout-title {
+    border-bottom: none;
+    font-size: .9rem;
+    font-weight: 600;
+    opacity: 75%;
+  }
+
+  .callout.callout-style-default  div.callout-title {
+    border-bottom: none;
+    font-weight: 600;
+    opacity: 85%;
+    font-size: 0.9rem;
+    padding-left: 0.5em;
+    padding-right: 0.5em;
+  }
+
+  .callout.callout-style-default div.callout-content {
+    padding-left: 0.5em;
+    padding-right: 0.5em;
+  }
+
+  .callout.callout-style-simple .callout-icon::before {
+    height: 1rem;
+    width: 1rem;
+    display: inline-block;
+    content: "";
+    background-repeat: no-repeat;
+    background-size: 1rem 1rem;
+  }
+
+  .callout.callout-style-default .callout-icon::before {
+    height: 0.9rem;
+    width: 0.9rem;
+    display: inline-block;
+    content: "";
+    background-repeat: no-repeat;
+    background-size: 0.9rem 0.9rem;
+  }
+
+  .callout-title {
+    display: flex
+  }
+    
+  .callout-icon::before {
+    margin-top: 1rem;
+    padding-right: .5rem;
+  }
+
+  .callout.no-icon::before {
+    display: none !important;
+  }
+
+  .callout.callout-titled .callout-body > .callout-content > :last-child {
+    margin-bottom: 0.5rem;
+  }
+
+  .callout.callout-titled .callout-icon::before {
+    margin-top: .5rem;
+    padding-right: .5rem;
+  }
+
+  .callout:not(.callout-titled) .callout-icon::before {
+    margin-top: 1rem;
+    padding-right: .5rem;
+  }
+
+  /* Callout Types */
+
+  div.callout-note {
+    border-left-color: #4582ec !important;
+  }
+
+  div.callout-note .callout-icon::before {
+    background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAIKADAAQAAAABAAAAIAAAAACshmLzAAAEU0lEQVRYCcVXTWhcVRQ+586kSUMMxkyaElstCto2SIhitS5Ek8xUKV2poatCcVHtUlFQk8mbaaziwpWgglJwVaquitBOfhQXFlqlzSJpFSpIYyXNjBNiTCck7x2/8/LeNDOZxDuEkgOXe++553zfefee+/OYLOXFk3+1LLrRdiO81yNqZ6K9cG0P3MeFaMIQjXssE8Z1JzLO9ls20MBZX7oG8w9GxB0goaPrW5aNMp1yOZIa7Wv6o2ykpLtmAPs/vrG14Z+6d4jpbSKuhdcSyq9wGMPXjonwmESXrriLzFGOdDBLB8Y6MNYBu0dRokSygMA/mrun8MGFN3behm6VVAwg4WR3i6FvYK1T7MHo9BK7ydH+1uurECoouk5MPRyVSBrBHMYwVobG2aOXM07sWrn5qgB60rc6mcwIDJtQrnrEr44kmy+UO9r0u9O5/YbkS9juQckLed3DyW2XV/qWBBB3ptvI8EUY3I9p/67OW+g967TNr3Sotn3IuVlfMLVnsBwH4fsnebJvyGm5GeIUA3jljERmrv49SizPYuq+z7c2H/jlGC+Ghhupn/hcapqmcudB9jwJ/3jvnvu6vu5lVzF1fXyZuZZ7U8nRmVzytvT+H3kilYvH09mLWrQdwFSsFEsxFVs5fK7A0g8gMZjbif4ACpKbjv7gNGaD8bUrlk8x+KRflttr22JEMRUbTUwwDQScyzPgedQHZT0xnx7ujw2jfVfExwYHwOsDTjLdJ2ebmeQIlJ7neo41s/DrsL3kl+W2lWvAga0tR3zueGr6GL78M3ifH0rGXrBC2aAR8uYcIA5gwV8zIE8onoh8u0Fca/ciF7j1uOzEnqcIm59sEXoGc0+z6+H45V1CvAvHcD7THztu669cnp+L0okAeIc6zjbM/24LgGM1gZk7jnRu1aQWoU9sfUOuhrmtaPIO3YY1KLLWZaEO5TKUbMY5zx8W9UJ6elpLwKXbsaZ4EFl7B4bMtDv0iRipKoDQT2sNQI9b1utXFdYisi+wzZ/ri/1m7QfDgEuvgUUEIJPq3DhX/5DWNqIXDOweC2wvIR90Oq3lDpdMIgD2r0dXvGdsEW5H6x6HLRJYU7C69VefO1x8Gde1ZFSJLfWS1jbCnhtOPxmpfv2LXOA2Xk2tvnwKKPFuZ/oRmwBwqRQDcKNeVQkYcOjtWVBuM/JuYw5b6isojIkYxyYAFn5K7ZBF10fea52y8QltAg6jnMqNHFBmGkQ1j+U43HMi2xMar1Nv0zGsf1s8nUsmUtPOOrbFIR8bHFDMB5zL13Gmr/kGlCkUzedTzzmzsaJXhYawnA3UmARpiYj5ooJZiUoxFRtK3X6pgNPv+IZVPcnwbOl6f+aBaO1CNvPW9n9LmCp01nuSaTRF2YxHqZ8DYQT6WsXT+RD6eUztwYLZ8rM+rcPxamv1VQzFUkzFXvkiVrySGQgJNvXHJAxiU3/NwiC03rSf05VBaPtu/Z7/B8Yn/w7eguloAAAAAElFTkSuQmCC');
+  }
+
+  div.callout-note.callout-style-default .callout-title {
+    background-color: #dae6fb
+  }
+
+  div.callout-important {
+    border-left-color: #d9534f !important;
+  }
+
+  div.callout-important .callout-icon::before {
+    background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAIKADAAQAAAABAAAAIAAAAACshmLzAAAEKklEQVRYCcVXTWhcVRS+575MJym48A+hSRFr00ySRQhURRfd2HYjk2SSTokuBCkU2o0LoSKKraKIBTcuFCoidGFD08nkBzdREbpQ1EDNIv8qSGMFUboImMSZd4/f9zJv8ibJMC8xJQfO3HPPPef7zrvvvnvviIkpC9nsw0UttFunbUhpFzFtarSd6WJkStVMw5xyVqYTvkwfzuf/5FgtkVoB0729j1rjXwThS7Vio+Mo6DNnvLfahoZ+i/o32lULuJ3NNiz7q6+pyAUkJaFF6JwaM2lUJlV0MlnQn5aTRbEu0SEqHUa0A4AdiGuB1kFXRfVyg5d87+Dg4DL6m2TLAub60ilj7A1Ec4odSAc8X95sHh7+ZRPCFo6Fnp7HfU/fBng/hi10CjCnWnJjsxvDNxWw0NfV6Rv5GgP3I3jGWXumdTD/3cbEOP2ZbOZp69yniG3FQ9z1jD7bnBu9Fc2tKGC2q+uAJOQHBDRiZX1x36o7fWBs7J9ownbtO+n0/qWkvW7UPIfc37WgT6ZGR++EOJyeQDSb9UB+DZ1G6DdLDzyS+b/kBCYGsYgJbSQHuThGKRcw5xdeQf8YdNHsc6ePXrlSYMBuSIAFTGAtQo+VuALo4BX83N190NWZWbynBjhOHsmNfFWLeL6v+ynsA58zDvvAC8j5PkbOcXCMg2PZFk3q8MjI7WAG/Dp9AwP7jdGBOOQkAvlFUB+irtm16I1Zw9YBcpGTGXYmk3kQIC/Cds55l+iMI3jqhjAuaoe+am2Jw5GT3Nbz3CkE12NavmzN5+erJW7046n/CH1RO/RVa8lBLozXk9uqykkGAyRXLWlLv5jyp4RFsG5vGVzpDLnIjTWgnRy2Rr+tDKvRc7Y8AyZq10jj8DqXdnIRNtFZb+t/ZRtXcDiVnzpqx8mPcDWxgARUqx0W1QB9MeUZiNrV4qP+Ehc+BpNgATsTX8ozYKL2NtFYAHc84fG7ndxUPr+AR/iQSns7uSUufAymwDOb2+NjK27lEFocm/EE2WpyIy/Hi66MWuMKJn8RvxIcj87IM5Vh9663ziW36kR0HNenXuxmfaD8JC7tfKbrhFr7LiZCrMjrzTeGx+PmkosrkNzW94ObzwocJ7A1HokLolY+AvkTiD/q1H0cN48c5EL8Crkttsa/AXQVDmutfyku0E7jShx49XqV3MFK8IryDhYVbj7Sj2P2eBxwcXoe8T8idsKKPRcnZw1b+slFTubwUwhktrfnAt7J++jwQtLZcm3sr9LQrjRzz6cfMv9aLvgmnAGvpoaGLxM4mAEaLV7iAzQ3oU0IvD5x9ix3yF2RAAuYAOO2f7PEFWCXZ4C9Pb2UsgDeVnFSpbFK7/IWu7TPTvBqzbGdCHOJQSxiEjt6IyZmxQyEJHv6xyQsYk//moVFsN2zP6fRImjfq7/n/wFDguUQFNEwugAAAABJRU5ErkJggg==');
+  }
+
+  div.callout-important.callout-style-default .callout-title {
+    background-color: #f7dddc
+  }
+
+  div.callout-warning {
+    border-left-color: #f0ad4e !important;
+  }
+
+  div.callout-warning .callout-icon::before {
+    background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAIKADAAQAAAABAAAAIAAAAACshmLzAAAETklEQVRYCeVWW2gcVRg+58yaTUnizqbipZeX4uWhBEniBaoUX1Ioze52t7sRq6APio9V9MEaoWlVsFasRq0gltaAPuxms8lu0gcviE/FFOstVbSIxgcv6SU7EZqmdc7v9+9mJtNks51NTUH84ed889/PP+cmxP+d5FIbMJmNbpREu4WUkiTtCicKny0l1pIKmBzovF2S+hIJHX8iEu3hZJ5lNZGqyRrGSIQpq15AzF28jgpeY6yk6GVdrfFqdrD6Iw+QlB8g0YS2g7dyQmXM/IDhBhT0UCiRf59lfqmmDvzRt6kByV/m4JjtzuaujMUM2c5Z2d6JdKrRb3K2q6mA+oYVz8JnDdKPmmNthzkAk/lN63sYPgevrguc72aZX/L9C6x09GYyxBgCX4NlvyGUHOKELlm5rXeR1kchuChJt4SSwyddZRXgvwMGvYo4QSlk3/zkHD8UHxwVJA6zjZZqP8v8kK8OWLnIZtLyCAJagYC4rTGW/9Pqj92N/c+LUaAj27movwbi19tk/whRCIE7Q9vyI6yvRpftAKVTdUjOW40X3h5OXsKCdmFcx0xlLJoSuQngnrJe7Kcjm4OMq9FlC7CMmScQANuNvjfP3PjGXDBaUQmbp296S5L4DrpbrHN1T87ZVEZVCzg1FF0Ft+dKrlLukI+/c9ENo+TvlTDbYFvuKPtQ9+l052rXrgKoWkDAFnvh0wTOmYn8R5f4k/jN/fZiCM1tQx9jQQ4ANhqG4hiL0qIFTGViG9DKB7GYzgubnpofgYRwO+DFjh0Zin2m4b/97EDkXkc+f6xYAPX0KK2I/7fUQuwzuwo/L3AkcjugPNixC8cHf0FyPjWlItmLxWw4Ou9YsQCr5fijMGoD/zpdRy95HRysyXA74MWOnscpO4j2y3HAVisw85hX5+AFBRSHt4ShfLFkIMXTqyKFc46xdzQM6XbAi702a7sy04J0+feReMFKp5q9esYLCqAZYw/k14E/xcLLsFElaornTuJB0svMuJINy8xkIYuL+xPAlWRceH6+HX7THJ0djLUom46zREu7tTkxwmf/FdOZ/sh6Q8qvEAiHpm4PJ4a/doJe0gH1t+aHRgCzOvBvJedEK5OFE5jpm4AGP2a8Dxe3gGJ/pAutug9Gp6he92CsSsWBaEcxGx0FHytmIpuqGkOpldqNYQK8cSoXvd+xLxXADw0kf6UkJNFtdo5MOgaLjiQOQHcn+A6h5NuL2s0qsC2LOM75PcF3yr5STuBSAcGG+meA14K/CI21HcS4LBT6tv0QAh8Dr5l93AhZzG5ZJ4VxAqdZUEl9z7WJ4aN+svMvwHHL21UKTd1mqvChH7/Za5xzXBBKrUcB0TQ+Ulgkfbi/H/YT5EptrGzsEK7tR1B7ln9BBwckYfMiuSqklSznIuoIIOM42MQO+QnduCoFCI0bpkzjCjddHPN/F+2Yu+sd9bKNpVwHhbS3LluK/0zgfwD0xYI5dXuzlQAAAABJRU5ErkJggg==');
+  }
+
+  div.callout-warning.callout-style-default .callout-title {
+    background-color: #fcefdc
+  }
+
+  div.callout-tip {
+    border-left-color: #02b875 !important;
+  }
+
+  div.callout-tip .callout-icon::before {
+    background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAIKADAAQAAAABAAAAIAAAAACshmLzAAADr0lEQVRYCe1XTWgTQRj9ZjZV8a9SPIkKgj8I1bMHsUWrqYLVg4Ue6v9BwZOxSYsIerFao7UiUryIqJcqgtpimhbBXoSCVxUFe9CTiogUrUp2Pt+3aUI2u5vdNh4dmMzOzHvvezuz8xNFM0mjnbXaNu1MvFWRXkXEyE6aYOYJpdW4IXuA4r0fo8qqSMDBU0v1HJUgVieAXxzCsdE/YJTdFcVIZQNMyhruOMJKXYFoLfIfIvVIMWdsrd+Rpd86ZmyzzjJmLStqRn0v8lzkb4rVIXvnpScOJuAn2ACC65FkPzEdEy4TPWRLJ2h7z4cArXzzaOdKlbOvKKX25Wl00jSnrwVxAg3o4dRxhO13RBSdNvH0xSARv3adTXbBdTf64IWO2vH0LT+cv4GR1DJt+DUItaQogeBX/chhbTBxEiZ6gftlDNXTrvT7co4ub5A6gp9HIcHvzTa46OS5fBeP87Qm0fQkr4FsYgVQ7Qg+ZayaDg9jhg1GkWj8RG6lkeSacrrHgDaxdoBiZPg+NXV/KifMuB6//JmYH4CntVEHy/keA6x4h4CU5oFy8GzrBS18cLJMXcljAKB6INjWsRcuZBWVaS3GDrqB7rdapVIeA+isQ57Eev9eCqzqOa81CY05VLd6SamW2wA2H3SiTbnbSxmzfp7WtKZkqy4mdyAlGx7ennghYf8voqp9cLSgKdqNfa6RdRsAAkPwRuJZNbpByn+RrJi1RXTwdi8RQF6ymDwGMAtZ6TVE+4uoKh+MYkcLsT0Hk8eAienbiGdjJHZTpmNjlbFJNKDVAp2fJlYju6IreQxQ08UJDNYdoLSl6AadO+fFuCQqVMB1NJwPm69T04Wv5WhfcWyfXQB+wXRs1pt+nCknRa0LVzSA/2B+a9+zQJadb7IyyV24YAxKp2Jqs3emZTuNnKxsah+uabKbMk7CbTgJx/zIgQYErIeTKRQ9yD9wxVof5YolPHqaWo7TD6tJlh7jQnK5z2n3+fGdggIOx2kaa2YI9QWarc5Ce1ipNWMKeSG4DysFF52KBmTNMmn5HqCFkwy34rDg05gDwgH3bBi+sgFhN/e8QvRn8kbamCOhgrZ9GJhFDgfcMHzFb6BAtjKpFhzTjwv1KCVuxHvCbsSiEz4CANnj84cwHdFXAbAOJ4LTSAawGWFn5tDhLMYz6nWeU2wJfIhmIJBefcd/A5FWQWGgrWzyORZ3Q6HuV+Jf0Bj+BTX69fm1zWgK7By1YTXchFDORywnfQ7GpzOo6S+qECrsx2ifVQAAAABJRU5ErkJggg==');
+  }
+
+  div.callout-tip.callout-style-default .callout-title {
+    background-color: #ccf1e3
+  }
+
+  div.callout-caution {
+    border-left-color: #fd7e14 !important;
+  }
+
+  div.callout-caution .callout-icon::before {
+    background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAIKADAAQAAAABAAAAIAAAAACshmLzAAACV0lEQVRYCdVWzWoUQRCuqp2ICBLJXgITZL1EfQDBW/bkzUMUD7klD+ATSHBEfAIfQO+iXsWDxJsHL96EHAwhgzlkg8nBg25XWb0zIb0zs9muYYWkoKeru+vn664fBqElyZNuyh167NXJ8Ut8McjbmEraKHkd7uAnAFku+VWdb3reSmRV8PKSLfZ0Gjn3a6Xlcq9YGb6tADjn+lUfTXtVmaZ1KwBIvFI11rRXlWlatwIAAv2asaa9mlB9wwygiDX26qaw1yYPzFXg2N1GgG0FMF8Oj+VIx7E/03lHx8UhvYyNZLN7BwSPgekXXLribw7w5/c8EF+DBK5idvDVYtEEwMeYefjjLAdEyQ3M9nfOkgnPTEkYU+sxMq0BxNR6jExrAI31H1rzvLEfRIdgcv1XEdj6QTQAS2wtstEALLG1yEZ3QhH6oDX7ExBSFEkFINXH98NTrme5IOaaA7kIfiu2L8A3qhH9zRbukdCqdsA98TdElyeMe5BI8Rs2xHRIsoTSSVFfCFCWGPn9XHb4cdobRIWABNf0add9jakDjQJpJ1bTXOJXnnRXHRf+dNL1ZV1MBRCXhMbaHqGI1JkKIL7+i8uffuP6wVQAzO7+qVEbF6NbS0LJureYcWXUUhH66nLR5rYmva+2tjRFtojkM2aD76HEGAD3tPtKM309FJg5j/K682ywcWJ3PASCcycH/22u+Bh7Aa0ehM2Fu4z0SAE81HF9RkB21c5bEn4Dzw+/qNOyXr3DCTQDMBOdhi4nAgiFDGCinIa2owCEChUwD8qzd03PG+qdW/4fDzjUMcE1ZpIAAAAASUVORK5CYII=');
+  }
+
+  div.callout-caution.callout-style-default .callout-title {
+    background-color: #ffe5d0
+  }
+
+  </style>
+  <style type="text/css">
+    .reveal div.sourceCode {
+      margin: 0;
+      overflow: auto;
+    }
+    .reveal div.hanging-indent {
+      margin-left: 1em;
+      text-indent: -1em;
+    }
+    .reveal .slide:not(.center) {
+      height: 100%;
+    }
+    .reveal .slide.scrollable {
+      overflow-y: auto;
+    }
+    .reveal .footnotes {
+      height: 100%;
+      overflow-y: auto;
+    }
+    .reveal .slide .absolute {
+      position: absolute;
+      display: block;
+    }
+    .reveal .footnotes ol {
+      counter-reset: ol;
+      list-style-type: none; 
+      margin-left: 0;
+    }
+    .reveal .footnotes ol li:before {
+      counter-increment: ol;
+      content: counter(ol) ". "; 
+    }
+    .reveal .footnotes ol li > p:first-child {
+      display: inline-block;
+    }
+    .reveal .slide ul,
+    .reveal .slide ol {
+      margin-bottom: 0.5em;
+    }
+    .reveal .slide ul li,
+    .reveal .slide ol li {
+      margin-top: 0.4em;
+      margin-bottom: 0.2em;
+    }
+    .reveal .slide ul[role="tablist"] li {
+      margin-bottom: 0;
+    }
+    .reveal .slide ul li > *:first-child,
+    .reveal .slide ol li > *:first-child {
+      margin-block-start: 0;
+    }
+    .reveal .slide ul li > *:last-child,
+    .reveal .slide ol li > *:last-child {
+      margin-block-end: 0;
+    }
+    .reveal .slide .columns:nth-child(3) {
+      margin-block-start: 0.8em;
+    }
+    .reveal blockquote {
+      box-shadow: none;
+    }
+    .reveal .tippy-content>* {
+      margin-top: 0.2em;
+      margin-bottom: 0.7em;
+    }
+    .reveal .tippy-content>*:last-child {
+      margin-bottom: 0.2em;
+    }
+    .reveal .slide > img.stretch.quarto-figure-center,
+    .reveal .slide > img.r-stretch.quarto-figure-center {
+      display: block;
+      margin-left: auto;
+      margin-right: auto; 
+    }
+    .reveal .slide > img.stretch.quarto-figure-left,
+    .reveal .slide > img.r-stretch.quarto-figure-left  {
+      display: block;
+      margin-left: 0;
+      margin-right: auto; 
+    }
+    .reveal .slide > img.stretch.quarto-figure-right,
+    .reveal .slide > img.r-stretch.quarto-figure-right  {
+      display: block;
+      margin-left: auto;
+      margin-right: 0; 
+    }
+  </style>
+</head>
+<body class="quarto-dark">
+  <div class="reveal">
+    <div class="slides">
+
+<section id="title-slide" class="quarto-title-block center">
+  <h1 class="title"><small>Web Scraping: A Primer</small></h1>
+
+<div class="quarto-title-authors">
+<div class="quarto-title-author">
+<div class="quarto-title-author-name">
+Quang Nguyen 
+</div>
+        <p class="quarto-title-affiliation">
+            </p><p>Department of Statistics &amp; Data Science<br>
+            Carnegie Mellon University<br>
+            <br>
+            SURE 2023 - CMSACamp<br>
+            <br>
+            <a href="https://twitter.com/qntkhvn"><svg aria-hidden="true" role="img" viewbox="0 0 512 512" style="height:1em;width:1em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:currentColor;overflow:visible;position:relative;"><path d="M459.37 151.716c.325 4.548.325 9.097.325 13.645 0 138.72-105.583 298.558-298.558 298.558-59.452 0-114.68-17.219-161.137-47.106 8.447.974 16.568 1.299 25.34 1.299 49.055 0 94.213-16.568 130.274-44.832-46.132-.975-84.792-31.188-98.112-72.772 6.498.974 12.995 1.624 19.818 1.624 9.421 0 18.843-1.3 27.614-3.573-48.081-9.747-84.143-51.98-84.143-102.985v-1.299c13.969 7.797 30.214 12.67 47.431 13.319-28.264-18.843-46.781-51.005-46.781-87.391 0-19.492 5.197-37.36 14.294-52.954 51.655 63.675 129.3 105.258 216.365 109.807-1.624-7.797-2.599-15.918-2.599-24.04 0-57.828 46.782-104.934 104.934-104.934 30.213 0 57.502 12.67 76.67 33.137 23.715-4.548 46.456-13.32 66.599-25.34-7.798 24.366-24.366 44.833-46.132 57.827 21.117-2.273 41.584-8.122 60.426-16.243-14.292 20.791-32.161 39.308-52.628 54.253z"></path></svg> <span class="citation" data-cites="qntkhvn">@qntkhvn</span></a> &nbsp; &nbsp; &nbsp; <a href="https://github.com/qntkhvn"><svg aria-hidden="true" role="img" viewbox="0 0 496 512" style="height:1em;width:0.97em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:currentColor;overflow:visible;position:relative;"><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"></path></svg> qntkhvn</a> &nbsp; &nbsp; &nbsp; <a href="https://qntkhvn.netlify.app/"><svg aria-hidden="true" role="img" viewbox="0 0 640 512" style="height:1em;width:1.25em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:currentColor;overflow:visible;position:relative;"><path d="M579.8 267.7c56.5-56.5 56.5-148 0-204.5c-50-50-128.8-56.5-186.3-15.4l-1.6 1.1c-14.4 10.3-17.7 30.3-7.4 44.6s30.3 17.7 44.6 7.4l1.6-1.1c32.1-22.9 76-19.3 103.8 8.6c31.5 31.5 31.5 82.5 0 114L422.3 334.8c-31.5 31.5-82.5 31.5-114 0c-27.9-27.9-31.5-71.8-8.6-103.8l1.1-1.6c10.3-14.4 6.9-34.4-7.4-44.6s-34.4-6.9-44.6 7.4l-1.1 1.6C206.5 251.2 213 330 263 380c56.5 56.5 148 56.5 204.5 0L579.8 267.7zM60.2 244.3c-56.5 56.5-56.5 148 0 204.5c50 50 128.8 56.5 186.3 15.4l1.6-1.1c14.4-10.3 17.7-30.3 7.4-44.6s-30.3-17.7-44.6-7.4l-1.6 1.1c-32.1 22.9-76 19.3-103.8-8.6C74 372 74 321 105.5 289.5L217.7 177.2c31.5-31.5 82.5-31.5 114 0c27.9 27.9 31.5 71.8 8.6 103.9l-1.1 1.6c-10.3 14.4-6.9 34.4 7.4 44.6s34.4 6.9 44.6-7.4l1.1-1.6C433.5 260.8 427 182 377 132c-56.5-56.5-148-56.5-204.5 0L60.2 244.3z"></path></svg> qntkhvn.netlify.app</a></p>
+          <p></p>
+    </div>
+</div>
+
+</section>
+<section class="slide level2">
+
+<h3 id="overview">Overview</h3>
+<p><strong>Goal: you should be able to use <code>R</code> to scrape an HTML table from the web after this lecture</strong></p>
+<p>Agenda:</p>
+<ul>
+<li><p>Web page basics</p></li>
+<li><p>Web scraping with <code>rvest</code></p>
+<ul>
+<li>Featuring <code>stringr</code></li>
+</ul></li>
+<li><p>APIs</p></li>
+<li><p>Responsible web scraping</p>
+<ul>
+<li><p>Best practice</p></li>
+<li><p>Featuring <code>polite</code></p></li>
+</ul></li>
+</ul>
+<!-- ### Learning goal -->
+<!-- - This should serve as an elementary introduction, without much technical details (e.g., html, the web) -->
+<!-- I view myself as an R user, not a developer or engineer. -->
+<!-- My knowledge about the web and web scraping is limited, but I know "enough" materials for my research -->
+<!-- I will try my best to answer your questions. -->
+</section>
+<section class="slide level2">
+
+<h3 id="material-credits">Material credits</h3>
+<ul>
+<li><p><a href="https://youtu.be/z8yT3E4pz54">Tan Ho’s excellent youtube video</a></p></li>
+<li><p><a href="https://dcl-wrangle.stanford.edu/rvest.html">Data Wrangling lecture notes</a> from the Stanford Data Challenge Lab (DCL) course</p></li>
+</ul>
+<!-- - Web scraping chapter in [R4DS (2e, draft)](https://r4ds.hadley.nz/webscraping.html) -->
+</section>
+<section class="slide level2">
+
+<h3 id="web-page-basics">Web page basics</h3>
+<ul>
+<li><p><strong>HTML</strong> (Hyper Text Markup Language) defines the content and structure of a web page</p>
+<ul>
+<li><p>An HTML page contains various elements (headers, paragraphs, tables…)</p></li>
+<li><p>HTML tags define where an element begins and ends</p></li>
+<li><p>Opening and closing tags have the forms <code>&lt;tagname&gt;</code> and <code>&lt;/tagname&gt;</code> (e.g., <code>&lt;table&gt;</code> and <code>&lt;/table&gt;</code>)</p></li>
+</ul></li>
+</ul>
+<div class="fragment">
+<ul>
+<li><p><strong>CSS</strong> (Cascading Style Sheets) defines the appearance of HTML elements (i.e.&nbsp;whether the web page is pretty or ugly)</p>
+<ul>
+<li><p>CSS selectors are patterns used to select the elements to be style</p></li>
+<li><p><strong>CSS selectors can be used to extract elements from a web page</strong></p></li>
+</ul></li>
+</ul>
+</div>
+</section>
+<section class="slide level2">
+
+<h3 id="web-scraping-in-r">Web scraping in <code>R</code></h3>
+<p>Two widely-used packages:</p>
+<ul>
+<li><p><code>rvest</code>: simple, <code>tidyverse</code> friendly, static data</p></li>
+<li><p><code>RSelenium</code>: more advanced, dynamic data</p></li>
+</ul>
+<p>We will focus on <code>rvest</code> today</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"rvest"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>(For the <code>python</code> fans, you can do it with <code>Beautiful Soup</code> and <code>Selenium</code>)</p>
+</section>
+<section class="slide level2">
+
+<h3 id="typical-web-scraping-workflow">Typical web scraping workflow</h3>
+<ul>
+<li><p>Reading in a website</p></li>
+<li><p>Data organization and cleaning (most of the process)</p>
+<ul>
+<li><p>Extracting website elements (e.g., tables, links, etc.)</p></li>
+<li><p>Common data manipulation tasks (e.g., with <code>dplyr</code>)</p></li>
+<li><p>Working with strings (e.g, <code>stringr</code>, <code>stringi</code>) and regular expressions (regex)</p></li>
+</ul></li>
+<li><p>Generalization: writing functions (and developing packages)</p>
+<ul>
+<li>For instance, in sports, you may be interested in data for not just 1 season/player/team/etc., but multiple</li>
+</ul></li>
+</ul>
+</section>
+<section class="slide level2">
+
+<h3 id="scraping-html-tables">Scraping (HTML) tables</h3>
+<ul>
+<li><p>Example: NHL career games played leaders</p>
+<ul>
+<li>URL: <a href="https://www.hockey-reference.com/leaders/nhl_tbl_career.html" class="uri">https://www.hockey-reference.com/leaders/nhl_tbl_career.html</a></li>
+</ul></li>
+</ul>
+<div class="fragment">
+<ul>
+<li><p>Tasks: Scrape the <strong>NHL Leaders</strong> table</p>
+<ul>
+<li><p>Read the HTML page into <code>R</code></p></li>
+<li><p>Grab the CSS selector for the table in the browser</p></li>
+<li><p>Write scraping code in <code>R</code></p></li>
+<li><p>Perform the following data cleaning steps</p>
+<ul>
+<li><p>Create an indicator variable for whether a player is in the Hall of Fame</p></li>
+<li><p>Remove the asterisk (<code>*</code>) from the Player column</p></li>
+<li><p>Remove the dot (<code>.</code>) from the Rank column</p></li>
+</ul></li>
+</ul></li>
+</ul>
+</div>
+</section>
+<section class="slide level2">
+
+<h3 id="read-the-html-page-into-r">Read the HTML page into <code>R</code></h3>
+<ul>
+<li>We use <code>read_html()</code> to read in the HTML page based on a specified web page’s URL</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(rvest)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>nhl_url <span class="ot">&lt;-</span> <span class="st">"https://www.hockey-reference.com/leaders/games_played_career.html"</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>nhl_url <span class="sc">|&gt;</span> </span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">read_html</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>{html_document}
+&lt;html data-version="klecko-" data-root="/home/hr/build" lang="en" class="no-js"&gt;
+[1] &lt;head&gt;\n&lt;meta http-equiv="Content-Type" content="text/html; charset=UTF-8 ...
+[2] &lt;body class="hr"&gt;\n&lt;div id="wrap"&gt;\n  \n  &lt;div id="header" role="banner"&gt; ...</code></pre>
+</div>
+</div>
+<ul>
+<li>The next step is to extract the <strong>NHL Leaders</strong> table from the HTML. This can be accomplished by finding the <strong>CSS selector</strong> of the table.</li>
+</ul>
+</section>
+<section class="slide level2">
+
+<h3 id="how-to-find-a-tables-css-selector">How to find a table’s CSS selector</h3>
+<ol type="1">
+<li>Move the cursor close to the table you want to scrape (e.g., near top of the table). Right click and select <strong>Inspect</strong> (<em>Chrome</em> or <em>Firefox</em>) or <strong>Inspect element</strong> (<em>Safari</em>)</li>
+</ol>
+<div class="fragment">
+<ol start="2" type="1">
+<li><p>The <strong>Developer Tools</strong> will open in your browser. Pay attention to the <strong>Elements</strong> pane (<em>Chrome</em> or <em>Safari</em>) or <strong>Inspector</strong> pane (<em>Firefox</em>)</p>
+<ul>
+<li><p>The HTML element corresponding to the web page area (close to the table) mentioned in Step 1 is highlighted</p></li>
+<li><p>Hovering over different HTML elements will highlight different parts of the web page</p></li>
+</ul></li>
+</ol>
+</div>
+<div class="fragment">
+<ol start="3" type="1">
+<li><p>To find the CSS selector for the table, hover over different lines and stop at the line where only the entire table is highlighted</p>
+<ul>
+<li>This will often be a line with a <code>&lt;table&gt;</code> opening tag</li>
+</ul></li>
+</ol>
+</div>
+<div class="fragment">
+<ol start="4" type="1">
+<li>Right click on the line, then choose <strong>Copy <span class="math inline">\(\rightarrow\)</span> Copy selector</strong> (<em>Chrome</em>) or <strong>Copy <span class="math inline">\(\rightarrow\)</span> CSS Selector</strong> (<em>Firefox</em>) or <strong>Copy <span class="math inline">\(\rightarrow\)</span> Selector Path</strong> (<em>Safari</em>)</li>
+</ol>
+</div>
+</section>
+<section class="slide level2">
+
+<h3 id="scraping-html-tables-1">Scraping (HTML) tables</h3>
+<p>The following video shows how to find the <strong>CSS selector</strong> (in <em>Chrome</em>)</p>
+<center>
+<video id="video_shortcode_videojs_video1" width="800" height="600" class="video-js vjs-default-skin " controls="" preload="auto" data-setup="{}" title=""><source src="vid.mov"></video>
+</center>
+</section>
+<section class="slide level2">
+
+<h3 id="scraping-html-tables-2">Scraping (HTML) tables</h3>
+<ul>
+<li><p>Use <code>html_element()</code> to get the element associated with the CSS selector (table in this case)</p></li>
+<li><p>Inside <code>html_element()</code>, specify the CSS selector that we copied earlier</p></li>
+<li><p>This returns an HTML “node”</p></li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>nhl_url <span class="sc">|&gt;</span> </span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">read_html</span>() <span class="sc">|&gt;</span> </span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">html_element</span>(<span class="at">css =</span> <span class="st">"#stats_career_NHL"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>{html_node}
+&lt;table class="suppress_glossary suppress_csv sortable stats_table" id="stats_career_NHL" data-cols-to-freeze="1,2"&gt;
+[1] &lt;caption&gt;NHL Leaders Table&lt;/caption&gt;
+[2] &lt;thead&gt;&lt;tr&gt;\n&lt;th class="right"&gt;Rank&lt;/th&gt;\n&lt;th class="left"&gt;Player&lt;/th&gt;\n&lt; ...
+[3] &lt;tbody&gt;\n&lt;tr&gt;\n&lt;td class="right"&gt;1.&lt;/td&gt;\n&lt;td class="left"&gt;&lt;a href="/play ...</code></pre>
+</div>
+</div>
+</section>
+<section class="slide level2">
+
+<h3 id="scraping-html-tables-3">Scraping (HTML) tables</h3>
+<ul>
+<li><p>Finally, use <code>html_table()</code> to convert to a tibble (data frame) in <code>R</code></p></li>
+<li><p>This completes our scraping pipeline.</p></li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>nhl_tbl <span class="ot">&lt;-</span> nhl_url <span class="sc">|&gt;</span> </span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">read_html</span>() <span class="sc">|&gt;</span> </span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">html_element</span>(<span class="at">css =</span> <span class="st">"#stats_career_NHL"</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">html_table</span>()</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>nhl_tbl</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 250 × 4
+   Rank  Player           Years      GP
+   &lt;chr&gt; &lt;chr&gt;            &lt;chr&gt;   &lt;int&gt;
+ 1 1.    Patrick Marleau  1997-21  1779
+ 2 2.    Gordie Howe*     1946-80  1767
+ 3 3.    Mark Messier*    1979-04  1756
+ 4 4.    Jaromír Jágr     1990-18  1733
+ 5 5.    Ron Francis*     1981-04  1731
+ 6 6.    Joe Thornton     1997-22  1714
+ 7 7.    Zdeno Chára      1997-22  1680
+ 8 8.    Mark Recchi*     1988-11  1652
+ 9 9.    Chris Chelios*   1983-10  1651
+10 10.   Dave Andreychuk* 1982-06  1639
+# ℹ 240 more rows</code></pre>
+</div>
+</div>
+</section>
+<section class="slide level2">
+
+<h3 id="remarks-web-page-elements">Remarks: web page elements</h3>
+<ul>
+<li><p>Note that <code>html_table()</code> only works when the element specified in <code>html_element()</code> is a table</p></li>
+<li><p>There are other things to be extracted from an element</p>
+<ul>
+<li><p>To retrieve text from an element, use <code>html_text()</code> and <code>html_text2()</code></p></li>
+<li><p>To retrieve an attribute (e.g., hyperlink) from an element, use <code>html_attr()</code> and <code>html_attrs()</code></p></li>
+<li><p>We will touch on these 2 cases later on</p></li>
+</ul></li>
+</ul>
+</section>
+<section class="slide level2">
+
+<h3 id="not-recommended">Not recommended</h3>
+<ul>
+<li><p>The inspection step (for obtaining CSS selector) can be skipped</p></li>
+<li><p><code>html_table()</code> can be called right after <code>read_html()</code></p></li>
+<li><p>This outputs a list of all the tables existed on the web page</p></li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>nhl_tbl_list <span class="ot">&lt;-</span> nhl_url <span class="sc">|&gt;</span> </span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">read_html</span>() <span class="sc">|&gt;</span> </span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">html_table</span>()</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>nhl_tbl_list</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[[1]]
+# A tibble: 250 × 4
+   Rank  Player           Years      GP
+   &lt;chr&gt; &lt;chr&gt;            &lt;chr&gt;   &lt;int&gt;
+ 1 1.    Patrick Marleau  1997-21  1779
+ 2 2.    Gordie Howe*     1946-80  1767
+ 3 3.    Mark Messier*    1979-04  1756
+ 4 4.    Jaromír Jágr     1990-18  1733
+ 5 5.    Ron Francis*     1981-04  1731
+ 6 6.    Joe Thornton     1997-22  1714
+ 7 7.    Zdeno Chára      1997-22  1680
+ 8 8.    Mark Recchi*     1988-11  1652
+ 9 9.    Chris Chelios*   1983-10  1651
+10 10.   Dave Andreychuk* 1982-06  1639
+# ℹ 240 more rows
+
+[[2]]
+# A tibble: 50 × 4
+   Rank  Player          Years      GP
+   &lt;chr&gt; &lt;chr&gt;           &lt;chr&gt;   &lt;int&gt;
+ 1 1.    André Lacroix   1972-79   551
+ 2 2.    Ron Plumb       1972-79   549
+ 3 3.    Paul Shmyr      1972-79   511
+ 4 4.    Michel Parizeau 1972-79   509
+ 5 5.    Mike Antonovich 1972-79   486
+ 6 6.    Rick Ley        1972-79   478
+ 7 7.    John McKenzie   1972-79   477
+ 8 8.    Blair MacDonald 1973-79   476
+ 9 9.    Larry Pleau     1972-79   468
+10 10.   Poul Popiel     1972-78   467
+# ℹ 40 more rows</code></pre>
+</div>
+</div>
+</section>
+<section class="slide level2">
+
+<h3 id="not-recommended-1">Not recommended</h3>
+<ul>
+<li>We can then subset out the desired table based on its index within the list</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>nhl_tbl_list[[<span class="dv">1</span>]]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 250 × 4
+   Rank  Player           Years      GP
+   &lt;chr&gt; &lt;chr&gt;            &lt;chr&gt;   &lt;int&gt;
+ 1 1.    Patrick Marleau  1997-21  1779
+ 2 2.    Gordie Howe*     1946-80  1767
+ 3 3.    Mark Messier*    1979-04  1756
+ 4 4.    Jaromír Jágr     1990-18  1733
+ 5 5.    Ron Francis*     1981-04  1731
+ 6 6.    Joe Thornton     1997-22  1714
+ 7 7.    Zdeno Chára      1997-22  1680
+ 8 8.    Mark Recchi*     1988-11  1652
+ 9 9.    Chris Chelios*   1983-10  1651
+10 10.   Dave Andreychuk* 1982-06  1639
+# ℹ 240 more rows</code></pre>
+</div>
+</div>
+<ul>
+<li>For this specific example, there are only 2 tables, so there doesn’t seem to be any issue. But what if there are a lot more than 2?</li>
+</ul>
+</section>
+<section class="slide level2">
+
+<h3 id="data-cleaning-working-with-stringr">Data cleaning: working with <code>stringr</code></h3>
+<ul>
+<li><p>The <code>tidyverse</code> offers <code>stringr</code> for string manipulation</p></li>
+<li><p>Check out the <a href="https://stringr.tidyverse.org/#cheatsheet"><code>stringr</code> cheatsheet</a></p>
+<ul>
+<li><p>The second page gives a neat overview of <a href="https://wikipedia.org/wiki/Regular_expression">regular expressions</a> (special patterns for string matching)</p></li>
+<li><p>Note that to specify special characters (e.g., <code>.</code>, <code>,</code>, <code>*</code>, <code>?</code>, etc.) in a pattern in <code>R</code>, use a double backslash (<code>\\</code>)</p></li>
+</ul></li>
+</ul>
+<!-- TODO: some notes on regular expression... -->
+</section>
+<section class="slide level2">
+
+<h3 id="str_detect"><code>str_detect()</code></h3>
+<ul>
+<li>Returns TRUE/FALSE, showing whether a string matches a specified pattern</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str_detect</span>(<span class="st">"Gordie Howe*"</span>, <span class="st">"</span><span class="sc">\\</span><span class="st">*"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] TRUE</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str_detect</span>(<span class="st">"Gordie Howe"</span>, <span class="st">"</span><span class="sc">\\</span><span class="st">*"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] FALSE</code></pre>
+</div>
+</div>
+<div class="fragment">
+<ul>
+<li><p><code>str_detect()</code> can be used with <code>filter()</code></p>
+<ul>
+<li>Recall that <code>filter()</code> subsets out rows that satisfy a condition</li>
+</ul></li>
+</ul>
+</div>
+</section>
+<section class="slide level2">
+
+<h3 id="str_detect-1"><code>str_detect()</code></h3>
+<p>Suppose we want to keep only the HOF players. We can detect all rows with the asterisk (<code>*</code>) with <code>str_detect()</code>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>nhl_tbl <span class="sc">|&gt;</span> </span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="fu">str_detect</span>(Player, <span class="st">"</span><span class="sc">\\</span><span class="st">*"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 78 × 4
+   Rank  Player            Years      GP
+   &lt;chr&gt; &lt;chr&gt;             &lt;chr&gt;   &lt;int&gt;
+ 1 2.    Gordie Howe*      1946-80  1767
+ 2 3.    Mark Messier*     1979-04  1756
+ 3 5.    Ron Francis*      1981-04  1731
+ 4 8.    Mark Recchi*      1988-11  1652
+ 5 9.    Chris Chelios*    1983-10  1651
+ 6 10.   Dave Andreychuk*  1982-06  1639
+ 7 11.   Scott Stevens*    1982-04  1635
+ 8 12.   Larry Murphy*     1980-01  1615
+ 9 13.   Ray Bourque*      1979-01  1612
+10 14.   Nicklas Lidström* 1991-12  1564
+# ℹ 68 more rows</code></pre>
+</div>
+</div>
+</section>
+<section class="slide level2">
+
+<h3 id="str_detect-2"><code>str_detect()</code></h3>
+<p>Back to one of the data cleaning task mentioned earlier - we want to create an indicator variable for whether a player is in the HOF</p>
+<p><big></big></p><big>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>nhl_tbl <span class="sc">|&gt;</span> </span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">HOF =</span> <span class="fu">ifelse</span>(<span class="fu">str_detect</span>(Player, <span class="st">"</span><span class="sc">\\</span><span class="st">*"</span>), <span class="dv">1</span>, <span class="dv">0</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 250 × 5
+   Rank  Player           Years      GP   HOF
+   &lt;chr&gt; &lt;chr&gt;            &lt;chr&gt;   &lt;int&gt; &lt;dbl&gt;
+ 1 1.    Patrick Marleau  1997-21  1779     0
+ 2 2.    Gordie Howe*     1946-80  1767     1
+ 3 3.    Mark Messier*    1979-04  1756     1
+ 4 4.    Jaromír Jágr     1990-18  1733     0
+ 5 5.    Ron Francis*     1981-04  1731     1
+ 6 6.    Joe Thornton     1997-22  1714     0
+ 7 7.    Zdeno Chára      1997-22  1680     0
+ 8 8.    Mark Recchi*     1988-11  1652     1
+ 9 9.    Chris Chelios*   1983-10  1651     1
+10 10.   Dave Andreychuk* 1982-06  1639     1
+# ℹ 240 more rows</code></pre>
+</div>
+</div>
+</big><p><big></big></p>
+</section>
+<section class="slide level2">
+
+<h3 id="str_remove"><code>str_remove()</code></h3>
+<ul>
+<li><code>str_remove()</code> takes in a string and removes a specified pattern.</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str_remove</span>(<span class="st">"Gordie Howe*"</span>, <span class="st">"</span><span class="sc">\\</span><span class="st">*"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "Gordie Howe"</code></pre>
+</div>
+</div>
+<div class="fragment">
+<ul>
+<li><p><code>str_remove()</code> can be used with <code>mutate()</code></p>
+<ul>
+<li>Recall that <code>mutate()</code> creates/modifies variables that are functions of existing variables</li>
+</ul></li>
+</ul>
+</div>
+<div class="fragment">
+<ul>
+<li>There’s a related function named <code>str_remove_all()</code>. The following code illustrates the difference.</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str_remove</span>(<span class="st">"*Gordie* Howe*"</span>, <span class="st">"</span><span class="sc">\\</span><span class="st">*"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "Gordie* Howe*"</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str_remove_all</span>(<span class="st">"*Gordie* Howe*"</span>, <span class="st">"</span><span class="sc">\\</span><span class="st">*"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "Gordie Howe"</code></pre>
+</div>
+</div>
+</div>
+</section>
+<section class="slide level2">
+
+<h3 id="str_remove-1"><code>str_remove()</code></h3>
+<ul>
+<li><p>Now we build upon the previous code to finish the data cleaning process.</p></li>
+<li><p>Recall than we want to remove the asterisk (<code>*</code>) and dot (<code>.</code>) from the <code>Player</code> and <code>Rank</code> columns, respectively.</p></li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>nhl_tbl_cleaned <span class="ot">&lt;-</span> nhl_tbl <span class="sc">|&gt;</span> </span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">HOF =</span> <span class="fu">ifelse</span>(<span class="fu">str_detect</span>(Player, <span class="st">"</span><span class="sc">\\</span><span class="st">*"</span>), <span class="dv">1</span>, <span class="dv">0</span>),</span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>         <span class="at">Player =</span> <span class="fu">str_remove</span>(Player, <span class="st">"</span><span class="sc">\\</span><span class="st">*"</span>),</span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>         <span class="at">Rank =</span> <span class="fu">str_remove</span>(Rank, <span class="st">"</span><span class="sc">\\</span><span class="st">."</span>))</span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a>nhl_tbl_cleaned</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 250 × 5
+   Rank  Player          Years      GP   HOF
+   &lt;chr&gt; &lt;chr&gt;           &lt;chr&gt;   &lt;int&gt; &lt;dbl&gt;
+ 1 1     Patrick Marleau 1997-21  1779     0
+ 2 2     Gordie Howe     1946-80  1767     1
+ 3 3     Mark Messier    1979-04  1756     1
+ 4 4     Jaromír Jágr    1990-18  1733     0
+ 5 5     Ron Francis     1981-04  1731     1
+ 6 6     Joe Thornton    1997-22  1714     0
+ 7 7     Zdeno Chára     1997-22  1680     0
+ 8 8     Mark Recchi     1988-11  1652     1
+ 9 9     Chris Chelios   1983-10  1651     1
+10 10    Dave Andreychuk 1982-06  1639     1
+# ℹ 240 more rows</code></pre>
+</div>
+</div>
+</section>
+<section class="slide level2">
+
+<h3 id="str_replace"><code>str_replace()</code></h3>
+<ul>
+<li><p><code>str_replace()</code> takes in a string and replaces a specified pattern with a new replacement pattern</p>
+<ul>
+<li><p><code>str_remove()</code> is a special case of <code>str_replace()</code>, where a pattern is replaced by an empty string</p></li>
+<li><p>There’s also <code>str_replace_all()</code>. The following code illustrates the difference</p></li>
+</ul></li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str_replace</span>(<span class="st">"statistician"</span>, <span class="st">"ian"</span>, <span class="st">""</span>) <span class="co"># same as str_remove("statistician", "ian")</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "statistic"</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str_replace</span>(<span class="st">"statistician"</span>, <span class="st">"ian"</span>, <span class="st">"s"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "statistics"</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str_replace</span>(<span class="st">"noon"</span>, <span class="st">"o"</span>, <span class="st">"a"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "naon"</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str_replace_all</span>(<span class="st">"noon"</span>, <span class="st">"o"</span>, <span class="st">"a"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "naan"</code></pre>
+</div>
+</div>
+<p><strong>There’s a lot more useful string functions provided by <code>stringr</code>. See the <a href="https://stringr.tidyverse.org/#cheatsheet"><code>stringr</code> cheatsheet</a> for more details.</strong></p>
+</section>
+<section class="slide level2">
+
+<h3 id="practice-frauen-bundesliga">Practice: Frauen Bundesliga</h3>
+<ul>
+<li><p>URL: <a href="https://fbref.com/en/comps/183/2017-2018/2017-2018-Frauen-Bundesliga-Stats" class="uri">https://fbref.com/en/comps/183/2017-2018/2017-2018-Frauen-Bundesliga-Stats</a></p></li>
+<li><p>The link above provides stats for the 2017-2018 season</p>
+<ul>
+<li><p>Scrape the <strong>Overall</strong> table under <strong>Regular season</strong></p></li>
+<li><p>(Optional) Write a general function for scraping data for any specified season.</p>
+<ul>
+<li><p>Hint: change the years in the URL and CSS selector</p></li>
+<li><p>Get data for every season between 2016-2017 and 2019-2020 and combine them into a single table</p></li>
+</ul></li>
+</ul></li>
+</ul>
+</section>
+<section class="slide level2">
+
+<h3 id="practice-frauen-bundesliga-1">Practice: Frauen Bundesliga</h3>
+<ul>
+<li>Scrape 2017-2018 overall standings</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>fb_url <span class="ot">&lt;-</span> <span class="st">"https://fbref.com/en/comps/183/2017-2018/2017-2018-Frauen-Bundesliga-Stats"</span></span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>fb_tbl <span class="ot">&lt;-</span> fb_url <span class="sc">|&gt;</span> </span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">read_html</span>() <span class="sc">|&gt;</span> </span>
+<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">html_element</span>(<span class="at">css =</span> <span class="st">"#results2017-20181831_overall"</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">html_table</span>()</span>
+<span id="cb36-6"><a href="#cb36-6" aria-hidden="true" tabindex="-1"></a>fb_tbl</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 12 × 15
+      Rk Squad             MP     W     D     L    GF    GA    GD   Pts `Pts/MP`
+   &lt;int&gt; &lt;chr&gt;          &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt;    &lt;dbl&gt;
+ 1     1 Wolfsburg         22    18     2     2    56     8    48    56     2.55
+ 2     2 Bayern Munich     22    17     2     3    62    15    47    53     2.41
+ 3     3 Freiburg          22    15     3     4    50    15    35    48     2.18
+ 4     4 Turbine Potsd…    22    13     6     3    50    21    29    45     2.05
+ 5     5 Essen             22    12     3     7    43    30    13    39     1.77
+ 6     6 FFC Frankfurt     22    10     1    11    29    25     4    31     1.41
+ 7     7 Sand              22     9     3    10    32    34    -2    30     1.36
+ 8     8 Hoffenheim        22     8     1    13    22    32   -10    25     1.14
+ 9     9 MSV Duisburg      22     6     0    16    16    33   -17    18     0.82
+10    10 Werder Bremen     22     3     5    14    26    59   -33    14     0.64
+11    11 Köln              22     3     2    17     8    78   -70    11     0.5 
+12    12 USV Jena          22     2     4    16    12    56   -44    10     0.45
+# ℹ 4 more variables: Attendance &lt;chr&gt;, `Top Team Scorer` &lt;chr&gt;,
+#   Goalkeeper &lt;chr&gt;, Notes &lt;chr&gt;</code></pre>
+</div>
+</div>
+</section>
+<section class="slide level2">
+
+<h3 id="practice-frauen-bundesliga-2">Practice: Frauen Bundesliga</h3>
+<ul>
+<li>General function</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a>get_fb_data <span class="ot">&lt;-</span> <span class="cf">function</span>(start_year) {</span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a>  year_str <span class="ot">&lt;-</span> <span class="fu">str_c</span>(start_year, start_year <span class="sc">+</span> <span class="dv">1</span>, <span class="at">sep =</span> <span class="st">"-"</span>)</span>
+<span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb38-5"><a href="#cb38-5" aria-hidden="true" tabindex="-1"></a>  fb_url <span class="ot">&lt;-</span> <span class="fu">str_c</span>(<span class="st">"https://fbref.com/en/comps/183/"</span>, year_str, <span class="st">"/"</span>, year_str, <span class="st">"-Frauen-Bundesliga-Stats"</span>)</span>
+<span id="cb38-6"><a href="#cb38-6" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb38-7"><a href="#cb38-7" aria-hidden="true" tabindex="-1"></a>  year_css <span class="ot">&lt;-</span> <span class="fu">str_c</span>(<span class="st">"#results"</span>, year_str, <span class="st">"1831_overall"</span>)</span>
+<span id="cb38-8"><a href="#cb38-8" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb38-9"><a href="#cb38-9" aria-hidden="true" tabindex="-1"></a>  fb_tbl <span class="ot">&lt;-</span> fb_url <span class="sc">|&gt;</span></span>
+<span id="cb38-10"><a href="#cb38-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">read_html</span>() <span class="sc">|&gt;</span> </span>
+<span id="cb38-11"><a href="#cb38-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">html_element</span>(<span class="at">css =</span> year_css) <span class="sc">|&gt;</span> </span>
+<span id="cb38-12"><a href="#cb38-12" aria-hidden="true" tabindex="-1"></a>    <span class="fu">html_table</span>() <span class="sc">|&gt;</span> </span>
+<span id="cb38-13"><a href="#cb38-13" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">season =</span> year_str)</span>
+<span id="cb38-14"><a href="#cb38-14" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb38-15"><a href="#cb38-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(fb_tbl)</span>
+<span id="cb38-16"><a href="#cb38-16" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb38-17"><a href="#cb38-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-18"><a href="#cb38-18" aria-hidden="true" tabindex="-1"></a>seasons <span class="ot">&lt;-</span> <span class="dv">2016</span><span class="sc">:</span><span class="dv">2019</span></span>
+<span id="cb38-19"><a href="#cb38-19" aria-hidden="true" tabindex="-1"></a>fb_tbl_full <span class="ot">&lt;-</span> seasons <span class="sc">|&gt;</span> </span>
+<span id="cb38-20"><a href="#cb38-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">map</span>(get_fb_data) <span class="sc">|&gt;</span> </span>
+<span id="cb38-21"><a href="#cb38-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">list_rbind</span>()</span>
+<span id="cb38-22"><a href="#cb38-22" aria-hidden="true" tabindex="-1"></a><span class="co"># fb_tbl_full</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section class="slide level2">
+
+<h3 id="scraping-links-and-images">Scraping links and images</h3>
+<p>Continuing with the Frauen Bundesliga 2017-2018 season stats example…</p>
+<ul>
+<li><p>Notice that the table on the web page also contains team logos, URLs, etc.</p></li>
+<li><p>These information were not extracted with <code>html_table()</code></p></li>
+<li><p>Suppose we’re also interested in getting the team URLs and logos</p></li>
+</ul>
+</section>
+<section class="slide level2">
+
+<h3 id="scraping-links-and-images-1">Scraping links and images</h3>
+<ul>
+<li><p>We first store the HTML node for the table (everything up to <code>html_element()</code> with a specified CSS selector for the table) in an object</p></li>
+<li><p>This can then be used to obtain the images and team links based on their tags.</p></li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>fb_url <span class="ot">&lt;-</span> <span class="st">"https://fbref.com/en/comps/183/2017-2018/2017-2018-Frauen-Bundesliga-Stats"</span></span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a>fb_node <span class="ot">&lt;-</span> fb_url <span class="sc">|&gt;</span> </span>
+<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">read_html</span>() <span class="sc">|&gt;</span> </span>
+<span id="cb39-4"><a href="#cb39-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">html_element</span>(<span class="at">css =</span> <span class="st">"#results2017-20181831_overall"</span>)</span>
+<span id="cb39-5"><a href="#cb39-5" aria-hidden="true" tabindex="-1"></a>fb_node</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>{html_node}
+&lt;table class="stats_table sortable min_width force_mobilize" id="results2017-20181831_overall" data-cols-to-freeze=",2"&gt;
+[1] &lt;caption&gt;Regular season Table&lt;/caption&gt;
+[2] &lt;colgroup&gt;\n&lt;col&gt;\n&lt;col&gt;\n&lt;col&gt;\n&lt;col&gt;\n&lt;col&gt;\n&lt;col&gt;\n&lt;col&gt;\n&lt;col&gt;\n&lt;col&gt; ...
+[3] &lt;thead&gt;&lt;tr&gt;\n&lt;th aria-label="Rank" data-stat="rank" scope="col" class=" p ...
+[4] &lt;tbody&gt;\n&lt;tr&gt;\n&lt;th scope="row" class="right qualifier qualification_indic ...</code></pre>
+</div>
+</div>
+</section>
+<section class="slide level2">
+
+<h3 id="scraping-links-and-images-2">Scraping links and images</h3>
+<ul>
+<li><p>To get all image elements, we can use <code>html_elements()</code> and specify the <code>img</code> tag <br></p>
+<ul>
+<li><code>html_elements()</code> is the “plural” version of <code>html_element()</code>, since we want ALL image elements, not just one</li>
+</ul></li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a>fb_node <span class="sc">|&gt;</span> </span>
+<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">html_elements</span>(<span class="st">"img"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>{xml_nodeset (12)}
+ [1] &lt;img itemscope="image" height="13" width="13" src="https://cdn.ssref.net ...
+ [2] &lt;img itemscope="image" height="13" width="13" src="https://cdn.ssref.net ...
+ [3] &lt;img itemscope="image" height="13" width="13" src="https://cdn.ssref.net ...
+ [4] &lt;img itemscope="image" height="13" width="13" src="https://cdn.ssref.net ...
+ [5] &lt;img itemscope="image" height="13" width="13" src="https://cdn.ssref.net ...
+ [6] &lt;img itemscope="image" height="13" width="13" src="https://cdn.ssref.net ...
+ [7] &lt;img itemscope="image" height="13" width="13" src="https://cdn.ssref.net ...
+ [8] &lt;img itemscope="image" height="13" width="13" src="https://cdn.ssref.net ...
+ [9] &lt;img itemscope="image" height="13" width="13" src="https://cdn.ssref.net ...
+[10] &lt;img itemscope="image" height="13" width="13" src="https://cdn.ssref.net ...
+[11] &lt;img itemscope="image" height="13" width="13" src="https://cdn.ssref.net ...
+[12] &lt;img itemscope="image" height="13" width="13" src="https://cdn.ssref.net ...</code></pre>
+</div>
+</div>
+<ul>
+<li>Notice that each image contains different attributes such as height, width, image path (src)</li>
+</ul>
+</section>
+<section class="slide level2">
+
+<h3 id="scraping-links-and-images-3">Scraping links and images</h3>
+<ul>
+<li>Suppose we want to grab the image path only (for future plotting purpose), we can use <code>html_attr()</code> to get the <code>src</code> attribute</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a>fb_imgs <span class="ot">&lt;-</span> fb_node <span class="sc">|&gt;</span> </span>
+<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">html_elements</span>(<span class="st">"img"</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb43-3"><a href="#cb43-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">html_attr</span>(<span class="st">"src"</span>)</span>
+<span id="cb43-4"><a href="#cb43-4" aria-hidden="true" tabindex="-1"></a>fb_imgs</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] "https://cdn.ssref.net/req/202307011/tlogo/fb/mini.a1393014.png"
+ [2] "https://cdn.ssref.net/req/202307011/tlogo/fb/mini.51ec22be.png"
+ [3] "https://cdn.ssref.net/req/202307011/tlogo/fb/mini.b4de690d.png"
+ [4] "https://cdn.ssref.net/req/202307011/tlogo/fb/mini.de550500.png"
+ [5] "https://cdn.ssref.net/req/202307011/tlogo/fb/mini.becc1dd0.png"
+ [6] "https://cdn.ssref.net/req/202307011/tlogo/fb/mini.77d2e598.png"
+ [7] "https://cdn.ssref.net/req/202307011/tlogo/fb/mini.0cc34cf4.png"
+ [8] "https://cdn.ssref.net/req/202307011/tlogo/fb/mini.87705c62.png"
+ [9] "https://cdn.ssref.net/req/202307011/tlogo/fb/mini.0580d9a9.png"
+[10] "https://cdn.ssref.net/req/202307011/tlogo/fb/mini.7adbf480.png"
+[11] "https://cdn.ssref.net/req/202307011/tlogo/fb/mini.88ddc98e.png"
+[12] "https://cdn.ssref.net/req/202307011/tlogo/fb/mini.765472c9.png"</code></pre>
+</div>
+</div>
+</section>
+<section class="slide level2">
+
+<h3 id="scraping-links-and-images-4">Scraping links and images</h3>
+<ul>
+<li><p>To get all the URLs in the <code>Squad</code> column, we can first use <code>html_elements()</code> again and specify the <code>"a"</code> tag</p>
+<ul>
+<li>The <code>&lt;a&gt;</code> (anchor) tag defines a hyperlink</li>
+</ul></li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a>fb_node <span class="sc">|&gt;</span> </span>
+<span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">html_elements</span>(<span class="st">"a"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>{xml_nodeset (38)}
+ [1] &lt;a href="/en/squads/a1393014/2017-2018/Wolfsburg-Women-Stats"&gt;Wolfsburg&lt;/a&gt;
+ [2] &lt;a href="/en/players/363b99a4/Pernille-Harder"&gt;Pernille Harder&lt;/a&gt;
+ [3] &lt;a href="/en/players/992b30a1/Almuth-Schult"&gt;Almuth Schult&lt;/a&gt;
+ [4] &lt;a href="/en/squads/51ec22be/2017-2018/Bayern-Munich-Women-Stats"&gt;Bayern ...
+ [5] &lt;a href="/en/players/6862731d/Fridolina-Rolfo"&gt;Fridolina Rolfö&lt;/a&gt;
+ [6] &lt;a href="/en/players/c7dc2a33/Manuela-Zinsberger"&gt;Manuela Zinsberger&lt;/a&gt;
+ [7] &lt;a href="/en/squads/b4de690d/2017-2018/Freiburg-Women-Stats"&gt;Freiburg&lt;/a&gt;
+ [8] &lt;a href="/en/players/3cd04ba1/Lina-Magull"&gt;Lina Magull&lt;/a&gt;
+ [9] &lt;a href="/en/players/82c4f339/Laura-Benkarth"&gt;Laura Benkarth&lt;/a&gt;
+[10] &lt;a href="/en/squads/de550500/2017-2018/Turbine-Potsdam-Stats"&gt;Turbine Po ...
+[11] &lt;a href="/en/players/8b5f141c/Svenja-Huth"&gt;Svenja Huth&lt;/a&gt;
+[12] &lt;a href="/en/players/38bbb38c/Lisa-Schmitz"&gt;Lisa Schmitz&lt;/a&gt;
+[13] &lt;a href="/en/squads/becc1dd0/2017-2018/Essen-Stats"&gt;Essen&lt;/a&gt;
+[14] &lt;a href="/en/players/5a20e7f0/Linda-Dallmann"&gt;Linda Dallmann&lt;/a&gt;
+[15] &lt;a href="/en/players/8699d87d/Lisa-Weiss"&gt;Lisa Weiß&lt;/a&gt;
+[16] &lt;a href="/en/squads/77d2e598/2017-2018/FFC-Frankfurt-Stats"&gt;FFC Frankfur ...
+[17] &lt;a href="/en/players/6698c9f0/Jackie-Groenen"&gt;Jackie Groenen&lt;/a&gt;
+[18] &lt;a href="/en/players/0dfe3e98/Bryane-Heaberlin"&gt;Bryane Heaberlin&lt;/a&gt;
+[19] &lt;a href="/en/squads/0cc34cf4/2017-2018/Sand-Stats"&gt;Sand&lt;/a&gt;
+[20] &lt;a href="/en/players/0f55e5ea/Nina-Burger"&gt;Nina Burger&lt;/a&gt;
+...</code></pre>
+</div>
+</div>
+</section>
+<section class="slide level2">
+
+<h3 id="scraping-links-and-images-5">Scraping links and images</h3>
+<ul>
+<li><p>Within <a href="">, we can grab the <code>href</code> attribute with <code>html_attr</code></a></p><a href="">
+<ul>
+<li><code>href</code> specifies the URL/page associated with the link</li>
+</ul></a></li><a href="">
+</a></ul><a href="">
+</a><div class="cell"><a href="">
+</a><div class="sourceCode cell-code" id="cb47"><a href=""></a><pre class="sourceCode r code-with-copy"><a href=""><code class="sourceCode r"><span id="cb47-1"></span></code></a><code class="sourceCode r"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a>fb_node <span class="sc">|&gt;</span> 
+<span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">html_elements</span>(<span class="st">"a"</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb47-3"><a href="#cb47-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">html_attr</span>(<span class="st">"href"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] "/en/squads/a1393014/2017-2018/Wolfsburg-Women-Stats"    
+ [2] "/en/players/363b99a4/Pernille-Harder"                   
+ [3] "/en/players/992b30a1/Almuth-Schult"                     
+ [4] "/en/squads/51ec22be/2017-2018/Bayern-Munich-Women-Stats"
+ [5] "/en/players/6862731d/Fridolina-Rolfo"                   
+ [6] "/en/players/c7dc2a33/Manuela-Zinsberger"                
+ [7] "/en/squads/b4de690d/2017-2018/Freiburg-Women-Stats"     
+ [8] "/en/players/3cd04ba1/Lina-Magull"                       
+ [9] "/en/players/82c4f339/Laura-Benkarth"                    
+[10] "/en/squads/de550500/2017-2018/Turbine-Potsdam-Stats"    
+[11] "/en/players/8b5f141c/Svenja-Huth"                       
+[12] "/en/players/38bbb38c/Lisa-Schmitz"                      
+[13] "/en/squads/becc1dd0/2017-2018/Essen-Stats"              
+[14] "/en/players/5a20e7f0/Linda-Dallmann"                    
+[15] "/en/players/8699d87d/Lisa-Weiss"                        
+[16] "/en/squads/77d2e598/2017-2018/FFC-Frankfurt-Stats"      
+[17] "/en/players/6698c9f0/Jackie-Groenen"                    
+[18] "/en/players/0dfe3e98/Bryane-Heaberlin"                  
+[19] "/en/squads/0cc34cf4/2017-2018/Sand-Stats"               
+[20] "/en/players/0f55e5ea/Nina-Burger"                       
+[21] "/en/players/9474cd93/Carina-Schluter"                   
+[22] "/en/squads/87705c62/2017-2018/Hoffenheim-Women-Stats"   
+[23] "/en/players/9e30ae90/Isabella-Hartig"                   
+[24] "/en/players/277cdd4e/Tabea-Wassmuth"                    
+[25] "/en/players/7c51bea4/Friederike-Abt"                    
+[26] "/en/squads/0580d9a9/2017-2018/MSV-Duisburg-Women-Stats" 
+[27] "/en/players/88be98d1/Kathleen-Radtke"                   
+[28] "/en/players/781a82de/Lena-Nuding"                       
+[29] "/en/squads/7adbf480/2017-2018/Werder-Bremen-Women-Stats"
+[30] "/en/players/e070cdf6/Nina-Luhrssen"                     
+[31] "/en/players/e18dc3a3/Nora-Clausen"                      
+[32] "/en/players/37469b31/Anneke-Borbe"                      
+[33] "/en/squads/88ddc98e/2017-2018/Koln-Women-Stats"         
+[34] "/en/players/998749f3/Amber-Hearn"                       
+[35] "/en/players/9abeb65b/Anne-Kathrine-Kremer"              
+[36] "/en/squads/765472c9/2017-2018/USV-Jena-Stats"           
+[37] "/en/players/b004aab5/Amelia-Pietrangelo"                
+[38] "/en/players/90c69bf5/Justien-Odeurs"                    </code></pre>
+</div>
+</div>
+</section>
+<section class="slide level2">
+
+<h3 id="scraping-links-and-images-6">Scraping links and images</h3>
+<ul>
+<li><p>Notice that the previous output is a vector with all hyperlinks in the table, including all squads and players</p></li>
+<li><p>Since we want squads only, we need to subset out all strings with the keyword <code>"squads"</code></p></li>
+<li><p>The function <code>str_subset()</code> comes in handy here</p>
+<ul>
+<li><code>str_subset()</code> returns only the vector elements that matches a specified pattern</li>
+</ul></li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb49"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a>fb_links <span class="ot">&lt;-</span> fb_node <span class="sc">|&gt;</span> </span>
+<span id="cb49-2"><a href="#cb49-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">html_elements</span>(<span class="st">"a"</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb49-3"><a href="#cb49-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">html_attr</span>(<span class="st">"href"</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb49-4"><a href="#cb49-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">str_subset</span>(<span class="st">"squads"</span>)</span>
+<span id="cb49-5"><a href="#cb49-5" aria-hidden="true" tabindex="-1"></a>fb_links</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] "/en/squads/a1393014/2017-2018/Wolfsburg-Women-Stats"    
+ [2] "/en/squads/51ec22be/2017-2018/Bayern-Munich-Women-Stats"
+ [3] "/en/squads/b4de690d/2017-2018/Freiburg-Women-Stats"     
+ [4] "/en/squads/de550500/2017-2018/Turbine-Potsdam-Stats"    
+ [5] "/en/squads/becc1dd0/2017-2018/Essen-Stats"              
+ [6] "/en/squads/77d2e598/2017-2018/FFC-Frankfurt-Stats"      
+ [7] "/en/squads/0cc34cf4/2017-2018/Sand-Stats"               
+ [8] "/en/squads/87705c62/2017-2018/Hoffenheim-Women-Stats"   
+ [9] "/en/squads/0580d9a9/2017-2018/MSV-Duisburg-Women-Stats" 
+[10] "/en/squads/7adbf480/2017-2018/Werder-Bremen-Women-Stats"
+[11] "/en/squads/88ddc98e/2017-2018/Koln-Women-Stats"         
+[12] "/en/squads/765472c9/2017-2018/USV-Jena-Stats"           </code></pre>
+</div>
+</div>
+</section>
+<section class="slide level2">
+
+<h3 id="scraping-links-and-images-7">Scraping links and images</h3>
+<ul>
+<li>Finally, we can add the team images and links as two new columns in our table</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb51"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a>fb_tbl <span class="ot">&lt;-</span> fb_node <span class="sc">|&gt;</span> </span>
+<span id="cb51-2"><a href="#cb51-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">html_table</span>() <span class="sc">|&gt;</span> </span>
+<span id="cb51-3"><a href="#cb51-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">img =</span> fb_imgs,</span>
+<span id="cb51-4"><a href="#cb51-4" aria-hidden="true" tabindex="-1"></a>         <span class="at">link =</span> fb_links)</span>
+<span id="cb51-5"><a href="#cb51-5" aria-hidden="true" tabindex="-1"></a>fb_tbl</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 12 × 17
+      Rk Squad             MP     W     D     L    GF    GA    GD   Pts `Pts/MP`
+   &lt;int&gt; &lt;chr&gt;          &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt;    &lt;dbl&gt;
+ 1     1 Wolfsburg         22    18     2     2    56     8    48    56     2.55
+ 2     2 Bayern Munich     22    17     2     3    62    15    47    53     2.41
+ 3     3 Freiburg          22    15     3     4    50    15    35    48     2.18
+ 4     4 Turbine Potsd…    22    13     6     3    50    21    29    45     2.05
+ 5     5 Essen             22    12     3     7    43    30    13    39     1.77
+ 6     6 FFC Frankfurt     22    10     1    11    29    25     4    31     1.41
+ 7     7 Sand              22     9     3    10    32    34    -2    30     1.36
+ 8     8 Hoffenheim        22     8     1    13    22    32   -10    25     1.14
+ 9     9 MSV Duisburg      22     6     0    16    16    33   -17    18     0.82
+10    10 Werder Bremen     22     3     5    14    26    59   -33    14     0.64
+11    11 Köln              22     3     2    17     8    78   -70    11     0.5 
+12    12 USV Jena          22     2     4    16    12    56   -44    10     0.45
+# ℹ 6 more variables: Attendance &lt;chr&gt;, `Top Team Scorer` &lt;chr&gt;,
+#   Goalkeeper &lt;chr&gt;, Notes &lt;chr&gt;, img &lt;chr&gt;, link &lt;chr&gt;</code></pre>
+</div>
+</div>
+</section>
+<section class="slide level2">
+
+<h3 id="scraping-links-and-images-8">Scraping links and images</h3>
+<p>Let’s make a scatterplot of total number of goals scored (<code>GF</code> - goals for) and goals conceded (<code>GA</code> - goals against), and display the team logos.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb53"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggimage)</span>
+<span id="cb53-2"><a href="#cb53-2" aria-hidden="true" tabindex="-1"></a>fb_tbl <span class="sc">|&gt;</span></span>
+<span id="cb53-3"><a href="#cb53-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">img =</span> <span class="fu">str_remove</span>(img, <span class="st">"mini."</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb53-4"><a href="#cb53-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(GA, GF)) <span class="sc">+</span></span>
+<span id="cb53-5"><a href="#cb53-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_image</span>(<span class="fu">aes</span>(<span class="at">image =</span> img), <span class="at">size =</span> <span class="fl">0.08</span>, <span class="at">asp =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb53-6"><a href="#cb53-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_classic</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+
+</div>
+<img data-src="index_files/figure-revealjs/unnamed-chunk-23-1.png" width="480" class="r-stretch quarto-figure-center"></section>
+<section class="slide level2">
+
+<h3 id="scraping-text">Scraping text</h3>
+<ul>
+<li><p>As previously mentioned, data do not always come in the form of nicely formatted tables</p></li>
+<li><p>Sometimes data are just simply raw text</p></li>
+<li><p>Example 3 Wimbledon Women’s singles</p>
+<ul>
+<li><p>URL: <a href="https://en.wikipedia.org/wiki/2009_Wimbledon_Championships_-_Women's_singles" class="uri">https://en.wikipedia.org/wiki/2009_Wimbledon_Championships_-_Women's_singles</a></p></li>
+<li><p>Suppose we want to scrape results for the seeded players (under <strong>Seeds</strong> section)</p></li>
+</ul></li>
+</ul>
+</section>
+<section class="slide level2">
+
+<h3 id="scraping-text-1">Scraping text</h3>
+<ul>
+<li>Just as before, after reading in the page, we inspect and grab the CSS selector for only this blurb of text</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb54"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a>wimbledon_url <span class="ot">&lt;-</span> <span class="st">"https://en.wikipedia.org/wiki/2009_Wimbledon_Championships_-_Women's_singles"</span> </span>
+<span id="cb54-2"><a href="#cb54-2" aria-hidden="true" tabindex="-1"></a>wimbledon_url <span class="sc">|&gt;</span> </span>
+<span id="cb54-3"><a href="#cb54-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">read_html</span>() <span class="sc">|&gt;</span> </span>
+<span id="cb54-4"><a href="#cb54-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">html_element</span>(<span class="st">"#mw-content-text &gt; div.mw-parser-output &gt; div:nth-child(13)"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>{html_node}
+&lt;div class="div-col"&gt;
+[1] &lt;dl&gt;\n&lt;dd&gt;\n&lt;span style="visibility:hidden;color:transparent;"&gt;0&lt;/span&gt;&lt;a ...
+[2] &lt;dl&gt;\n&lt;dd&gt;\n&lt;a href="#Section_1"&gt;17&lt;/a&gt;.&nbsp;&nbsp; &lt;span class="flagicon"&gt;&lt;a href ...</code></pre>
+</div>
+</div>
+</section>
+<section class="slide level2">
+
+<h3 id="scraping-text-2">Scraping text</h3>
+<ul>
+<li><p>Then, we can retrieve text from this element with <code>html_text2()</code></p>
+<ul>
+<li>There’s also an <code>html_text()</code> function. Look up the documentation <code>?html_text</code> to see the differences. (Honestly, if you don’t remember the differences, just try both and see which one is suitable. Ditto for <code>html_element()</code> and <code>html_elements()</code>.)</li>
+</ul></li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb56"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a>wimbledon_url <span class="sc">|&gt;</span> </span>
+<span id="cb56-2"><a href="#cb56-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">read_html</span>() <span class="sc">|&gt;</span> </span>
+<span id="cb56-3"><a href="#cb56-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">html_element</span>(<span class="st">"#mw-content-text &gt; div.mw-parser-output &gt; div:nth-child(13)"</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb56-4"><a href="#cb56-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">html_text2</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "01. Dinara Safina (semifinals)\n02. Serena Williams (champion)\n03. Venus Williams (final)\n04. Elena Dementieva (semifinals)\n05. Svetlana Kuznetsova (third round)\n06. Jelena Janković (third round)\n07. Vera Zvonareva (third round, withdrew due to an ankle injury)\n08. Victoria Azarenka (quarterfinals)\n09. Caroline Wozniacki (fourth round)\n10. Nadia Petrova (fourth round)\n11. Agnieszka Radwańska (quarterfinals)\n12. Marion Bartoli (third round)\n13. Ana Ivanovic (fourth round, retired due to a thigh injury)\n14. Dominika Cibulková (third round)\n15. Flavia Pennetta (third round)\n16. Zheng Jie (second round)\n17. Amélie Mauresmo (fourth round)\n18. Samantha Stosur (third round)\n19. Li Na (third round)\n20. Anabel Medina Garrigues (third round)\n21. Patty Schnyder (first round)\n22. Alizé Cornet (first round)\n23. Aleksandra Wozniak (first round)\n24. Maria Sharapova (second round)\n25. Kaia Kanepi (first round)\n26. Virginie Razzano (fourth round)\n27. Alisa Kleybanova (second round)\n28. Sorana Cîrstea (third round)\n29. Sybille Bammer (first round)\n30. Ágnes Szávay (first round)\n31. Anastasia Pavlyuchenkova (second round)\n32. Anna Chakvetadze (first round)"</code></pre>
+</div>
+</div>
+</section>
+<section class="slide level2">
+
+<h3 id="scraping-text-3">Scraping text</h3>
+<ul>
+<li><p>Notice this output a single string of all the text</p></li>
+<li><p>Each combination of seed-player-result is separated by a newline character <code>\n</code></p></li>
+<li><p>There are many ways you can do to separate these - one way is with <code>str_split_1()</code></p>
+<ul>
+<li><p><code>str_split_1()</code> splits a single string into a character vector based on a pattern</p></li>
+<li><p>Other ways include <code>str_split()</code> then <code>unlist()</code>, or <code>read_lines()</code>, and there’s many more</p></li>
+</ul></li>
+</ul>
+</section>
+<section class="slide level2">
+
+<h3 id="scraping-text-4">Scraping text</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb58"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb58-1"><a href="#cb58-1" aria-hidden="true" tabindex="-1"></a>wimbledon_info <span class="ot">&lt;-</span> wimbledon_url <span class="sc">|&gt;</span> </span>
+<span id="cb58-2"><a href="#cb58-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">read_html</span>() <span class="sc">|&gt;</span> </span>
+<span id="cb58-3"><a href="#cb58-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">html_element</span>(<span class="st">"#mw-content-text &gt; div.mw-parser-output &gt; div:nth-child(13)"</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb58-4"><a href="#cb58-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">html_text2</span>() <span class="sc">|&gt;</span></span>
+<span id="cb58-5"><a href="#cb58-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">str_split_1</span>(<span class="st">"</span><span class="sc">\\</span><span class="st">n"</span>)</span>
+<span id="cb58-6"><a href="#cb58-6" aria-hidden="true" tabindex="-1"></a>wimbledon_info</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] "01. Dinara Safina (semifinals)"                                   
+ [2] "02. Serena Williams (champion)"                                   
+ [3] "03. Venus Williams (final)"                                       
+ [4] "04. Elena Dementieva (semifinals)"                                
+ [5] "05. Svetlana Kuznetsova (third round)"                            
+ [6] "06. Jelena Janković (third round)"                                
+ [7] "07. Vera Zvonareva (third round, withdrew due to an ankle injury)"
+ [8] "08. Victoria Azarenka (quarterfinals)"                            
+ [9] "09. Caroline Wozniacki (fourth round)"                            
+[10] "10. Nadia Petrova (fourth round)"                                 
+[11] "11. Agnieszka Radwańska (quarterfinals)"                          
+[12] "12. Marion Bartoli (third round)"                                 
+[13] "13. Ana Ivanovic (fourth round, retired due to a thigh injury)"   
+[14] "14. Dominika Cibulková (third round)"                             
+[15] "15. Flavia Pennetta (third round)"                                
+[16] "16. Zheng Jie (second round)"                                     
+[17] "17. Amélie Mauresmo (fourth round)"                               
+[18] "18. Samantha Stosur (third round)"                                
+[19] "19. Li Na (third round)"                                          
+[20] "20. Anabel Medina Garrigues (third round)"                        
+[21] "21. Patty Schnyder (first round)"                                 
+[22] "22. Alizé Cornet (first round)"                                   
+[23] "23. Aleksandra Wozniak (first round)"                             
+[24] "24. Maria Sharapova (second round)"                               
+[25] "25. Kaia Kanepi (first round)"                                    
+[26] "26. Virginie Razzano (fourth round)"                              
+[27] "27. Alisa Kleybanova (second round)"                              
+[28] "28. Sorana Cîrstea (third round)"                                 
+[29] "29. Sybille Bammer (first round)"                                 
+[30] "30. Ágnes Szávay (first round)"                                   
+[31] "31. Anastasia Pavlyuchenkova (second round)"                      
+[32] "32. Anna Chakvetadze (first round)"                               </code></pre>
+</div>
+</div>
+</section>
+<section class="slide level2">
+
+<h3 id="scraping-text-5">Scraping text</h3>
+<ul>
+<li>As a final step, you can try to turn the vector into a table (as a column), then clean up and create 3 columns: seed, player, and result.</li>
+</ul>
+</section>
+<section class="slide level2">
+
+<h3 id="web-api-basics">(Web) API basics</h3>
+<p>An API (Application Programming Interface) connects computer programs to each other</p>
+<p>Web APIs provides interactions between a client device and a web server using the Hypertext Transfer Protocol (HTTP)</p>
+<ul>
+<li><p>Clients send a (HTTP) request and receive a response (in <code>JSON</code> or <code>XML</code>)</p></li>
+<li><p>Many organizations have their own public API, which can be used to access data</p></li>
+<li><p>Fortunately, there exists many <code>R</code> packages (sports on non-sports) that provides access to APIs for obtaining data</p>
+<ul>
+<li><p>Note that these packages (“API wrappers”) do not provide the actual data - instead functions for accessing the data</p></li>
+<li><p>For sports, check out the <a href="https://cran.r-project.org/web/views/SportsAnalytics.html">Sports Analytics CRAN Task View</a> and <a href="https://www.sportsdataverse.org/">SportsDataverse</a> for more information</p></li>
+</ul></li>
+</ul>
+</section>
+<section class="slide level2">
+
+<h3 id="the-httr-package">The <code>httr</code> package</h3>
+<p><code>httr</code> offers a general way of getting data from an API, via different tools for working with HTTP</p>
+<div class="fragment">
+<ul>
+<li><p><code>GET()</code> sends a <strong>request</strong> to an API and captures the <strong>response</strong></p></li>
+<li><p><code>content()</code> extracts out the data from the response</p></li>
+</ul>
+<p>These 2 functions are illustrated in the next example</p>
+</div>
+<div class="fragment">
+<p>There are many other useful functions in <code>httr</code></p>
+<ul>
+<li><p>For example, <code>PUT()</code> and <code>POST()</code> can be used to send data to APIs</p></li>
+<li><p>Other popular verbs are <code>PATCH()</code>, <code>HEAD()</code>, and <code>DELETE()</code></p></li>
+</ul>
+</div>
+</section>
+<section class="slide level2">
+
+<h3 id="example-4-formula-one-api">Example 4: Formula One API</h3>
+<p>(Inspiration: <a href="https://github.com/rfordatascience/tidytuesday/tree/master/data/2021/2021-09-07">Tidy Tuesday 2021-09-07</a>)</p>
+<ul>
+<li><p><a href="http://ergast.com/mrd/">Ergast Developer API</a> (<a href="http://ergast.com/mrd/" class="uri">http://ergast.com/mrd/</a>) is an (experimental) API that provides Formula One historical data</p></li>
+<li><p>Suppose we’re interested in getting a table of every F1 winning constructor</p>
+<ul>
+<li>URL: <a href="http://ergast.com/api/f1/constructorStandings/1/constructors.json" class="uri">http://ergast.com/api/f1/constructorStandings/1/constructors.json</a></li>
+</ul></li>
+</ul>
+</section>
+<section class="slide level2">
+
+<h3 id="example-4-formula-one-api-1">Example 4: Formula One API</h3>
+<ul>
+<li>First, we can use <code>GET()</code> to send a request to the API. We then receive the data via a response</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb60"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb60-1"><a href="#cb60-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(httr)</span>
+<span id="cb60-2"><a href="#cb60-2" aria-hidden="true" tabindex="-1"></a>f1_api <span class="ot">&lt;-</span> <span class="st">"http://ergast.com/api/f1/constructorStandings/1/constructors.json"</span></span>
+<span id="cb60-3"><a href="#cb60-3" aria-hidden="true" tabindex="-1"></a>f1_response <span class="ot">&lt;-</span> f1_api <span class="sc">|&gt;</span> </span>
+<span id="cb60-4"><a href="#cb60-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">GET</span>()</span>
+<span id="cb60-5"><a href="#cb60-5" aria-hidden="true" tabindex="-1"></a>f1_response</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Response [http://ergast.com/api/f1/constructorStandings/1/constructors.json]
+  Date: 2023-07-03 20:07
+  Status: 200
+  Content-Type: application/json; charset=utf-8
+  Size: 2.4 kB</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb62"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb62-1"><a href="#cb62-1" aria-hidden="true" tabindex="-1"></a><span class="co"># check the type of the response object and whether we get an error</span></span>
+<span id="cb62-2"><a href="#cb62-2" aria-hidden="true" tabindex="-1"></a><span class="co"># http_type(f1_response)</span></span>
+<span id="cb62-3"><a href="#cb62-3" aria-hidden="true" tabindex="-1"></a><span class="co"># http_error(f1_response)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section class="slide level2">
+
+<h3 id="example-4-formula-one-api-2">Example 4: Formula One API</h3>
+<ul>
+<li>Next, we want to get the data from the response by calling <code>content()</code>. We can then view the structure of the content object.</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb63"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb63-1"><a href="#cb63-1" aria-hidden="true" tabindex="-1"></a>f1_content <span class="ot">&lt;-</span> f1_response <span class="sc">|&gt;</span>   </span>
+<span id="cb63-2"><a href="#cb63-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">content</span>()</span>
+<span id="cb63-3"><a href="#cb63-3" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(f1_content)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>List of 1
+ $ MRData:List of 7
+  ..$ xmlns           : chr "http://ergast.com/mrd/1.5"
+  ..$ series          : chr "f1"
+  ..$ url             : chr "http://ergast.com/api/f1/constructorstandings/1/constructors.json"
+  ..$ limit           : chr "30"
+  ..$ offset          : chr "0"
+  ..$ total           : chr "17"
+  ..$ ConstructorTable:List of 2
+  .. ..$ constructorStandings: chr "1"
+  .. ..$ Constructors        :List of 17</code></pre>
+</div>
+</div>
+</section>
+<section class="slide level2">
+
+<h3 id="example-4-formula-one-api-3">Example 4: Formula One API</h3>
+<ul>
+<li>Finally, based on the content structure, we can get a list of constructors. Each list consists of constructor ID, (Wikipedia) URL, name, and nationality.</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb65"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb65-1"><a href="#cb65-1" aria-hidden="true" tabindex="-1"></a>f1_constructor_list <span class="ot">&lt;-</span> f1_content <span class="sc">|&gt;</span> </span>
+<span id="cb65-2"><a href="#cb65-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pluck</span>(<span class="st">"MRData"</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb65-3"><a href="#cb65-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pluck</span>(<span class="st">"ConstructorTable"</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb65-4"><a href="#cb65-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pluck</span>(<span class="st">"Constructors"</span>)</span>
+<span id="cb65-5"><a href="#cb65-5" aria-hidden="true" tabindex="-1"></a><span class="co"># f1_constructor_list</span></span>
+<span id="cb65-6"><a href="#cb65-6" aria-hidden="true" tabindex="-1"></a><span class="co"># names(f1_constructor_list[[1]])</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section class="slide level2">
+
+<h3 id="example-4-formula-one-api-4">Example 4: Formula One API</h3>
+<ul>
+<li>A few extra transformation steps will give us the desired table</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb66"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb66-1"><a href="#cb66-1" aria-hidden="true" tabindex="-1"></a>f1_constructor_tbl <span class="ot">&lt;-</span> f1_constructor_list <span class="sc">|&gt;</span> </span>
+<span id="cb66-2"><a href="#cb66-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as_tibble_col</span>(<span class="at">column_name =</span> <span class="st">"info"</span>) <span class="sc">|&gt;</span> <span class="co"># convert list to tibble</span></span>
+<span id="cb66-3"><a href="#cb66-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unnest_wider</span>(info) <span class="co"># unnest a list-column into columns</span></span>
+<span id="cb66-4"><a href="#cb66-4" aria-hidden="true" tabindex="-1"></a>f1_constructor_tbl</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 17 × 4
+   constructorId url                                           name  nationality
+   &lt;chr&gt;         &lt;chr&gt;                                         &lt;chr&gt; &lt;chr&gt;      
+ 1 benetton      http://en.wikipedia.org/wiki/Benetton_Formula Bene… Italian    
+ 2 brabham-repco http://en.wikipedia.org/wiki/Brabham          Brab… British    
+ 3 brawn         http://en.wikipedia.org/wiki/Brawn_GP         Brawn British    
+ 4 brm           http://en.wikipedia.org/wiki/BRM              BRM   British    
+ 5 cooper-climax http://en.wikipedia.org/wiki/Cooper_Car_Comp… Coop… British    
+ 6 ferrari       http://en.wikipedia.org/wiki/Scuderia_Ferrari Ferr… Italian    
+ 7 lotus-climax  http://en.wikipedia.org/wiki/Team_Lotus       Lotu… British    
+ 8 lotus-ford    http://en.wikipedia.org/wiki/Team_Lotus       Lotu… British    
+ 9 matra-ford    http://en.wikipedia.org/wiki/Matra            Matr… French     
+10 mclaren       http://en.wikipedia.org/wiki/McLaren          McLa… British    
+11 mercedes      http://en.wikipedia.org/wiki/Mercedes-Benz_i… Merc… German     
+12 red_bull      http://en.wikipedia.org/wiki/Red_Bull_Racing  Red … Austrian   
+13 renault       http://en.wikipedia.org/wiki/Renault_in_Form… Rena… French     
+14 team_lotus    http://en.wikipedia.org/wiki/Team_Lotus       Team… British    
+15 tyrrell       http://en.wikipedia.org/wiki/Tyrrell_Racing   Tyrr… British    
+16 vanwall       http://en.wikipedia.org/wiki/Vanwall          Vanw… British    
+17 williams      http://en.wikipedia.org/wiki/Williams_Grand_… Will… British    </code></pre>
+</div>
+</div>
+</section>
+<section class="slide level2">
+
+<h3 id="scrape-responsibly">Scrape responsibly!</h3>
+<ul>
+<li><p>Great article on <a href="https://towardsdatascience.com/ethics-in-web-scraping-b96b18136f01">Ethics in Web Scraping</a>, featuring a “web scraping manifesto”</p></li>
+<li><p>Web scraping case study from <a href="https://mdsr-book.github.io/mdsr2e/ch-ethics.html">Data science ethics chapter of MDSR</a></p></li>
+<li><p><a href="https://jakobtures.github.io/web-scraping/goodpractice.html">Good pratice chapter from Web Scraping using R</a></p></li>
+<li><p>Common points</p>
+<ul>
+<li><p>Be mindful of the terms of use of every website</p></li>
+<li><p>Anonymize personal data, especially if data/analysis are to be publicly released</p></li>
+</ul></li>
+</ul>
+</section>
+<section class="slide level2">
+
+<h3 id="the-polite-package-overview">The <code>polite</code> package: overview</h3>
+<ul>
+<li><p><a href="https://github.com/dmi3kno/polite"><code>polite</code></a> ensures that you’re respecting the <a href="https://en.wikipedia.org/wiki/Robots.txt"><code>robots.txt</code></a> <sup>1</sup> and not submitting too many requests</p>
+<ul>
+<li><p><code>bow()</code> introduces the user to the host and asks for scraping permission</p></li>
+<li><p><code>scrape()</code> scrapes and retrieves data</p></li>
+</ul></li>
+</ul>
+<aside><ol class="aside-footnotes"><li id="fn1"><p>“<code>robots.txt</code> is the filename used for implementing the Robots Exclusion Protocol, a standard used by websites to indicate to visiting web crawlers and other web robots which portions of the website they are allowed to visit” (Source: Wikipedia)</p></li></ol></aside></section>
+<section class="slide level2">
+
+<h3 id="the-polite-package-example">The <code>polite</code> package: example</h3>
+<ul>
+<li><p>We use the same Wimbledon example as before to demonstrate <code>polite</code></p></li>
+<li><p>First, pass the URL into <code>bow()</code> to get a “session” object</p>
+<ul>
+<li>This gives information about the <code>robots.txt</code> and whether the web page is scrapable</li>
+</ul></li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb68"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb68-1"><a href="#cb68-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(polite)</span>
+<span id="cb68-2"><a href="#cb68-2" aria-hidden="true" tabindex="-1"></a>wimbledon_url <span class="ot">&lt;-</span> <span class="st">"https://en.wikipedia.org/wiki/2009_Wimbledon_Championships_-_Women's_singles"</span></span>
+<span id="cb68-3"><a href="#cb68-3" aria-hidden="true" tabindex="-1"></a>session <span class="ot">&lt;-</span> wimbledon_url <span class="sc">|&gt;</span> </span>
+<span id="cb68-4"><a href="#cb68-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">bow</span>()</span>
+<span id="cb68-5"><a href="#cb68-5" aria-hidden="true" tabindex="-1"></a>session</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>&lt;polite session&gt; https://en.wikipedia.org/wiki/2009_Wimbledon_Championships_-_Women's_singles
+    User-agent: polite R package
+    robots.txt: 456 rules are defined for 33 bots
+   Crawl delay: 5 sec
+  The path is scrapable for this user-agent</code></pre>
+</div>
+</div>
+</section>
+<section class="slide level2">
+
+<h3 id="the-polite-package-example-1">The <code>polite</code> package: example</h3>
+<ul>
+<li><p>Now we can use <code>scrape()</code> to get the data from the session previously created by <code>bow()</code></p>
+<ul>
+<li>This essentially replaces <code>read_html()</code> as seen earlier</li>
+</ul></li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb70"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb70-1"><a href="#cb70-1" aria-hidden="true" tabindex="-1"></a>session <span class="sc">|&gt;</span> </span>
+<span id="cb70-2"><a href="#cb70-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scrape</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>{html_document}
+&lt;html class="client-nojs vector-feature-language-in-header-enabled vector-feature-language-in-main-page-header-disabled vector-feature-sticky-header-disabled vector-feature-page-tools-pinned-disabled vector-feature-toc-pinned-enabled vector-feature-main-menu-pinned-disabled vector-feature-limited-width-enabled vector-feature-limited-width-content-enabled vector-feature-zebra-design-disabled" lang="en" dir="ltr"&gt;
+[1] &lt;head&gt;\n&lt;meta http-equiv="Content-Type" content="text/html; charset=UTF-8 ...
+[2] &lt;body class="skin-vector skin-vector-search-vue mediawiki ltr sitedir-ltr ...</code></pre>
+</div>
+</div>
+</section>
+<section class="slide level2">
+
+<h3 id="the-polite-package-example-2">The <code>polite</code> package: example</h3>
+<ul>
+<li>The remaining steps are similar as before. We can copy the earlier code for specifying the HTML element, retrieving text, and converting to tibble.</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb72"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb72-1"><a href="#cb72-1" aria-hidden="true" tabindex="-1"></a>session <span class="sc">|&gt;</span> </span>
+<span id="cb72-2"><a href="#cb72-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scrape</span>() <span class="sc">|&gt;</span> </span>
+<span id="cb72-3"><a href="#cb72-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">html_element</span>(<span class="st">"#mw-content-text &gt; div.mw-parser-output &gt; div:nth-child(13)"</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb72-4"><a href="#cb72-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">html_text2</span>() <span class="sc">|&gt;</span></span>
+<span id="cb72-5"><a href="#cb72-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">str_split_1</span>(<span class="st">"</span><span class="sc">\\</span><span class="st">n"</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb72-6"><a href="#cb72-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as_tibble_col</span>(<span class="at">column_name =</span> <span class="st">"info"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 32 × 1
+   info                                                             
+   &lt;chr&gt;                                                            
+ 1 01. Dinara Safina (semifinals)                                   
+ 2 02. Serena Williams (champion)                                   
+ 3 03. Venus Williams (final)                                       
+ 4 04. Elena Dementieva (semifinals)                                
+ 5 05. Svetlana Kuznetsova (third round)                            
+ 6 06. Jelena Janković (third round)                                
+ 7 07. Vera Zvonareva (third round, withdrew due to an ankle injury)
+ 8 08. Victoria Azarenka (quarterfinals)                            
+ 9 09. Caroline Wozniacki (fourth round)                            
+10 10. Nadia Petrova (fourth round)                                 
+# ℹ 22 more rows</code></pre>
+</div>
+</div>
+</section>
+<section class="slide level2">
+
+<h3 id="more-resources">More resources</h3>
+<ul>
+<li><p><a href="https://r4ds.hadley.nz/webscraping.html">Web scraping chapter</a> from R4DS (2e, draft)</p></li>
+<li><p><a href="https://ryo-n7.github.io/2020-05-14-webscrape-soccer-data-with-R">Intro to {polite} Web Scraping of Soccer Data with R</a></p></li>
+<li><p>Web scraping workshop from UCSAS <a href="https://github.com/YaqiongYao/UCSAS_WebScrapping">2020</a> and <a href="https://github.com/lcgodoy/ucsas2021">2021</a></p></li>
+<li><p><a href="http://brooksandrew.github.io/simpleblog/articles/scraping-with-selenium/">Scraping with Selenium blogpost</a></p></li>
+<li><p>Browse through source code of different <code>R</code> “scraper” packages.</p></li>
+</ul>
+</section>
+<section class="slide level2">
+
+<h3 id="final-words">Final words</h3>
+<ul>
+<li><p>Web scraping is an excellent means for gaining proficiency in data cleaning</p>
+<ul>
+<li><p>It takes time… the more you play around the better you get</p></li>
+<li><p>Always consult the function documentations</p></li>
+</ul></li>
+<li><p>Come up with fun personal projects (data viz, Shiny app, etc.), scrape data, and enjoy learning (and the struggle)</p></li>
+<li><p>You can develop the next great sports “scrapR” package(s)</p></li>
+</ul>
+<div class="footer footer-default">
+
+</div>
+</section>
+
+    </div>
+  </div>
+
+  <script>window.backupDefine = window.define; window.define = undefined;</script>
+  <script src="index_files/libs/revealjs/dist/reveal.js"></script>
+  <!-- reveal.js plugins -->
+  <script src="index_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.js"></script>
+  <script src="index_files/libs/revealjs/plugin/pdf-export/pdfexport.js"></script>
+  <script src="index_files/libs/revealjs/plugin/reveal-menu/menu.js"></script>
+  <script src="index_files/libs/revealjs/plugin/reveal-menu/quarto-menu.js"></script>
+  <script src="index_files/libs/revealjs/plugin/quarto-support/support.js"></script>
+  
+
+  <script src="index_files/libs/revealjs/plugin/notes/notes.js"></script>
+  <script src="index_files/libs/revealjs/plugin/search/search.js"></script>
+  <script src="index_files/libs/revealjs/plugin/zoom/zoom.js"></script>
+  <script src="index_files/libs/revealjs/plugin/math/math.js"></script>
+  <script>window.define = window.backupDefine; window.backupDefine = undefined;</script>
+
+  <script>
+
+      // Full list of configuration options available at:
+      // https://revealjs.com/config/
+      Reveal.initialize({
+'controlsAuto': true,
+'previewLinksAuto': false,
+'smaller': true,
+'pdfSeparateFragments': false,
+'autoAnimateEasing': "ease",
+'autoAnimateDuration': 1,
+'autoAnimateUnmatched': true,
+'menu': {"side":"left","useTextContentForMissingTitles":true,"markers":false,"loadIcons":false,"custom":[{"title":"Tools","icon":"<i class=\"fas fa-gear\"></i>","content":"<ul class=\"slide-menu-items\">\n<li class=\"slide-tool-item active\" data-item=\"0\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.fullscreen(event)\"><kbd>f</kbd> Fullscreen</a></li>\n<li class=\"slide-tool-item\" data-item=\"1\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.speakerMode(event)\"><kbd>s</kbd> Speaker View</a></li>\n<li class=\"slide-tool-item\" data-item=\"2\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.overview(event)\"><kbd>o</kbd> Slide Overview</a></li>\n<li class=\"slide-tool-item\" data-item=\"3\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.togglePdfExport(event)\"><kbd>e</kbd> PDF Export Mode</a></li>\n<li class=\"slide-tool-item\" data-item=\"4\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.keyboardHelp(event)\"><kbd>?</kbd> Keyboard Help</a></li>\n</ul>"}],"openButton":true},
+'smaller': true,
+ 
+        // Display controls in the bottom right corner
+        controls: false,
+
+        // Help the user learn the controls by providing hints, for example by
+        // bouncing the down arrow when they first encounter a vertical slide
+        controlsTutorial: false,
+
+        // Determines where controls appear, "edges" or "bottom-right"
+        controlsLayout: 'edges',
+
+        // Visibility rule for backwards navigation arrows; "faded", "hidden"
+        // or "visible"
+        controlsBackArrows: 'faded',
+
+        // Display a presentation progress bar
+        progress: true,
+
+        // Display the page number of the current slide
+        slideNumber: false,
+
+        // 'all', 'print', or 'speaker'
+        showSlideNumber: 'all',
+
+        // Add the current slide number to the URL hash so that reloading the
+        // page/copying the URL will return you to the same slide
+        hash: true,
+
+        // Start with 1 for the hash rather than 0
+        hashOneBasedIndex: false,
+
+        // Flags if we should monitor the hash and change slides accordingly
+        respondToHashChanges: true,
+
+        // Push each slide change to the browser history
+        history: true,
+
+        // Enable keyboard shortcuts for navigation
+        keyboard: true,
+
+        // Enable the slide overview mode
+        overview: true,
+
+        // Disables the default reveal.js slide layout (scaling and centering)
+        // so that you can use custom CSS layout
+        disableLayout: false,
+
+        // Vertical centering of slides
+        center: false,
+
+        // Enables touch navigation on devices with touch input
+        touch: true,
+
+        // Loop the presentation
+        loop: false,
+
+        // Change the presentation direction to be RTL
+        rtl: false,
+
+        // see https://revealjs.com/vertical-slides/#navigation-mode
+        navigationMode: 'linear',
+
+        // Randomizes the order of slides each time the presentation loads
+        shuffle: false,
+
+        // Turns fragments on and off globally
+        fragments: true,
+
+        // Flags whether to include the current fragment in the URL,
+        // so that reloading brings you to the same fragment position
+        fragmentInURL: false,
+
+        // Flags if the presentation is running in an embedded mode,
+        // i.e. contained within a limited portion of the screen
+        embedded: false,
+
+        // Flags if we should show a help overlay when the questionmark
+        // key is pressed
+        help: true,
+
+        // Flags if it should be possible to pause the presentation (blackout)
+        pause: true,
+
+        // Flags if speaker notes should be visible to all viewers
+        showNotes: false,
+
+        // Global override for autoplaying embedded media (null/true/false)
+        autoPlayMedia: null,
+
+        // Global override for preloading lazy-loaded iframes (null/true/false)
+        preloadIframes: null,
+
+        // Number of milliseconds between automatically proceeding to the
+        // next slide, disabled when set to 0, this value can be overwritten
+        // by using a data-autoslide attribute on your slides
+        autoSlide: 0,
+
+        // Stop auto-sliding after user input
+        autoSlideStoppable: true,
+
+        // Use this method for navigation when auto-sliding
+        autoSlideMethod: null,
+
+        // Specify the average time in seconds that you think you will spend
+        // presenting each slide. This is used to show a pacing timer in the
+        // speaker view
+        defaultTiming: null,
+
+        // Enable slide navigation via mouse wheel
+        mouseWheel: false,
+
+        // The display mode that will be used to show slides
+        display: 'block',
+
+        // Hide cursor if inactive
+        hideInactiveCursor: true,
+
+        // Time before the cursor is hidden (in ms)
+        hideCursorTime: 5000,
+
+        // Opens links in an iframe preview overlay
+        previewLinks: false,
+
+        // Transition style (none/fade/slide/convex/concave/zoom)
+        transition: 'none',
+
+        // Transition speed (default/fast/slow)
+        transitionSpeed: 'default',
+
+        // Transition style for full page slide backgrounds
+        // (none/fade/slide/convex/concave/zoom)
+        backgroundTransition: 'none',
+
+        // Number of slides away from the current that are visible
+        viewDistance: 3,
+
+        // Number of slides away from the current that are visible on mobile
+        // devices. It is advisable to set this to a lower number than
+        // viewDistance in order to save resources.
+        mobileViewDistance: 2,
+
+        // The "normal" size of the presentation, aspect ratio will be preserved
+        // when the presentation is scaled to fit different resolutions. Can be
+        // specified using percentage units.
+        width: 1050,
+
+        height: 700,
+
+        // Factor of the display size that should remain empty around the content
+        margin: 0.1,
+
+        math: {
+          mathjax: 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js',
+          config: 'TeX-AMS_HTML-full',
+          tex2jax: {
+            inlineMath: [['\\(','\\)']],
+            displayMath: [['\\[','\\]']],
+            balanceBraces: true,
+            processEscapes: false,
+            processRefs: true,
+            processEnvironments: true,
+            preview: 'TeX',
+            skipTags: ['script','noscript','style','textarea','pre','code'],
+            ignoreClass: 'tex2jax_ignore',
+            processClass: 'tex2jax_process'
+          },
+        },
+
+        // reveal.js plugins
+        plugins: [QuartoLineHighlight, PdfExport, RevealMenu, QuartoSupport,
+
+          RevealMath,
+          RevealNotes,
+          RevealSearch,
+          RevealZoom
+        ]
+      });
+    </script>
+    
+    <script>
+      // htmlwidgets need to know to resize themselves when slides are shown/hidden.
+      // Fire the "slideenter" event (handled by htmlwidgets.js) when the current
+      // slide changes (different for each slide format).
+      (function () {
+        // dispatch for htmlwidgets
+        function fireSlideEnter() {
+          const event = window.document.createEvent("Event");
+          event.initEvent("slideenter", true, true);
+          window.document.dispatchEvent(event);
+        }
+
+        function fireSlideChanged(previousSlide, currentSlide) {
+          fireSlideEnter();
+
+          // dispatch for shiny
+          if (window.jQuery) {
+            if (previousSlide) {
+              window.jQuery(previousSlide).trigger("hidden");
+            }
+            if (currentSlide) {
+              window.jQuery(currentSlide).trigger("shown");
+            }
+          }
+        }
+
+        // hookup for slidy
+        if (window.w3c_slidy) {
+          window.w3c_slidy.add_observer(function (slide_num) {
+            // slide_num starts at position 1
+            fireSlideChanged(null, w3c_slidy.slides[slide_num - 1]);
+          });
+        }
+
+      })();
+    </script>
+
+    <script id="quarto-html-after-body" type="application/javascript">
+    window.document.addEventListener("DOMContentLoaded", function (event) {
+      const toggleBodyColorMode = (bsSheetEl) => {
+        const mode = bsSheetEl.getAttribute("data-mode");
+        const bodyEl = window.document.querySelector("body");
+        if (mode === "dark") {
+          bodyEl.classList.add("quarto-dark");
+          bodyEl.classList.remove("quarto-light");
+        } else {
+          bodyEl.classList.add("quarto-light");
+          bodyEl.classList.remove("quarto-dark");
+        }
+      }
+      const toggleBodyColorPrimary = () => {
+        const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+        if (bsSheetEl) {
+          toggleBodyColorMode(bsSheetEl);
+        }
+      }
+      toggleBodyColorPrimary();  
+      const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+      tabsets.forEach(function(tabset) {
+        const tabby = new Tabby('#' + tabset.id);
+      });
+      const isCodeAnnotation = (el) => {
+        for (const clz of el.classList) {
+          if (clz.startsWith('code-annotation-')) {                     
+            return true;
+          }
+        }
+        return false;
+      }
+      const clipboard = new window.ClipboardJS('.code-copy-button', {
+        text: function(trigger) {
+          const codeEl = trigger.previousElementSibling.cloneNode(true);
+          for (const childEl of codeEl.children) {
+            if (isCodeAnnotation(childEl)) {
+              childEl.remove();
+            }
+          }
+          return codeEl.innerText;
+        }
+      });
+      clipboard.on('success', function(e) {
+        // button target
+        const button = e.trigger;
+        // don't keep focus
+        button.blur();
+        // flash "checked"
+        button.classList.add('code-copy-button-checked');
+        var currentTitle = button.getAttribute("title");
+        button.setAttribute("title", "Copied!");
+        let tooltip;
+        if (window.bootstrap) {
+          button.setAttribute("data-bs-toggle", "tooltip");
+          button.setAttribute("data-bs-placement", "left");
+          button.setAttribute("data-bs-title", "Copied!");
+          tooltip = new bootstrap.Tooltip(button, 
+            { trigger: "manual", 
+              customClass: "code-copy-button-tooltip",
+              offset: [0, -8]});
+          tooltip.show();    
+        }
+        setTimeout(function() {
+          if (tooltip) {
+            tooltip.hide();
+            button.removeAttribute("data-bs-title");
+            button.removeAttribute("data-bs-toggle");
+            button.removeAttribute("data-bs-placement");
+          }
+          button.setAttribute("title", currentTitle);
+          button.classList.remove('code-copy-button-checked');
+        }, 1000);
+        // clear code selection
+        e.clearSelection();
+      });
+      function tippyHover(el, contentFn) {
+        const config = {
+          allowHTML: true,
+          content: contentFn,
+          maxWidth: 500,
+          delay: 100,
+          arrow: false,
+          appendTo: function(el) {
+              return el.closest('section.slide') || el.parentElement;
+          },
+          interactive: true,
+          interactiveBorder: 10,
+          theme: 'light-border',
+          placement: 'bottom-start'
+        };
+          config['offset'] = [0,0];
+          config['maxWidth'] = 700;
+        window.tippy(el, config); 
+      }
+      const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+      for (var i=0; i<noterefs.length; i++) {
+        const ref = noterefs[i];
+        tippyHover(ref, function() {
+          // use id or data attribute instead here
+          let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+          try { href = new URL(href).hash; } catch {}
+          const id = href.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          return note.innerHTML;
+        });
+      }
+      const findCites = (el) => {
+        const parentEl = el.parentElement;
+        if (parentEl) {
+          const cites = parentEl.dataset.cites;
+          if (cites) {
+            return {
+              el,
+              cites: cites.split(' ')
+            };
+          } else {
+            return findCites(el.parentElement)
+          }
+        } else {
+          return undefined;
+        }
+      };
+      var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+      for (var i=0; i<bibliorefs.length; i++) {
+        const ref = bibliorefs[i];
+        const citeInfo = findCites(ref);
+        if (citeInfo) {
+          tippyHover(citeInfo.el, function() {
+            var popup = window.document.createElement('div');
+            citeInfo.cites.forEach(function(cite) {
+              var citeDiv = window.document.createElement('div');
+              citeDiv.classList.add('hanging-indent');
+              citeDiv.classList.add('csl-entry');
+              var biblioDiv = window.document.getElementById('ref-' + cite);
+              if (biblioDiv) {
+                citeDiv.innerHTML = biblioDiv.innerHTML;
+              }
+              popup.appendChild(citeDiv);
+            });
+            return popup.innerHTML;
+          });
+        }
+      }
+    });
+    </script>
+    
+    
+
+</body></html>

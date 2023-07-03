@@ -1,2 +1,3 @@
 # webscraping
-Web Scraping: A Primer
+
+A primer on web scraping, with focus on sports data

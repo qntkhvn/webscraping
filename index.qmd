@@ -1,0 +1,894 @@
+---
+title: "<small>Web Scraping: A Primer</small>"
+author: "Quang Nguyen"
+institute: |
+  | Department of Statistics & Data Science
+  | Carnegie Mellon University
+  | 
+  | SURE 2023 - CMSACamp
+  |
+  | [`r fontawesome::fa("twitter")` @qntkhvn](https://twitter.com/qntkhvn) &nbsp; &nbsp; &nbsp; [`r fontawesome::fa("github")` qntkhvn](https://github.com/qntkhvn) &nbsp; &nbsp; &nbsp; [`r fontawesome::fa("link")` qntkhvn.netlify.app](https://qntkhvn.netlify.app/)
+format: 
+  revealjs:
+    theme: night
+    smaller: true
+    code-line-numbers: false
+---
+
+### Overview
+
+**Goal: you should be able to use `R` to scrape an HTML table from the web after this lecture**
+
+Agenda:
+
+-   Web page basics
+
+-   Web scraping with `rvest`
+
+    -   Featuring `stringr`
+    
+-   APIs
+
+-   Responsible web scraping
+
+    -   Best practice
+    
+    -   Featuring `polite`
+
+
+
+<!-- ### Learning goal -->
+
+<!-- - This should serve as an elementary introduction, without much technical details (e.g., html, the web) -->
+
+<!-- I view myself as an R user, not a developer or engineer. -->
+<!-- My knowledge about the web and web scraping is limited, but I know "enough" materials for my research -->
+<!-- I will try my best to answer your questions. -->
+
+---
+
+### Material credits
+
+- [Tan Ho's excellent youtube video](https://youtu.be/z8yT3E4pz54)
+
+- [Data Wrangling lecture notes](https://dcl-wrangle.stanford.edu/rvest.html) from the Stanford Data Challenge Lab (DCL) course
+
+<!-- - Web scraping chapter in [R4DS (2e, draft)](https://r4ds.hadley.nz/webscraping.html) -->
+
+---
+
+### Web page basics
+
+-   **HTML** (Hyper Text Markup Language) defines the content and structure of a web page
+
+    -   An HTML page contains various elements (headers, paragraphs, tables...)
+    
+    -   HTML tags define where an element begins and ends
+    
+    -   Opening and closing tags have the forms `<tagname>` and `</tagname>` (e.g., `<table>` and `</table>`)
+    
+::: {.fragment}
+
+-   **CSS** (Cascading Style Sheets) defines the appearance of HTML elements (i.e. whether the web page is pretty or ugly)
+
+    -   CSS selectors are patterns used to select the elements to be style
+    
+    -   **CSS selectors can be used to extract elements from a web page**
+
+:::
+
+---
+
+### Web scraping in `R`
+
+Two widely-used packages:
+
+- `rvest`: simple, `tidyverse` friendly, static data
+
+- `RSelenium`: more advanced, dynamic data
+
+We will focus on `rvest` today
+
+```{r, eval=FALSE, echo=TRUE}
+install.packages("rvest")
+```
+
+(For the `python` fans, you can do it with `Beautiful Soup` and `Selenium`)
+
+---
+
+### Typical web scraping workflow
+
+- Reading in a website
+
+- Data organization and cleaning (most of the process)
+
+  - Extracting website elements (e.g., tables, links, etc.)
+
+  - Common data manipulation tasks (e.g., with `dplyr`)
+
+  - Working with strings (e.g, `stringr`, `stringi`) and regular expressions (regex)
+
+- Generalization: writing functions (and developing packages)
+
+  - For instance, in sports, you may be interested in data for not just 1 season/player/team/etc., but multiple
+
+---
+
+### Scraping (HTML) tables
+
+-   Example: NHL career games played leaders
+
+    -   URL: <https://www.hockey-reference.com/leaders/nhl_tbl_career.html>
+
+::: {.fragment}
+-   Tasks:  Scrape the **NHL Leaders** table
+
+    *   Read the HTML page into `R`
+
+    *   Grab the CSS selector for the table in the browser
+    
+    *   Write scraping code in `R`
+    
+    *   Perform the following data cleaning steps
+    
+        *   Create an indicator variable for whether a player is in the Hall of Fame
+        
+        *   Remove the asterisk (`*`) from the Player column
+        
+        *   Remove the dot (`.`) from the Rank column
+:::
+
+---
+
+### Read the HTML page into `R`
+
+-   We use `read_html()` to read in the HTML page based on a specified web page's URL
+
+```{r, echo=TRUE}
+library(rvest)
+library(tidyverse)
+nhl_url <- "https://www.hockey-reference.com/leaders/games_played_career.html"
+nhl_url |> 
+  read_html()
+```
+
+-   The next step is to extract the **NHL Leaders** table from the HTML. This can be accomplished by finding the **CSS selector** of the table.
+
+---
+
+### How to find a table's CSS selector
+
+1.   Move the cursor close to the table you want to scrape (e.g., near top of the table). Right click and select **Inspect** (*Chrome* or *Firefox*) or **Inspect element** (*Safari*)
+
+::: {.fragment}
+
+2.  The **Developer Tools** will open in your browser. Pay attention to the **Elements** pane (*Chrome* or *Safari*) or **Inspector** pane (*Firefox*)
+
+    *   The HTML element corresponding to the web page area (close to the table) mentioned in Step 1 is highlighted
+
+    *   Hovering over different HTML elements will highlight different parts of the web page
+    
+:::
+
+::: {.fragment}
+
+3.  To find the CSS selector for the table, hover over different lines and stop at the line where only the entire table is highlighted 
+
+    *   This will often be a line with a `<table>` opening tag
+    
+:::
+
+::: {.fragment}
+
+4.   Right click on the line, then choose **Copy $\rightarrow$ Copy selector** (*Chrome*) or **Copy $\rightarrow$ CSS Selector** (*Firefox*) or **Copy $\rightarrow$ Selector Path** (*Safari*)
+
+:::
+
+---
+
+### Scraping (HTML) tables
+
+The following video shows how to find the **CSS selector** (in *Chrome*)
+
+<center>
+
+{{< video vid.mov width="800" height="600">}}
+
+</center>
+
+---
+
+### Scraping (HTML) tables
+
+-   Use `html_element()` to get the element associated with the CSS selector (table in this case)
+
+-   Inside `html_element()`, specify the CSS selector that we copied earlier
+
+-   This returns an HTML "node"
+
+```{r, echo=TRUE}
+nhl_url |> 
+  read_html() |> 
+  html_element(css = "#stats_career_NHL")
+```
+
+---
+
+### Scraping (HTML) tables
+
+-   Finally, use `html_table()` to convert to a tibble (data frame) in `R`
+
+-   This completes our scraping pipeline.
+
+```{r, echo=TRUE}
+nhl_tbl <- nhl_url |> 
+  read_html() |> 
+  html_element(css = "#stats_career_NHL") |> 
+  html_table()
+
+nhl_tbl
+```
+
+---
+
+### Remarks: web page elements
+
+*   Note that `html_table()` only works when the element specified in `html_element()` is a table
+
+*   There are other things to be extracted from an element
+
+    *   To retrieve text from an element, use `html_text()` and  `html_text2()`
+
+    *   To retrieve an attribute (e.g., hyperlink) from an element, use `html_attr()` and `html_attrs()`
+    
+    *   We will touch on these 2 cases later on
+
+---
+
+### Not recommended
+
+-   The inspection step (for obtaining CSS selector) can be skipped
+
+-   `html_table()` can be called right after `read_html()`
+
+-   This outputs a list of all the tables existed on the web page
+
+```{r, echo=TRUE}
+nhl_tbl_list <- nhl_url |> 
+  read_html() |> 
+  html_table()
+nhl_tbl_list
+```
+
+---
+
+### Not recommended
+
+-   We can then subset out the desired table based on its index within the list
+
+```{r, echo=TRUE}
+nhl_tbl_list[[1]]
+```
+
+-   For this specific example, there are only 2 tables, so there doesn't seem to be any issue. But what if there are a lot more than 2?
+
+---
+
+### Data cleaning: working with `stringr`
+
+-   The `tidyverse` offers `stringr` for string manipulation
+
+-   Check out the [`stringr` cheatsheet](https://stringr.tidyverse.org/#cheatsheet)
+
+    -   The second page gives a neat overview of [regular expressions](https://wikipedia.org/wiki/Regular_expression) (special patterns for string matching)
+    
+    -   Note that to specify special characters (e.g., `.`, `,`, `*`, `?`, etc.) in a pattern in `R`, use a double backslash (`\\`)
+    
+<!-- TODO: some notes on regular expression... -->
+
+---
+
+### `str_detect()`
+
+*   Returns TRUE/FALSE, showing whether a string matches a specified pattern
+
+```{r, echo=TRUE}
+str_detect("Gordie Howe*", "\\*")
+str_detect("Gordie Howe", "\\*")
+```
+
+::: {.fragment}
+
+*   `str_detect()` can be used with `filter()` 
+
+    *   Recall that `filter()` subsets out rows that satisfy a condition
+
+:::
+
+---
+
+### `str_detect()`
+
+Suppose we want to keep only the HOF players. We can detect all rows with the asterisk (`*`) with `str_detect()`.
+
+```{r, echo=TRUE}
+nhl_tbl |> 
+  filter(str_detect(Player, "\\*"))
+```
+
+---
+
+### `str_detect()`
+
+Back to one of the data cleaning task mentioned earlier -  we want to create an indicator variable for whether a player is in the HOF
+
+<big>
+
+```{r, echo=TRUE}
+nhl_tbl |> 
+  mutate(HOF = ifelse(str_detect(Player, "\\*"), 1, 0))
+```
+
+</big>
+
+---
+
+### `str_remove()`
+
+*   `str_remove()` takes in a string and removes a specified pattern.
+
+```{r, echo=TRUE}
+str_remove("Gordie Howe*", "\\*")
+```
+
+::: {.fragment}
+
+*   `str_remove()` can be used with `mutate()` 
+
+    *   Recall that `mutate()` creates/modifies variables that are functions of existing variables
+    
+:::
+
+::: {.fragment}
+
+*   There's a related function named `str_remove_all()`. The following code illustrates the difference.
+
+```{r, echo=TRUE}
+str_remove("*Gordie* Howe*", "\\*")
+str_remove_all("*Gordie* Howe*", "\\*")
+```
+
+:::
+
+---
+
+### `str_remove()`
+
+*   Now we build upon the previous code to finish the data cleaning process. 
+
+*   Recall than we want to remove the asterisk (`*`) and dot (`.`) from the `Player` and `Rank` columns, respectively.
+        
+
+```{r, echo=TRUE}
+nhl_tbl_cleaned <- nhl_tbl |> 
+  mutate(HOF = ifelse(str_detect(Player, "\\*"), 1, 0),
+         Player = str_remove(Player, "\\*"),
+         Rank = str_remove(Rank, "\\."))
+
+nhl_tbl_cleaned
+```
+
+---
+
+### `str_replace()`
+
+- `str_replace()` takes in a string and replaces a specified pattern with a new replacement pattern
+
+    - `str_remove()` is a special case of `str_replace()`, where a pattern is replaced by an empty string
+
+    - There's also `str_replace_all()`. The following code illustrates the difference
+    
+```{r, echo=TRUE}
+str_replace("statistician", "ian", "") # same as str_remove("statistician", "ian")
+str_replace("statistician", "ian", "s")
+str_replace("noon", "o", "a")
+str_replace_all("noon", "o", "a")
+```
+
+**There's a lot more useful string functions provided by `stringr`. See the [`stringr` cheatsheet](https://stringr.tidyverse.org/#cheatsheet) for more details.**
+
+
+---
+
+### Practice: Frauen Bundesliga
+
+*   URL: <https://fbref.com/en/comps/183/2017-2018/2017-2018-Frauen-Bundesliga-Stats>
+
+*   The link above provides stats for the 2017-2018 season
+
+    *   Scrape the **Overall** table under **Regular season**
+    
+    *   (Optional) Write a general function for scraping data for any specified season. 
+    
+        *   Hint: change the years in the URL and CSS selector
+    
+        *   Get data for every season between 2016-2017 and 2019-2020 and combine them into a single table
+    
+---
+
+### Practice: Frauen Bundesliga
+
+*   Scrape 2017-2018 overall standings
+
+```{r, echo=TRUE}
+fb_url <- "https://fbref.com/en/comps/183/2017-2018/2017-2018-Frauen-Bundesliga-Stats"
+fb_tbl <- fb_url |> 
+  read_html() |> 
+  html_element(css = "#results2017-20181831_overall") |> 
+  html_table()
+fb_tbl
+```
+        
+---
+
+### Practice: Frauen Bundesliga
+
+*   General function
+
+```{r, echo=TRUE}
+get_fb_data <- function(start_year) {
+  
+  year_str <- str_c(start_year, start_year + 1, sep = "-")
+  
+  fb_url <- str_c("https://fbref.com/en/comps/183/", year_str, "/", year_str, "-Frauen-Bundesliga-Stats")
+  
+  year_css <- str_c("#results", year_str, "1831_overall")
+  
+  fb_tbl <- fb_url |>
+    read_html() |> 
+    html_element(css = year_css) |> 
+    html_table() |> 
+    mutate(season = year_str)
+  
+  return(fb_tbl)
+}
+
+seasons <- 2016:2019
+fb_tbl_full <- seasons |> 
+  map(get_fb_data) |> 
+  list_rbind()
+# fb_tbl_full
+```
+
+---
+
+### Scraping links and images
+
+Continuing with the Frauen Bundesliga 2017-2018 season stats example...
+
+*   Notice that the table on the web page also contains team logos, URLs, etc.
+
+*   These information were not extracted with `html_table()`
+
+*   Suppose we're also interested in getting the team URLs and logos
+
+---
+
+### Scraping links and images
+
+*   We first store the HTML node for the table (everything up to `html_element()` with a specified CSS selector for the table) in an object
+
+*   This can then be used to obtain the images and team links based on their tags.
+
+```{r, echo=TRUE}
+fb_url <- "https://fbref.com/en/comps/183/2017-2018/2017-2018-Frauen-Bundesliga-Stats"
+fb_node <- fb_url |> 
+  read_html() |> 
+  html_element(css = "#results2017-20181831_overall")
+fb_node
+```
+
+---
+
+### Scraping links and images
+
+*   To get all image elements, we can use `html_elements()` and specify the `img` tag <br> 
+
+    * `html_elements()` is the "plural" version of `html_element()`, since we want ALL image elements, not just one
+
+```{r, echo=TRUE}
+fb_node |> 
+  html_elements("img")
+```
+
+*   Notice that each image contains different attributes such as height, width, image path (src)
+
+---
+
+### Scraping links and images
+
+*   Suppose we want to grab the image path only (for future plotting purpose), we can use `html_attr()` to get the `src` attribute
+
+```{r, echo=TRUE}
+fb_imgs <- fb_node |> 
+  html_elements("img") |> 
+  html_attr("src")
+fb_imgs
+```
+
+---
+
+### Scraping links and images
+
+*   To get all the URLs in the `Squad` column, we can first use `html_elements()` again and specify the `"a"` tag
+
+    *   The `<a>` (anchor) tag defines a hyperlink
+
+```{r, echo=TRUE}
+fb_node |> 
+  html_elements("a")
+```
+
+---
+
+### Scraping links and images
+
+*   Within <a>, we can grab the `href` attribute with `html_attr` 
+
+    *   `href` specifies the URL/page associated with the link
+
+```{r, echo=TRUE}
+fb_node |> 
+  html_elements("a") |> 
+  html_attr("href")
+```
+
+---
+
+### Scraping links and images
+
+*   Notice that the previous output is a vector with all hyperlinks in the table, including all squads and players
+
+*   Since we want squads only, we need to subset out all strings with the keyword `"squads"`
+
+*   The function `str_subset()` comes in handy here
+
+    *   `str_subset()` returns only the vector elements that matches a specified pattern
+
+```{r, echo=TRUE}
+fb_links <- fb_node |> 
+  html_elements("a") |> 
+  html_attr("href") |> 
+  str_subset("squads")
+fb_links
+```
+
+---
+
+### Scraping links and images
+
+*   Finally, we can add the team images and links as two new columns in our table
+
+```{r, echo=TRUE}
+fb_tbl <- fb_node |> 
+  html_table() |> 
+  mutate(img = fb_imgs,
+         link = fb_links)
+fb_tbl
+```
+
+---
+
+### Scraping links and images
+
+Let's make a scatterplot of total number of goals scored (`GF` - goals for) and goals conceded (`GA` - goals against), and display the team logos.
+
+```{r, echo=TRUE, fig.height=4, fig.width=5, fig.pos="center"}
+library(ggimage)
+fb_tbl |>
+  mutate(img = str_remove(img, "mini.")) |> 
+  ggplot(aes(GA, GF)) +
+  geom_image(aes(image = img), size = 0.08, asp = 1) +
+  theme_classic()
+```
+
+---
+
+### Scraping text
+
+*   As previously mentioned, data do not always come in the form of nicely formatted tables
+
+*   Sometimes data are just simply raw text
+
+*   Example 3 Wimbledon Women's singles
+
+    *   URL: <https://en.wikipedia.org/wiki/2009_Wimbledon_Championships_-_Women's_singles>
+
+    *   Suppose we want to scrape results for the seeded players (under **Seeds** section)
+
+---
+
+### Scraping text
+
+*   Just as before, after reading in the page, we inspect and grab the CSS selector for only this blurb of text
+
+```{r, echo=TRUE}
+wimbledon_url <- "https://en.wikipedia.org/wiki/2009_Wimbledon_Championships_-_Women's_singles" 
+wimbledon_url |> 
+  read_html() |> 
+  html_element("#mw-content-text > div.mw-parser-output > div:nth-child(13)")
+```
+
+---
+
+### Scraping text
+
+*   Then, we can retrieve text from this element with `html_text2()`
+
+    *   There's also an `html_text()` function. Look up the documentation `?html_text` to see the differences. (Honestly, if you don't remember the differences, just try both and see which one is suitable. Ditto for `html_element()` and `html_elements()`.)
+    
+```{r, echo=TRUE}
+wimbledon_url |> 
+  read_html() |> 
+  html_element("#mw-content-text > div.mw-parser-output > div:nth-child(13)") |> 
+  html_text2()
+```
+
+---
+
+### Scraping text
+
+*   Notice this output a single string of all the text
+
+*   Each combination of seed-player-result is separated by a newline character `\n`
+
+*   There are many ways you can do to separate these - one way is with `str_split_1()`
+
+    *   `str_split_1()` splits a single string into a character vector based on a pattern
+    
+    *   Other ways include `str_split()` then `unlist()`, or `read_lines()`, and there's many more
+    
+---
+
+### Scraping text
+
+```{r, echo=TRUE}
+wimbledon_info <- wimbledon_url |> 
+  read_html() |> 
+  html_element("#mw-content-text > div.mw-parser-output > div:nth-child(13)") |> 
+  html_text2() |>
+  str_split_1("\\n")
+wimbledon_info
+```
+    
+---
+
+### Scraping text
+    
+*   As a final step, you can try to turn the vector into a table (as a column), then clean up and create 3 columns: seed, player, and result.
+
+---
+
+### (Web) API basics
+
+An API (Application Programming Interface) connects computer programs to each other
+
+Web APIs provides interactions between a client device and a web server using the Hypertext Transfer Protocol (HTTP) 
+
+*   Clients send a (HTTP) request and receive a response (in `JSON` or `XML`)
+    
+*   Many organizations have their own public API, which can be used to access data
+
+*   Fortunately, there exists many `R` packages (sports on non-sports) that provides access to APIs for obtaining data
+
+    *   Note that these packages ("API wrappers") do not provide the actual data - instead functions for accessing the data
+
+    *   For sports, check out the [Sports Analytics CRAN Task View](https://cran.r-project.org/web/views/SportsAnalytics.html) and [SportsDataverse](https://www.sportsdataverse.org/) for more information
+
+---
+
+### The `httr` package
+
+`httr` offers a general way of getting data from an API, via different tools for working with HTTP
+
+::: {.fragment}
+
+*   `GET()` sends a **request** to an API and captures the **response**
+
+*   `content()` extracts out the data from the response
+
+These 2 functions are illustrated in the next example
+
+:::
+
+::: {.fragment}
+
+There are many other useful functions in `httr`
+
+* For example, `PUT()` and `POST()` can be used to send data to APIs
+
+* Other popular verbs are `PATCH()`, `HEAD()`, and `DELETE()`
+
+:::
+
+---
+
+### Example 4: Formula One API
+
+(Inspiration: [Tidy Tuesday 2021-09-07](https://github.com/rfordatascience/tidytuesday/tree/master/data/2021/2021-09-07))
+
+-   [Ergast Developer API](http://ergast.com/mrd/) (<http://ergast.com/mrd/>) is an (experimental) API that provides Formula One historical data
+
+-   Suppose we're interested in getting a table of every F1 winning constructor
+
+    -   URL: <http://ergast.com/api/f1/constructorStandings/1/constructors.json>
+
+---
+
+### Example 4: Formula One API
+
+-   First, we can use `GET()` to send a request to the API. We then receive the data via a response
+
+```{r, echo=TRUE}
+library(httr)
+f1_api <- "http://ergast.com/api/f1/constructorStandings/1/constructors.json"
+f1_response <- f1_api |> 
+  GET()
+f1_response
+
+# check the type of the response object and whether we get an error
+# http_type(f1_response)
+# http_error(f1_response)
+```
+
+---
+
+### Example 4: Formula One API
+
+-   Next, we want to get the data from the response by calling `content()`. We can then view the structure of the content object.
+
+```{r, echo=TRUE}
+f1_content <- f1_response |>   
+  content()
+glimpse(f1_content)
+```
+
+---
+
+### Example 4: Formula One API
+
+-   Finally, based on the content structure, we can get a list of constructors. Each list consists of constructor ID, (Wikipedia) URL, name, and nationality.
+
+```{r, echo=TRUE}
+f1_constructor_list <- f1_content |> 
+  pluck("MRData") |> 
+  pluck("ConstructorTable") |> 
+  pluck("Constructors")
+# f1_constructor_list
+# names(f1_constructor_list[[1]])
+```
+
+---
+
+### Example 4: Formula One API
+
+-   A few extra transformation steps will give us the desired table
+
+```{r, echo=TRUE}
+f1_constructor_tbl <- f1_constructor_list |> 
+  as_tibble_col(column_name = "info") |> # convert list to tibble
+  unnest_wider(info) # unnest a list-column into columns
+f1_constructor_tbl
+```
+
+
+```{r}
+# a$MRData$ConstructorTable$Constructors |> 
+#   as_tibble_col(column_name = "info") |> 
+#   unnest_wider(info)
+```
+
+
+---
+
+### Scrape responsibly!
+
+-   Great article on [Ethics in Web Scraping](https://towardsdatascience.com/ethics-in-web-scraping-b96b18136f01), featuring a "web scraping manifesto"
+
+-   Web scraping case study from [Data science ethics chapter of MDSR](https://mdsr-book.github.io/mdsr2e/ch-ethics.html)
+
+-   [Good pratice chapter from Web Scraping using R](https://jakobtures.github.io/web-scraping/goodpractice.html)
+
+-   Common points
+
+    - Be mindful of the terms of use of every website
+    
+    - Anonymize personal data, especially if data/analysis are to be publicly released
+
+--- 
+
+### The `polite` package: overview
+
+*   [`polite`](https://github.com/dmi3kno/polite) ensures that you’re respecting the [`robots.txt`](https://en.wikipedia.org/wiki/Robots.txt) [^robot] and not submitting too many requests
+
+    *   `bow()` introduces the user to the host and asks for scraping permission
+    
+    *   `scrape()` scrapes and retrieves data
+
+[^robot]: "`robots.txt` is the filename used for implementing the Robots Exclusion Protocol, a standard used by websites to indicate to visiting web crawlers and other web robots which portions of the website they are allowed to visit" (Source: Wikipedia)
+
+---
+
+### The `polite` package: example
+
+-   We use the same Wimbledon example as before to demonstrate `polite`
+
+-   First, pass the URL into `bow()` to get a "session" object
+
+    -   This gives information about the `robots.txt` and whether the web page is scrapable
+
+```{r, echo=TRUE}
+library(polite)
+wimbledon_url <- "https://en.wikipedia.org/wiki/2009_Wimbledon_Championships_-_Women's_singles"
+session <- wimbledon_url |> 
+  bow()
+session
+```
+
+---
+
+### The `polite` package: example
+
+-   Now we can use `scrape()` to get the data from the session previously created by `bow()`
+
+    -   This essentially replaces `read_html()` as seen earlier
+
+```{r, echo=TRUE}
+session |> 
+  scrape()
+```
+
+---
+
+### The `polite` package: example
+
+-   The remaining steps are similar as before. We can copy the earlier code for specifying the HTML element, retrieving text, and converting to tibble.
+
+```{r, echo=TRUE}
+session |> 
+  scrape() |> 
+  html_element("#mw-content-text > div.mw-parser-output > div:nth-child(13)") |> 
+  html_text2() |>
+  str_split_1("\\n") |> 
+  as_tibble_col(column_name = "info")
+```
+
+---
+
+### More resources
+
+-   [Web scraping chapter](https://r4ds.hadley.nz/webscraping.html) from R4DS (2e, draft)
+
+-   [Intro to {polite} Web Scraping of Soccer Data with R](https://ryo-n7.github.io/2020-05-14-webscrape-soccer-data-with-R)
+
+-   Web scraping workshop from UCSAS [2020](https://github.com/YaqiongYao/UCSAS_WebScrapping) and [2021](https://github.com/lcgodoy/ucsas2021)
+
+-   [Scraping with Selenium blogpost](http://brooksandrew.github.io/simpleblog/articles/scraping-with-selenium/)
+
+-   Browse through source code of different `R` "scraper" packages.
+
+---
+
+### Final words
+
+-   Web scraping is an excellent means for gaining proficiency in data cleaning
+
+    -   It takes time... the more you play around the better you get
+    
+    -   Always consult the function documentations
+    
+-   Come up with fun personal projects (data viz, Shiny app, etc.), scrape data, and enjoy learning (and the struggle)
+
+-   You can develop the next great sports "scrapR" package(s)
+
