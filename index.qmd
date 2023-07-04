@@ -430,7 +430,7 @@ str_replace_all("noon", "o", "a")
 
 ### Scraping practice
 
-Example: Frauen Bundesliga (Germany's women's soccer league)
+Example: Frauen Bundesliga (German women's soccer league)
 
 *   URL: <https://fbref.com/en/comps/183/2017-2018/2017-2018-Frauen-Bundesliga-Stats>
 
@@ -563,9 +563,9 @@ fb_node |>
 
 ### Scraping links and images
 
-*   Within `<a>`, we can grab the `href` attribute with `html_attr` 
+*   Within `<a>`, we can grab the `href` attribute with `html_attr()` 
 
-    *   `href` specifies the URL/page associated with the link
+    *   `href` indicates the URL/page associated with the link
 
 ```{r, echo=TRUE}
 fb_node |> 
@@ -583,7 +583,7 @@ fb_node |>
 
 *   The function `str_subset()` comes in handy here
 
-    *   `str_subset()` returns only the vector elements that matches a specified pattern
+    *   `str_subset()` returns only the vector elements that matches a pattern
 
 ```{r, echo=TRUE}
 fb_links <- fb_node |> 
@@ -604,7 +604,6 @@ fb_tbl <- fb_node |>
   html_table() |> 
   mutate(img = fb_imgs,
          link = fb_links)
-fb_tbl
 ```
 
 ---
@@ -697,17 +696,17 @@ wimbledon_info
 
 ### Scraping text
     
-*   As a final step, you can try to turn the vector into a table (as a column), then clean up and create 3 columns: seed, player, and result.
+*   As a final step, you can try to turn the vector into a table (as a single column), then clean up and create 3 columns: seed, player, and result
 
 ---
 
 ### (Web) API basics
 
-An API (Application Programming Interface) connects computer programs to each other
+An **API** (Application Programming Interface) connects computer programs to each other
 
 ::: {.fragment}
 
-Web APIs provides interactions between a client device and a web server using the Hypertext Transfer Protocol (HTTP) 
+**Web APIs** provide interactions between a client device and a web server using the Hypertext Transfer Protocol (**HTTP**) 
 
 :::
 
@@ -843,6 +842,8 @@ f1_constructor_tbl
 
 -   [Good pratice chapter](https://jakobtures.github.io/web-scraping/goodpractice.html) from Web Scraping using R
 
+-   [Scraping ethics and legalities section](https://r4ds.hadley.nz/webscraping.html#scraping-ethics-and-legalities) from  Web scraping chapter of R4DS (2e, draft)
+
 -   Common points
 
     - Be mindful of the terms of use of every website
@@ -885,7 +886,7 @@ session
 
 ### The `polite` package: example
 
--   Now we can use `scrape()` to get the data from the session previously created by `bow()`
+-   Now, use `scrape()` to get the data from the session previously created by `bow()`
 
     -   This essentially replaces `read_html()` as seen earlier
 
@@ -898,22 +899,21 @@ session |>
 
 ### The `polite` package: example
 
--   The remaining steps are similar as before. We can copy the earlier code for specifying the HTML element, retrieving text, and converting to tibble.
+-   The remaining steps are similar as before. We can use the same code as earlier for selecting the HTML element and retrieving text.
 
 ```{r, echo=TRUE}
 session |> 
   scrape() |> 
   html_element("#mw-content-text > div.mw-parser-output > div:nth-child(13)") |> 
   html_text2() |>
-  str_split_1("\\n") |> 
-  as_tibble_col(column_name = "info")
+  str_split_1("\\n")
 ```
 
 ---
 
 ### More resources
 
--   [Web scraping chapter](https://r4ds.hadley.nz/webscraping.html) from R4DS (2e, draft)
+-   [`polite` package page](https://dmi3kno.github.io/polite/)
 
 -   [Intro to {polite} Web Scraping of Soccer Data with R](https://ryo-n7.github.io/2020-05-14-webscrape-soccer-data-with-R)
 
