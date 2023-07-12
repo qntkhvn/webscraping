@@ -17,7 +17,7 @@ format:
 
 ### Overview
 
-**Goal: you should be able to use `R` to scrape an HTML table from the web after this lecture**
+**Goal: you should be able to use `R` to scrape an HTML table from the web after this lecture, and hopefully more.**
 
 Agenda:
 
@@ -304,15 +304,23 @@ nhl_tbl_list[[1]]
 
 ### Data cleaning: working with `stringr`
 
--   The `tidyverse` offers `stringr` for string manipulation
+The `tidyverse` offers `stringr` for string manipulation. 
 
--   Check out the [`stringr` cheatsheet](https://stringr.tidyverse.org/#cheatsheet)
+Check out the [`stringr` cheatsheet](https://stringr.tidyverse.org/#cheatsheet).
 
-    -   The second page gives a neat overview of [regular expressions](https://wikipedia.org/wiki/Regular_expression) (special patterns for string matching)
+-   The second page gives a neat overview of [regular expressions](https://wikipedia.org/wiki/Regular_expression) (special patterns for string matching)
     
-    -   Note that to specify special characters (e.g., `.`, `,`, `*`, `?`, etc.) in a pattern in `R`, use a double backslash (`\\`)
+-   Note that some characters in an `R` string must be represented as special characters
+    
+    -   `$ * + . ? [ ] ^ { } | ( ) \`
+        
+    -   Use a double backslash (`\\`) [^db] to "escape" these characters (e.g., `\\*`)
+    
+<!-- -   Note that to specify special characters (e.g., `.`, `,`, `*`, `?`, etc.) in a pattern in `R`, use a double backslash (`\\`) -->
     
 <!-- TODO: some notes on regular expression... -->
+
+[^db]: A single backslash (`\`) suppresses the special meaning of these characters in regular expressions. Since `\` itself also needs to be escaped in `R`, we need to add another `\`. This is why we need a double backslash (`\\`).
 
 ---
 
@@ -842,7 +850,7 @@ f1_constructor_tbl
 
 -   [Good pratice chapter](https://jakobtures.github.io/web-scraping/goodpractice.html) from Web Scraping using R
 
--   [Scraping ethics and legalities section](https://r4ds.hadley.nz/webscraping.html#scraping-ethics-and-legalities) from  Web scraping chapter of R4DS (2e, draft)
+-   [Scraping ethics and legalities section](https://r4ds.hadley.nz/webscraping.html#scraping-ethics-and-legalities) from  Web scraping chapter of R4DS (2e)
 
 -   Common points
 
@@ -930,6 +938,8 @@ session |>
 -   Web scraping is an excellent means for gaining proficiency in data cleaning
 
     -   It takes time - the more you play around the better you get
+    
+    -   Inspect the output at each step
     
     -   Remember to consult the help documentations
     

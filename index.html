@@ -414,7 +414,7 @@ Quang Nguyen
 <section class="slide level2">
 
 <h3 id="overview">Overview</h3>
-<p><strong>Goal: you should be able to use <code>R</code> to scrape an HTML table from the web after this lecture</strong></p>
+<p><strong>Goal: you should be able to use <code>R</code> to scrape an HTML table from the web after this lecture, and hopefully more.</strong></p>
 <p>Agenda:</p>
 <ul>
 <li><p>Web page basics</p></li>
@@ -749,16 +749,19 @@ Quang Nguyen
 <section class="slide level2">
 
 <h3 id="data-cleaning-working-with-stringr">Data cleaning: working with <code>stringr</code></h3>
-<ul>
-<li><p>The <code>tidyverse</code> offers <code>stringr</code> for string manipulation</p></li>
-<li><p>Check out the <a href="https://stringr.tidyverse.org/#cheatsheet"><code>stringr</code> cheatsheet</a></p>
+<p>The <code>tidyverse</code> offers <code>stringr</code> for string manipulation.</p>
+<p>Check out the <a href="https://stringr.tidyverse.org/#cheatsheet"><code>stringr</code> cheatsheet</a>.</p>
 <ul>
 <li><p>The second page gives a neat overview of <a href="https://wikipedia.org/wiki/Regular_expression">regular expressions</a> (special patterns for string matching)</p></li>
-<li><p>Note that to specify special characters (e.g., <code>.</code>, <code>,</code>, <code>*</code>, <code>?</code>, etc.) in a pattern in <code>R</code>, use a double backslash (<code>\\</code>)</p></li>
+<li><p>Note that some characters in an <code>R</code> string must be represented as special characters</p>
+<ul>
+<li><p><code>$ * + . ? [ ] ^ { } | ( ) \</code></p></li>
+<li><p>Use a double backslash (<code>\\</code>) <sup>1</sup> to “escape” these characters (e.g., <code>\\*</code>)</p></li>
 </ul></li>
 </ul>
+<!-- -   Note that to specify special characters (e.g., `.`, `,`, `*`, `?`, etc.) in a pattern in `R`, use a double backslash (`\\`) -->
 <!-- TODO: some notes on regular expression... -->
-</section>
+<aside><ol class="aside-footnotes"><li id="fn1"><p>A single backslash (<code>\</code>) suppresses the special meaning of these characters in regular expressions. Since <code>\</code> itself also needs to be escaped in <code>R</code>, we need to add another <code>\</code>. This is why we need a double backslash (<code>\\</code>).</p></li></ol></aside></section>
 <section class="slide level2">
 
 <h3 id="str_detect"><code>str_detect()</code></h3>
@@ -1289,7 +1292,7 @@ Quang Nguyen
 <pre><code>{html_node}
 &lt;div class="div-col"&gt;
 [1] &lt;dl&gt;\n&lt;dd&gt;\n&lt;span style="visibility:hidden;color:transparent;"&gt;0&lt;/span&gt;&lt;a ...
-[2] &lt;dl&gt;\n&lt;dd&gt;\n&lt;a href="#Section_1"&gt;17&lt;/a&gt;.&nbsp;&nbsp; &lt;span class="flagicon"&gt;&lt;a href ...</code></pre>
+[2] &lt;dl&gt;\n&lt;dd&gt;\n&lt;a href="#Section_1"&gt;17&lt;/a&gt;.&nbsp;&nbsp; &lt;span class="flagicon"&gt;&lt;span c ...</code></pre>
 </div>
 </div>
 </section>
@@ -1447,7 +1450,7 @@ Quang Nguyen
 <span id="cb59-5"><a href="#cb59-5" aria-hidden="true" tabindex="-1"></a>f1_response</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Response [http://ergast.com/api/f1/constructorStandings/1/constructors.json]
-  Date: 2023-07-04 00:52
+  Date: 2023-07-12 14:56
   Status: 200
   Content-Type: application/json; charset=utf-8
   Size: 2.4 kB</code></pre>
@@ -1552,7 +1555,7 @@ $nationality
 <li><p>Great article on <a href="https://towardsdatascience.com/ethics-in-web-scraping-b96b18136f01">Ethics in Web Scraping</a>, featuring a “web scraping manifesto”</p></li>
 <li><p>Web scraping case study from the <a href="https://mdsr-book.github.io/mdsr2e/ch-ethics.html">Data science ethics chapter</a> of MDSR</p></li>
 <li><p><a href="https://jakobtures.github.io/web-scraping/goodpractice.html">Good pratice chapter</a> from Web Scraping using R</p></li>
-<li><p><a href="https://r4ds.hadley.nz/webscraping.html#scraping-ethics-and-legalities">Scraping ethics and legalities section</a> from Web scraping chapter of R4DS (2e, draft)</p></li>
+<li><p><a href="https://r4ds.hadley.nz/webscraping.html#scraping-ethics-and-legalities">Scraping ethics and legalities section</a> from Web scraping chapter of R4DS (2e)</p></li>
 <li><p>Common points</p>
 <ul>
 <li><p>Be mindful of the terms of use of every website</p></li>
@@ -1571,7 +1574,7 @@ $nationality
 <li><p><code>scrape()</code> scrapes and retrieves data</p></li>
 </ul></li>
 </ul>
-<aside><ol class="aside-footnotes"><li id="fn1"><p>“<code>robots.txt</code> is the filename used for implementing the Robots Exclusion Protocol, a standard used by websites to indicate to visiting web crawlers and other web robots which portions of the website they are allowed to visit” (Source: Wikipedia)</p></li></ol></aside></section>
+<aside><ol class="aside-footnotes"><li id="fn2"><p>“<code>robots.txt</code> is the filename used for implementing the Robots Exclusion Protocol, a standard used by websites to indicate to visiting web crawlers and other web robots which portions of the website they are allowed to visit” (Source: Wikipedia)</p></li></ol></aside></section>
 <section class="slide level2">
 
 <h3 id="the-polite-package-example">The <code>polite</code> package: example</h3>
@@ -1683,6 +1686,7 @@ $nationality
 <li><p>Web scraping is an excellent means for gaining proficiency in data cleaning</p>
 <ul>
 <li><p>It takes time - the more you play around the better you get</p></li>
+<li><p>Inspect the output at each step</p></li>
 <li><p>Remember to consult the help documentations</p></li>
 </ul></li>
 <li><p>Come up with fun personal projects (data viz, Shiny app, etc.), scrape data, and enjoy learning (and the struggle)</p></li>
