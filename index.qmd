@@ -10,8 +10,8 @@ institute: |
   | [`r fontawesome::fa("twitter")` @qntkhvn](https://twitter.com/qntkhvn) &nbsp; &nbsp; &nbsp; [`r fontawesome::fa("github")` qntkhvn](https://github.com/qntkhvn) &nbsp; &nbsp; &nbsp; [`r fontawesome::fa("link")` qntkhvn.netlify.app](https://qntkhvn.netlify.app/)
 format: 
   revealjs:
-    theme: night
     smaller: true
+    slide-number: c
     code-line-numbers: false
 ---
 
@@ -107,7 +107,7 @@ install.packages("rvest")
 
 ::: {.fragment}
 
-- Read in the webpage
+- Scrape the webpage content
 
 :::
 
@@ -133,7 +133,7 @@ install.packages("rvest")
 
 ---
 
-### Scraping (HTML) tables
+### Scraping HTML tables
 
 -   Example: NHL career games played leaders
 
@@ -210,7 +210,7 @@ nhl_url |>
 
 ---
 
-### Scraping (HTML) tables
+### Scraping HTML tables
 
 The following video shows how to find the **CSS selector** (in *Chrome*)
 
@@ -222,7 +222,7 @@ The following video shows how to find the **CSS selector** (in *Chrome*)
 
 ---
 
-### Scraping (HTML) tables
+### Scraping HTML tables
 
 -   Use `html_element()` to get the element associated with the CSS selector (table in this case)
 
@@ -238,7 +238,7 @@ nhl_url |>
 
 ---
 
-### Scraping (HTML) tables
+### Scraping HTML tables
 
 -   Finally, use `html_table()` to convert to a tibble (data frame) in `R`
 

@@ -7,7 +7,7 @@
 <link href="index_files/libs/quarto-html/tippy.css" rel="stylesheet">
 <link href="index_files/libs/quarto-html/light-border.css" rel="stylesheet">
 <link href="index_files/libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
-<link href="index_files/libs/quarto-html/quarto-syntax-highlighting-dark.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="index_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="index_files/libs/quarto-contrib/videojs/video.min.js"></script>
 <link href="index_files/libs/quarto-contrib/videojs/video-js.css" rel="stylesheet"><meta charset="utf-8">
   <meta name="generator" content="quarto-1.3.361">
@@ -58,44 +58,44 @@
         -khtml-user-select: none; -moz-user-select: none;
         -ms-user-select: none; user-select: none;
         padding: 0 4px; width: 4em;
+        color: #aaaaaa;
       }
-    pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
     div.sourceCode
-      { color: #f8f8f2;  }
+      { color: #003b4f; background-color: #f1f3f5; }
     @media screen {
     pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
     }
-    code span { color: #f8f8f2; } /* Normal */
-    code span.al { color: #f07178; background-color: #2a0f15; font-weight: bold; } /* Alert */
-    code span.an { color: #d4d0ab; } /* Annotation */
-    code span.at { color: #00e0e0; } /* Attribute */
-    code span.bn { color: #d4d0ab; } /* BaseN */
-    code span.bu { color: #abe338; } /* BuiltIn */
-    code span.cf { color: #ffa07a; font-weight: bold; } /* ControlFlow */
-    code span.ch { color: #abe338; } /* Char */
-    code span.cn { color: #ffd700; } /* Constant */
-    code span.co { color: #f8f8f2; font-style: italic; } /* Comment */
-    code span.cv { color: #ffd700; } /* CommentVar */
-    code span.do { color: #f8f8f2; } /* Documentation */
-    code span.dt { color: #ffa07a; } /* DataType */
-    code span.dv { color: #d4d0ab; } /* DecVal */
-    code span.er { color: #f07178; text-decoration: underline; } /* Error */
-    code span.ex { color: #00e0e0; font-weight: bold; } /* Extension */
-    code span.fl { color: #d4d0ab; } /* Float */
-    code span.fu { color: #ffa07a; } /* Function */
-    code span.im { color: #abe338; } /* Import */
-    code span.in { color: #d4d0ab; } /* Information */
-    code span.kw { color: #ffa07a; font-weight: bold; } /* Keyword */
-    code span.op { color: #ffa07a; } /* Operator */
-    code span.ot { color: #00e0e0; } /* Other */
-    code span.pp { color: #dcc6e0; } /* Preprocessor */
-    code span.re { color: #00e0e0; background-color: #f8f8f2; } /* RegionMarker */
-    code span.sc { color: #abe338; } /* SpecialChar */
-    code span.ss { color: #abe338; } /* SpecialString */
-    code span.st { color: #abe338; } /* String */
-    code span.va { color: #00e0e0; } /* Variable */
-    code span.vs { color: #abe338; } /* VerbatimString */
-    code span.wa { color: #dcc6e0; } /* Warning */
+    code span { color: #003b4f; } /* Normal */
+    code span.al { color: #ad0000; } /* Alert */
+    code span.an { color: #5e5e5e; } /* Annotation */
+    code span.at { color: #657422; } /* Attribute */
+    code span.bn { color: #ad0000; } /* BaseN */
+    code span.bu { } /* BuiltIn */
+    code span.cf { color: #003b4f; } /* ControlFlow */
+    code span.ch { color: #20794d; } /* Char */
+    code span.cn { color: #8f5902; } /* Constant */
+    code span.co { color: #5e5e5e; } /* Comment */
+    code span.cv { color: #5e5e5e; font-style: italic; } /* CommentVar */
+    code span.do { color: #5e5e5e; font-style: italic; } /* Documentation */
+    code span.dt { color: #ad0000; } /* DataType */
+    code span.dv { color: #ad0000; } /* DecVal */
+    code span.er { color: #ad0000; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #ad0000; } /* Float */
+    code span.fu { color: #4758ab; } /* Function */
+    code span.im { color: #00769e; } /* Import */
+    code span.in { color: #5e5e5e; } /* Information */
+    code span.kw { color: #003b4f; } /* Keyword */
+    code span.op { color: #5e5e5e; } /* Operator */
+    code span.ot { color: #003b4f; } /* Other */
+    code span.pp { color: #ad0000; } /* Preprocessor */
+    code span.sc { color: #5e5e5e; } /* SpecialChar */
+    code span.ss { color: #20794d; } /* SpecialString */
+    code span.st { color: #20794d; } /* String */
+    code span.va { color: #111111; } /* Variable */
+    code span.vs { color: #20794d; } /* VerbatimString */
+    code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
   </style>
   <link rel="stylesheet" href="index_files/libs/revealjs/dist/theme/quarto.css">
   <link href="index_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
@@ -387,7 +387,7 @@
     }
   </style>
 </head>
-<body class="quarto-dark">
+<body class="quarto-light">
   <div class="reveal">
     <div class="slides">
 
@@ -489,7 +489,7 @@ Quang Nguyen
 </div>
 <div class="fragment">
 <ul>
-<li>Read in the webpage</li>
+<li>Scrape the webpage content</li>
 </ul>
 </div>
 <div class="fragment">
@@ -513,7 +513,7 @@ Quang Nguyen
 </section>
 <section class="slide level2">
 
-<h3 id="scraping-html-tables">Scraping (HTML) tables</h3>
+<h3 id="scraping-html-tables">Scraping HTML tables</h3>
 <ul>
 <li><p>Example: NHL career games played leaders</p>
 <ul>
@@ -593,7 +593,7 @@ Quang Nguyen
 </section>
 <section class="slide level2">
 
-<h3 id="scraping-html-tables-1">Scraping (HTML) tables</h3>
+<h3 id="scraping-html-tables-1">Scraping HTML tables</h3>
 <p>The following video shows how to find the <strong>CSS selector</strong> (in <em>Chrome</em>)</p>
 <center>
 <video id="video_shortcode_videojs_video1" width="800" height="600" class="video-js vjs-default-skin " controls="" preload="auto" data-setup="{}" title=""><source src="vid.mov"></video>
@@ -601,7 +601,7 @@ Quang Nguyen
 </section>
 <section class="slide level2">
 
-<h3 id="scraping-html-tables-2">Scraping (HTML) tables</h3>
+<h3 id="scraping-html-tables-2">Scraping HTML tables</h3>
 <ul>
 <li><p>Use <code>html_element()</code> to get the element associated with the CSS selector (table in this case)</p></li>
 <li><p>Inside <code>html_element()</code>, specify the CSS selector that we copied earlier</p></li>
@@ -622,7 +622,7 @@ Quang Nguyen
 </section>
 <section class="slide level2">
 
-<h3 id="scraping-html-tables-3">Scraping (HTML) tables</h3>
+<h3 id="scraping-html-tables-3">Scraping HTML tables</h3>
 <ul>
 <li><p>Finally, use <code>html_table()</code> to convert to a tibble (data frame) in <code>R</code></p></li>
 <li><p>This completes our scraping process</p></li>
@@ -1450,7 +1450,7 @@ Quang Nguyen
 <span id="cb59-5"><a href="#cb59-5" aria-hidden="true" tabindex="-1"></a>f1_response</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Response [http://ergast.com/api/f1/constructorStandings/1/constructors.json]
-  Date: 2023-07-12 14:56
+  Date: 2023-07-12 15:18
   Status: 200
   Content-Type: application/json; charset=utf-8
   Size: 2.4 kB</code></pre>
@@ -1749,7 +1749,7 @@ $nationality
         progress: true,
 
         // Display the page number of the current slide
-        slideNumber: false,
+        slideNumber: 'c',
 
         // 'all', 'print', or 'speaker'
         showSlideNumber: 'all',
