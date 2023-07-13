@@ -15,13 +15,44 @@ format:
     code-line-numbers: false
 ---
 
+### First, a moment of appreciation
+
+-   Sports analytics today would be so much different without web scraping
+
+    -   Publicly available data
+    
+    -   Reproducible research
+    
+-   A breakthrough...
+
+:::: {.columns}
+
+::: {.column width="45%" .fragment}
+
+```{r, out.width="70%", fig.align='center'}
+knitr::include_graphics("https://pbs.twimg.com/profile_images/1076883081192263680/hj53KzOl_400x400.jpg")
+```
+
+:::
+
+::: {.column width="50%" .fragment}
+
+[![](postgazette.png){width=80%}](https://www.post-gazette.com/sports/steelers/2017/08/17/carnegie-mellon-sports-analytics-conference-cmu-nflscrapr-nfl-r-package-pittsburgh-steelers-analytics-predictions/stories/201708180009)
+
+:::
+
+::::
+
+
+---
+
 ### Overview
 
 **Goal: you should be able to use `R` to scrape an HTML table from the web after this lecture, and hopefully more.**
 
 Agenda:
 
--   Web page basics
+-   Webpage basics
 
 -   Web scraping with `rvest`
 
@@ -53,11 +84,11 @@ Agenda:
 
 - [Data Wrangling lecture notes](https://dcl-wrangle.stanford.edu/rvest.html) from the Stanford Data Challenge Lab (DCL) course
 
-<!-- - Web scraping chapter in [R4DS (2e, draft)](https://r4ds.hadley.nz/webscraping.html) -->
+I highly recommend the [Web scraping chapter in R4DS (2e)](https://r4ds.hadley.nz/webscraping.html) for a neat basic overview of web pages and web scraping.
 
 ---
 
-### Web page basics
+### Webpage basics
 
 -   **HTML** (Hyper Text Markup Language) defines the content and structure of a webpage
 

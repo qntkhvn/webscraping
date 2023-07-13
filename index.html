@@ -413,11 +413,42 @@ Quang Nguyen
 </section>
 <section class="slide level2">
 
+<h3 id="first-a-moment-of-appreciation">First, a moment of appreciation</h3>
+<ul>
+<li><p>Sports analytics today would be so much different without web scraping</p>
+<ul>
+<li><p>Publicly available data</p></li>
+<li><p>Reproducible research</p></li>
+</ul></li>
+<li><p>A breakthrough…</p></li>
+</ul>
+<div class="columns">
+<div class="column fragment" style="width:45%;">
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="https://pbs.twimg.com/profile_images/1076883081192263680/hj53KzOl_400x400.jpg" style="width:70.0%"></p>
+</figure>
+</div>
+</div>
+</div>
+</div><div class="column fragment" style="width:50%;">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><a href="https://www.post-gazette.com/sports/steelers/2017/08/17/carnegie-mellon-sports-analytics-conference-cmu-nflscrapr-nfl-r-package-pittsburgh-steelers-analytics-predictions/stories/201708180009"><img data-src="postgazette.png" style="width:80.0%"></a></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section class="slide level2">
+
 <h3 id="overview">Overview</h3>
 <p><strong>Goal: you should be able to use <code>R</code> to scrape an HTML table from the web after this lecture, and hopefully more.</strong></p>
 <p>Agenda:</p>
 <ul>
-<li><p>Web page basics</p></li>
+<li><p>Webpage basics</p></li>
 <li><p>Web scraping with <code>rvest</code></p>
 <ul>
 <li>Featuring <code>stringr</code></li>
@@ -442,11 +473,11 @@ Quang Nguyen
 <li><p><a href="https://youtu.be/z8yT3E4pz54">Tan Ho’s excellent youtube video</a></p></li>
 <li><p><a href="https://dcl-wrangle.stanford.edu/rvest.html">Data Wrangling lecture notes</a> from the Stanford Data Challenge Lab (DCL) course</p></li>
 </ul>
-<!-- - Web scraping chapter in [R4DS (2e, draft)](https://r4ds.hadley.nz/webscraping.html) -->
+<p>I highly recommend the <a href="https://r4ds.hadley.nz/webscraping.html">Web scraping chapter in R4DS (2e)</a> for a neat basic overview of web pages and web scraping.</p>
 </section>
 <section class="slide level2">
 
-<h3 id="web-page-basics">Web page basics</h3>
+<h3 id="webpage-basics">Webpage basics</h3>
 <ul>
 <li><p><strong>HTML</strong> (Hyper Text Markup Language) defines the content and structure of a webpage</p>
 <ul>
@@ -1263,7 +1294,7 @@ Quang Nguyen
 <span id="cb52-6"><a href="#cb52-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_classic</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
 </div>
-<img data-src="index_files/figure-revealjs/unnamed-chunk-23-1.png" width="480" class="r-stretch quarto-figure-center"></section>
+<img data-src="index_files/figure-revealjs/unnamed-chunk-24-1.png" width="480" class="r-stretch quarto-figure-center"></section>
 <section class="slide level2">
 
 <h3 id="scraping-text">Scraping text</h3>
@@ -1450,7 +1481,7 @@ Quang Nguyen
 <span id="cb59-5"><a href="#cb59-5" aria-hidden="true" tabindex="-1"></a>f1_response</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Response [http://ergast.com/api/f1/constructorStandings/1/constructors.json]
-  Date: 2023-07-12 15:18
+  Date: 2023-07-13 16:05
   Status: 200
   Content-Type: application/json; charset=utf-8
   Size: 2.4 kB</code></pre>
