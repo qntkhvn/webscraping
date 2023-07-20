@@ -8,6 +8,8 @@ institute: |
   | SURE 2023 - CMSACamp
   |
   | [`r fontawesome::fa("twitter")` @qntkhvn](https://twitter.com/qntkhvn) &nbsp; &nbsp; &nbsp; [`r fontawesome::fa("github")` qntkhvn](https://github.com/qntkhvn) &nbsp; &nbsp; &nbsp; [`r fontawesome::fa("link")` qntkhvn.netlify.app](https://qntkhvn.netlify.app/)
+  |
+  | Slides: [qntkhvn.github.io/webscraping](https://qntkhvn.github.io/webscraping)
 format: 
   revealjs:
     smaller: true
@@ -84,7 +86,7 @@ Agenda:
 
 - [Data Wrangling lecture notes](https://dcl-wrangle.stanford.edu/rvest.html) from the Stanford Data Challenge Lab (DCL) course
 
-I highly recommend the [Web scraping chapter in R4DS (2e)](https://r4ds.hadley.nz/webscraping.html) for a neat basic overview of web pages and web scraping.
+I highly recommend the [Web scraping chapter in R4DS (2e)](https://r4ds.hadley.nz/webscraping.html) for a neat basic overview of webpage structure and web scraping.
 
 ---
 
@@ -168,7 +170,7 @@ install.packages("rvest")
 
 -   Example: NHL career games played leaders
 
-    -   URL: <https://www.hockey-reference.com/leaders/nhl_tbl_career.html>
+    -   URL: <https://www.hockey-reference.com/leaders/games_played_career.html>
     
 ::: {.fragment}
 
@@ -294,7 +296,7 @@ nhl_tbl
 
 *   There are other things to be extracted from an element
 
-    *   To retrieve text from an element, use `html_text()` and  `html_text2()`
+    *   To retrieve text from an element, use `html_text2()`
 
     *   To retrieve an attribute (e.g., hyperlink) from an element, use `html_attr()` and `html_attrs()`
     
@@ -366,7 +368,7 @@ str_detect("Gordie Howe", "\\*")
 
 ::: {.fragment}
 
-*   `str_detect()` can be used with `filter()` 
+*   `str_detect()` can be used with `filter()` or within a conditional statement (e.g., with `ifelse()` or `case_when()`)
 
     *   Recall that `filter()` subsets out rows that satisfy a condition
 
@@ -447,25 +449,25 @@ nhl_tbl_cleaned
 
 ---
 
-### `str_replace()`
+<!-- ### `str_replace()` -->
 
-- `str_replace()` takes in a string and replaces a specified pattern with a new replacement pattern
+<!-- - `str_replace()` takes in a string and replaces a specified pattern with a new replacement pattern -->
 
-    - `str_remove()` is a special case of `str_replace()`, where a pattern is replaced by an empty string
+<!--     - `str_remove()` is a special case of `str_replace()`, where a pattern is replaced by an empty string -->
 
-    - There's also `str_replace_all()`. The following code illustrates the difference
-    
-```{r, echo=TRUE}
-str_replace("statistician", "ian", "") # same as str_remove("statistician", "ian")
-str_replace("statistician", "ian", "s")
-str_replace("noon", "o", "a")
-str_replace_all("noon", "o", "a")
-```
+<!--     - There's also `str_replace_all()`. The following code illustrates the difference -->
 
-**There's a lot more useful string functions provided by `stringr`. See the [`stringr` cheatsheet](https://stringr.tidyverse.org/#cheatsheet) for more details.**
+<!-- ```{r, echo=TRUE} -->
+<!-- str_replace("statistician", "ian", "") # same as str_remove("statistician", "ian") -->
+<!-- str_replace("statistician", "ian", "s") -->
+<!-- str_replace("noon", "o", "a") -->
+<!-- str_replace_all("noon", "o", "a") -->
+<!-- ``` -->
+
+<!-- **There's a lot more useful string functions provided by `stringr`. See the [`stringr` cheatsheet](https://stringr.tidyverse.org/#cheatsheet) for more details.** -->
 
 
----
+<!-- --- -->
 
 ### Scraping practice
 
@@ -485,51 +487,51 @@ Example: Frauen Bundesliga (German women's soccer league)
     
 ---
 
-### Scraping practice
+<!-- ### Scraping practice -->
 
-*   Scrape 2017-2018 overall standings
+<!-- *   Scrape 2017-2018 overall standings -->
 
-```{r, echo=TRUE}
-fb_url <- "https://fbref.com/en/comps/183/2017-2018/2017-2018-Frauen-Bundesliga-Stats"
-fb_tbl <- fb_url |> 
-  read_html() |> 
-  html_element(css = "#results2017-20181831_overall") |> 
-  html_table()
-fb_tbl
-```
-        
----
+<!-- ```{r, echo=TRUE} -->
+<!-- fb_url <- "https://fbref.com/en/comps/183/2017-2018/2017-2018-Frauen-Bundesliga-Stats" -->
+<!-- fb_tbl <- fb_url |>  -->
+<!--   read_html() |>  -->
+<!--   html_element(css = "#results2017-20181831_overall") |>  -->
+<!--   html_table() -->
+<!-- fb_tbl -->
+<!-- ``` -->
 
-### Scraping practice
+<!-- --- -->
 
-*   General function
+<!-- ### Scraping practice -->
 
-```{r, echo=TRUE}
-get_fb_data <- function(start_year) {
-  
-  year_str <- str_c(start_year, start_year + 1, sep = "-")
-  
-  fb_url <- str_c("https://fbref.com/en/comps/183/", year_str, "/", year_str, "-Frauen-Bundesliga-Stats")
-  
-  year_css <- str_c("#results", year_str, "1831_overall")
-  
-  fb_tbl <- fb_url |>
-    read_html() |> 
-    html_element(css = year_css) |> 
-    html_table() |> 
-    mutate(season = year_str)
-  
-  return(fb_tbl)
-}
+<!-- *   General function -->
 
-seasons <- 2016:2019
-fb_tbl_full <- seasons |> 
-  map(get_fb_data) |> 
-  list_rbind()
-# fb_tbl_full
-```
+<!-- ```{r, echo=TRUE} -->
+<!-- get_fb_data <- function(start_year) { -->
 
----
+<!--   year_str <- str_c(start_year, start_year + 1, sep = "-") -->
+
+<!--   fb_url <- str_c("https://fbref.com/en/comps/183/", year_str, "/", year_str, "-Frauen-Bundesliga-Stats") -->
+
+<!--   year_css <- str_c("#results", year_str, "1831_overall") -->
+
+<!--   fb_tbl <- fb_url |> -->
+<!--     read_html() |>  -->
+<!--     html_element(css = year_css) |>  -->
+<!--     html_table() |>  -->
+<!--     mutate(season = year_str) -->
+
+<!--   return(fb_tbl) -->
+<!-- } -->
+
+<!-- seasons <- 2016:2019 -->
+<!-- fb_tbl_full <- seasons |>  -->
+<!--   map(get_fb_data) |>  -->
+<!--   list_rbind() -->
+<!-- # fb_tbl_full -->
+<!-- ``` -->
+
+<!-- --- -->
 
 ### Scraping links and images
 
@@ -563,7 +565,7 @@ fb_node
 
 *   To get all image elements, we can use `html_elements()` and specify the `img` tag <br> 
 
-    * `html_elements()` is the "plural" version of `html_element()`, since we want ALL image elements, not just one
+    * `html_elements()` is the "plural" version of `html_element()`, since we want ALL image elements, not just one <small>(Honestly, if you don't remember the differences, just try both and see which one is suitable)</small>
 
 ```{r, echo=TRUE}
 fb_node |> 
@@ -651,6 +653,8 @@ fb_tbl <- fb_node |>
 
 Let's make a scatterplot of total number of goals scored (`GF` - goals for) and goals conceded (`GA` - goals against), and display the team logos.
 
+::: {.fragment}
+
 ```{r, echo=TRUE, fig.height=4, fig.width=5, fig.pos="center"}
 library(ggimage)
 fb_tbl |>
@@ -659,6 +663,8 @@ fb_tbl |>
   geom_image(aes(image = img), size = 0.08, asp = 1) +
   theme_classic()
 ```
+
+:::
 
 ---
 
@@ -692,10 +698,6 @@ wimbledon_url |>
 ### Scraping text
 
 *   Then, we can retrieve text from this element with `html_text2()`
-
-    *   There's also an `html_text()` function. Look up the help documentation to see the differences
-    
-(Honestly, if you don't remember the differences, just try both and see which one is suitable. Ditto for `html_element()` and `html_elements()`)
     
 ```{r, echo=TRUE}
 wimbledon_url |> 
@@ -716,7 +718,7 @@ wimbledon_url |>
 
     *   `str_split_1()` splits a single string into a character vector based on a pattern
     
-    *   Other ways include `str_split()` then `unlist()`, or `read_lines()`, and there's many more
+    *   Other ways include: `str_split()` then `unlist()`, or `read_lines()`, and many more
     
 ---
 
@@ -736,6 +738,8 @@ wimbledon_info
 ### Scraping text
     
 *   As a final step, you can try to turn the vector into a table (as a single column), then clean up and create 3 columns: seed, player, and result
+
+(This might involve tasks like extracting text between parentheses, locating special characters like `. ( )`, etc. --- check out this [blog post](https://www.pipinghotdata.com/posts/2018-12-11-stringr-4-ways/))
 
 ---
 
@@ -839,7 +843,7 @@ glimpse(f1_content)
 
 ### Pulling data from APIs
 
--   Finally, based on the content structure, we can get a list of constructors. Each list consists of constructor ID, (Wikipedia) URL, name, and nationality.
+-   Finally, based on the content structure, we can get a list of constructors. Each list consists of constructor ID, URL, name, and nationality.
 
 ```{r, echo=TRUE}
 f1_constructor_list <- f1_content |> 
@@ -879,7 +883,7 @@ f1_constructor_tbl
 
 -   Web scraping case study from the [Data science ethics chapter](https://mdsr-book.github.io/mdsr2e/ch-ethics.html) of MDSR
 
--   [Good pratice chapter](https://jakobtures.github.io/web-scraping/goodpractice.html) from Web Scraping using R
+-   [Good practice chapter](https://jakobtures.github.io/web-scraping/goodpractice.html) from Web Scraping using R
 
 -   [Scraping ethics and legalities section](https://r4ds.hadley.nz/webscraping.html#scraping-ethics-and-legalities) from  Web scraping chapter of R4DS (2e)
 
@@ -890,18 +894,24 @@ f1_constructor_tbl
     - Anonymize personal data, especially if data/analysis are to be publicly released
     
     - Take advantage of APIs
+    
+    - Only scrape what you need
 
 --- 
 
 ### The `polite` package: overview
 
-*   [`polite`](https://github.com/dmi3kno/polite) ensures that you’re respecting the [`robots.txt`](https://en.wikipedia.org/wiki/Robots.txt) [^robot] and not submitting too many requests
-
-    *   `bow()` introduces the user to the host and asks for scraping permission
-    
-    *   `scrape()` scrapes and retrieves data
+[`polite`](https://github.com/dmi3kno/polite) ensures that you’re respecting the [`robots.txt`](https://en.wikipedia.org/wiki/Robots.txt) [^robot] and not submitting too many requests
 
 [^robot]: "`robots.txt` is the filename used for implementing the Robots Exclusion Protocol, a standard used by websites to indicate to visiting web crawlers and other web robots which portions of the website they are allowed to visit" (Source: Wikipedia)
+
+::: {.fragment}
+
+*   `bow()` introduces the user to the host and asks for scraping permission
+    
+*   `scrape()` scrapes and retrieves data
+    
+:::
 
 ---
 
