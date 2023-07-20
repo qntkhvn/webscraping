@@ -495,51 +495,51 @@ Example: Frauen Bundesliga (German women's soccer league)
     
 ---
 
-<!-- ### Scraping practice -->
+### Scraping practice
 
-<!-- *   Scrape 2017-2018 overall standings -->
+*   Scrape 2017-2018 overall standings
 
-<!-- ```{r, echo=TRUE} -->
-<!-- fb_url <- "https://fbref.com/en/comps/183/2017-2018/2017-2018-Frauen-Bundesliga-Stats" -->
-<!-- fb_tbl <- fb_url |> -->
-<!--   read_html() |> -->
-<!--   html_element(css = "#results2017-20181831_overall") |> -->
-<!--   html_table() -->
-<!-- fb_tbl -->
-<!-- ``` -->
+```{r, echo=TRUE}
+fb_url <- "https://fbref.com/en/comps/183/2017-2018/2017-2018-Frauen-Bundesliga-Stats"
+fb_tbl <- fb_url |>
+  read_html() |>
+  html_element(css = "#results2017-20181831_overall") |>
+  html_table()
+fb_tbl
+```
 
-<!-- --- -->
+---
 
-<!-- ### Scraping practice -->
+### Scraping practice
 
-<!-- *   General function -->
+*   General function
 
-<!-- ```{r, echo=TRUE} -->
-<!-- get_fb_data <- function(start_year) { -->
+```{r, echo=TRUE}
+get_fb_data <- function(start_year) {
 
-<!--   year_str <- str_c(start_year, start_year + 1, sep = "-") -->
+  year_str <- str_c(start_year, start_year + 1, sep = "-")
 
-<!--   fb_url <- str_c("https://fbref.com/en/comps/183/", year_str, "/", year_str, "-Frauen-Bundesliga-Stats") -->
+  fb_url <- str_c("https://fbref.com/en/comps/183/", year_str, "/", year_str, "-Frauen-Bundesliga-Stats")
 
-<!--   year_css <- str_c("#results", year_str, "1831_overall") -->
+  year_css <- str_c("#results", year_str, "1831_overall")
 
-<!--   fb_tbl <- fb_url |> -->
-<!--     read_html() |> -->
-<!--     html_element(css = year_css) |> -->
-<!--     html_table() |> -->
-<!--     mutate(season = year_str) -->
+  fb_tbl <- fb_url |>
+    read_html() |>
+    html_element(css = year_css) |>
+    html_table() |>
+    mutate(season = year_str)
 
-<!--   return(fb_tbl) -->
-<!-- } -->
+  return(fb_tbl)
+}
 
-<!-- seasons <- 2016:2019 -->
-<!-- fb_tbl_full <- seasons |> -->
-<!--   map(get_fb_data) |> -->
-<!--   list_rbind() -->
-<!-- # fb_tbl_full -->
-<!-- ``` -->
+seasons <- 2016:2019
+fb_tbl_full <- seasons |>
+  map(get_fb_data) |>
+  list_rbind()
+# fb_tbl_full
+```
 
-<!-- --- -->
+---
 
 ### Scraping links and images
 
