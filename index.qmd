@@ -64,7 +64,7 @@ Agenda:
 
 -   Responsible web scraping
 
-    -   Best practice
+    -   Best practices
     
     -   Featuring `polite`
 
@@ -162,6 +162,18 @@ install.packages("rvest")
 
   - For instance, in sports, you may be interested in data for not just 1 season/player/team/etc., but multiple
   
+:::
+
+---
+
+### And make sure to...
+
+::: {.fragment}
+
+*   Inspect the output at each step
+
+*   Consult the help documentations
+
 :::
 
 ---
@@ -348,10 +360,6 @@ Check out the [`stringr` cheatsheet](https://stringr.tidyverse.org/#cheatsheet).
     -   `$ * + . ? [ ] ^ { } | ( ) \`
         
     -   Use a double backslash (`\\`) [^db] to "escape" these characters (e.g., `\\*`)
-    
-<!-- -   Note that to specify special characters (e.g., `.`, `,`, `*`, `?`, etc.) in a pattern in `R`, use a double backslash (`\\`) -->
-    
-<!-- TODO: some notes on regular expression... -->
 
 [^db]: A single backslash (`\`) suppresses the special meaning of these characters in regular expressions. Since `\` itself also needs to be escaped in `R`, we need to add another `\`. This is why we need a double backslash (`\\`).
 
@@ -479,7 +487,7 @@ Example: Frauen Bundesliga (German women's soccer league)
 
     *   Scrape the **Overall** table under **Regular season**
     
-    *   (Optional) Write a general function for scraping data for any specified season. 
+    *   (Time permitting) Write a general function for scraping data for any specified season. 
     
         *   Hint: change the years in the URL and CSS selector
     
@@ -487,51 +495,51 @@ Example: Frauen Bundesliga (German women's soccer league)
     
 ---
 
-<!-- ### Scraping practice -->
+### Scraping practice
 
-<!-- *   Scrape 2017-2018 overall standings -->
+*   Scrape 2017-2018 overall standings
 
-<!-- ```{r, echo=TRUE} -->
-<!-- fb_url <- "https://fbref.com/en/comps/183/2017-2018/2017-2018-Frauen-Bundesliga-Stats" -->
-<!-- fb_tbl <- fb_url |>  -->
-<!--   read_html() |>  -->
-<!--   html_element(css = "#results2017-20181831_overall") |>  -->
-<!--   html_table() -->
-<!-- fb_tbl -->
-<!-- ``` -->
+```{r, echo=TRUE}
+fb_url <- "https://fbref.com/en/comps/183/2017-2018/2017-2018-Frauen-Bundesliga-Stats"
+fb_tbl <- fb_url |>
+  read_html() |>
+  html_element(css = "#results2017-20181831_overall") |>
+  html_table()
+fb_tbl
+```
 
-<!-- --- -->
+---
 
-<!-- ### Scraping practice -->
+### Scraping practice
 
-<!-- *   General function -->
+*   General function
 
-<!-- ```{r, echo=TRUE} -->
-<!-- get_fb_data <- function(start_year) { -->
+```{r, echo=TRUE}
+get_fb_data <- function(start_year) {
 
-<!--   year_str <- str_c(start_year, start_year + 1, sep = "-") -->
+  year_str <- str_c(start_year, start_year + 1, sep = "-")
 
-<!--   fb_url <- str_c("https://fbref.com/en/comps/183/", year_str, "/", year_str, "-Frauen-Bundesliga-Stats") -->
+  fb_url <- str_c("https://fbref.com/en/comps/183/", year_str, "/", year_str, "-Frauen-Bundesliga-Stats")
 
-<!--   year_css <- str_c("#results", year_str, "1831_overall") -->
+  year_css <- str_c("#results", year_str, "1831_overall")
 
-<!--   fb_tbl <- fb_url |> -->
-<!--     read_html() |>  -->
-<!--     html_element(css = year_css) |>  -->
-<!--     html_table() |>  -->
-<!--     mutate(season = year_str) -->
+  fb_tbl <- fb_url |>
+    read_html() |>
+    html_element(css = year_css) |>
+    html_table() |>
+    mutate(season = year_str)
 
-<!--   return(fb_tbl) -->
-<!-- } -->
+  return(fb_tbl)
+}
 
-<!-- seasons <- 2016:2019 -->
-<!-- fb_tbl_full <- seasons |>  -->
-<!--   map(get_fb_data) |>  -->
-<!--   list_rbind() -->
-<!-- # fb_tbl_full -->
-<!-- ``` -->
+seasons <- 2016:2019
+fb_tbl_full <- seasons |>
+  map(get_fb_data) |>
+  list_rbind()
+# fb_tbl_full
+```
 
-<!-- --- -->
+---
 
 ### Scraping links and images
 
@@ -547,7 +555,7 @@ Continuing with the Frauen Bundesliga 2017-2018 season stats example...
 
 ### Scraping links and images
 
-*   We first store the HTML node for the table (everything up to `html_element()` with a specified CSS selector for the table) in an object
+*   We first store the HTML node for the table in an object (i.e., everything up to `html_element()` with a specified CSS selector for the table) 
 
 *   This can then be used to obtain the images and team links based on their tags.
 
@@ -901,6 +909,10 @@ f1_constructor_tbl
 
 ### The `polite` package: overview
 
+```{r, eval=FALSE, echo=TRUE}
+install.packages("polite")
+```
+
 [`polite`](https://github.com/dmi3kno/polite) ensures that you’re respecting the [`robots.txt`](https://en.wikipedia.org/wiki/Robots.txt) [^robot] and not submitting too many requests
 
 [^robot]: "`robots.txt` is the filename used for implementing the Robots Exclusion Protocol, a standard used by websites to indicate to visiting web crawlers and other web robots which portions of the website they are allowed to visit" (Source: Wikipedia)
@@ -910,6 +922,8 @@ f1_constructor_tbl
 *   `bow()` introduces the user to the host and asks for scraping permission
     
 *   `scrape()` scrapes and retrieves data
+
+(Sometimes, `nod()` is required as an intermediate step, )
     
 :::
 
@@ -962,7 +976,7 @@ session |>
 
 ### More resources
 
--   [`polite` package page](https://dmi3kno.github.io/polite/)
+-   [`polite` package page](https://dmi3kno.github.io/polite/) (more examples, featuring a template for package developers)
 
 -   [Intro to {polite} Web Scraping of Soccer Data with R](https://ryo-n7.github.io/2020-05-14-webscrape-soccer-data-with-R)
 
@@ -982,9 +996,11 @@ session |>
     
     -   Inspect the output at each step
     
-    -   Remember to consult the help documentations
+    -   Consult the help documentations
     
 -   Come up with fun personal projects (data viz, Shiny app, etc.), scrape data, and enjoy learning (and the struggle)
 
--   You can develop the next great sports "scrapR" package(s) (or even for your field of interest)
+-   You can develop the next great sports "scrapR"[^idc] package(s) (or even for your field of interest)
+
+[^idc]: I don't care how you pronounce them
 
